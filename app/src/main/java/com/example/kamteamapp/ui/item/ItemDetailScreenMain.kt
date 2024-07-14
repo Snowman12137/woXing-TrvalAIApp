@@ -74,7 +74,7 @@ fun LazyMainBoay(
     actions.setTrvalItem(combineItems(TempRes, TempWeath) )
 
         CustomLazyLayout(
-            numState = state,
+            actions = actions,
             state = lazyLayoutState,
             modifier = Modifier.fillMaxSize(),
         ){items(state.items){item->
@@ -102,7 +102,7 @@ fun LazyMainBoay(
 @ExperimentalFoundationApi
 @Composable
 fun CustomLazyLayout(
-    numState: State,
+    actions: Actions,
     state: LazyLayoutState = rememberLazyLayoutState(),
     modifier: Modifier,
     content: CustomLazyListScope.() -> Unit
@@ -125,7 +125,7 @@ fun CustomLazyLayout(
         layout(constraints.maxWidth, constraints.maxHeight) {
             indexesWithPlaceables.forEach { (index, placeables) ->
                 val item = itemProvider.getItem(index)
-                item?.let { placeItem(numState,state, item, placeables) }
+                item?.let { placeItem(actions,index,state, item, placeables) }
             }
         }
 
@@ -144,7 +144,7 @@ private fun Modifier.lazyLayoutPointerInput(state: LazyLayoutState): Modifier {
     }
 }
 
-private fun Placeable.PlacementScope.placeItem(numState: State,state: LazyLayoutState, listItem: ListItem, placeables: List<Placeable>) {
+private fun Placeable.PlacementScope.placeItem(actions: Actions,index: Int,state: LazyLayoutState, listItem: ListItem, placeables: List<Placeable>) {
     val xPosition : Int
     val yPosition : Int
     when (listItem.hereItem){
@@ -153,8 +153,9 @@ private fun Placeable.PlacementScope.placeItem(numState: State,state: LazyLayout
             yPosition = listItem.y - state.offsetState.value.y
         }
         is DisplayItem.WeatherItem->{
-            xPosition = listItem.x
-            yPosition = listItem.y
+            actions.ChangeXY_Top(index,state.offsetState.value.x,state.offsetState.value.y)
+            xPosition = listItem.x - state.offsetState.value.x
+            yPosition = 0
         }
     }
 

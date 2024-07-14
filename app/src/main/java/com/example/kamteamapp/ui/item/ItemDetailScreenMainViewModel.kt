@@ -105,6 +105,26 @@ class DetailMainViewModel : ViewModel(), Actions {
 
         return ResultVal(size, maxX * DayLang, maxY, items)
     }
+
+    override fun ChangeXY_Top(index:Int,offsetStateX: Int,offsetStateY: Int){
+        // 首先，获取当前状态的值
+        val currentState = state.value
+        // 接着，获取当前索引处的 ListItem
+        val currentItem = currentState.items[index]
+        // 使用 copy 方法来创建一个新的 ListItem 实例，并更新 x 和 y 的值
+        val newItem = currentItem.copy(
+            x = currentItem.x,
+            y = offsetStateY,
+            currentItem.hereItem
+        )
+        // 替换原列表中的元素
+        val newItems = currentState.items.toMutableList()
+        newItems[index] = newItem
+        // 最后，更新状态
+        state.value = currentState.copy(items = newItems)
+    }
+
+
     private data class ResultVal(
         val size: Int,
         val maxX: Int,
@@ -154,7 +174,7 @@ sealed class DisplayItem {
 interface Actions {
 
     fun setTrvalItem(Temp: List<DisplayItem>)
-
+    fun ChangeXY_Top(index:Int,offsetState: Int,offsetStateY: Int)
 }
 
 

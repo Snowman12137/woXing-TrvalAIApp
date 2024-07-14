@@ -9,6 +9,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.kamteamapp.ui.chat.ChatDestination
+import com.example.kamteamapp.ui.chat.ConversationScreen
 import com.example.kamteamapp.ui.home.HomeDestination
 import com.example.kamteamapp.ui.home.HomeScreen
 import com.example.kamteamapp.ui.item.Actions
@@ -27,10 +29,10 @@ fun MyNavHost(
 ){
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = ChatDestination.route,
         modifier = modifier
     ){
-        // 主界面
+
      composable(route = HomeDestination.route){
          HomeScreen(
              navigateToItemUpdate = {
@@ -51,9 +53,18 @@ fun MyNavHost(
              //navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
              navigateBack = { navController.navigateUp() },
          )
-
-
      }
+        // 主界面 对话界面
+        composable(
+            route = ChatDestination.route
+        ){
+            ConversationScreen(
+                navigateToItemUpdate = {
+                    navController.navigate(HomeDestination.route)
+                }
+            )
+
+        }
 
     }
 }
