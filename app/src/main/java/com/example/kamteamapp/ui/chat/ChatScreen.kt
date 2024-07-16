@@ -2,6 +2,7 @@ package com.example.kamteamapp.ui.chat
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -67,6 +69,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kamteamapp.R
+import com.example.kamteamapp.data.exampleUiState
+import com.example.kamteamapp.ui.home.MyItem
 import com.example.kamteamapp.ui.navigation.NavigationDestination
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import kotlinx.coroutines.launch
@@ -122,7 +126,7 @@ fun ConversationScreen(
             Messages(
                 data = topmassage,
                 messages = uiState.messages,
-                //navigateToProfile = navigateToProfile,
+                navigateToItemUpdate = navigateToItemUpdate,
                 modifier = Modifier.weight(1f),
                 scrollState = scrollState
             )
@@ -183,7 +187,7 @@ fun ChannelNameBar(
             )
             // Info icon
             Icon(
-                imageVector = Icons.Outlined.Info,
+                imageVector = Icons.Rounded.Apps,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .clickable(onClick = navigateToItemUpdate )
@@ -202,7 +206,7 @@ fun ChannelNameBar(
 fun Messages(
     data: TopMassage,
     messages: List<Message>,
-    //navigateToProfile: (String) -> Unit,
+    navigateToItemUpdate: () -> Unit,
     scrollState: LazyListState,
     modifier: Modifier = Modifier
 ){
@@ -235,7 +239,7 @@ fun Messages(
 
                 item {
                     Message(
-                        //onAuthorClick = { name -> navigateToProfile(name) },
+                        navigateToItemUpdate = navigateToItemUpdate,
                         msg = content,
                         isUserMe = content.author == data.authorMe,
                         isFirstMessageByAuthor = isFirstMessageByAuthor,
@@ -252,6 +256,7 @@ fun Messages(
 
 @Composable
 fun Message(
+    navigateToItemUpdate: () -> Unit,
     msg: Message,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
@@ -284,11 +289,11 @@ fun Message(
             Spacer(modifier = Modifier.width(74.dp))
         }
         AuthorAndTextMessage(
+            navigateToItemUpdate=navigateToItemUpdate,
             msg = msg,
             isUserMe = isUserMe,
             isFirstMessageByAuthor = isFirstMessageByAuthor,
             isLastMessageByAuthor = isLastMessageByAuthor,
-            //authorClicked = onAuthorClick,
             modifier = Modifier
                 .padding(end = 16.dp)
                 .weight(1f)
@@ -299,18 +304,18 @@ fun Message(
 
 @Composable
 fun AuthorAndTextMessage(
+    navigateToItemUpdate: () -> Unit,
     msg: Message,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
-    //authorClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         if (isLastMessageByAuthor) {
             AuthorNameTimestamp(msg)
         }
-        ChatItemBubble(msg, isUserMe )//authorClicked = authorClicked)
+        ChatItemBubble(msg, isUserMe,navigateToItemUpdate )
         if (isFirstMessageByAuthor) {
             Spacer(modifier = Modifier.height(8.dp))
         } else {
@@ -325,7 +330,7 @@ private val ChatBubbleShape = RoundedCornerShape(4.dp, 20.dp, 20.dp, 20.dp)
 fun ChatItemBubble(
     message: Message,
     isUserMe: Boolean,
-    //authorClicked: (String) -> Unit
+    onItemOptionClick: () -> Unit
 ) {
 
     val backgroundBubbleColor = if (isUserMe) {
@@ -345,19 +350,30 @@ fun ChatItemBubble(
                 //authorClicked = authorClicked
             )
         }
+        message.cardorimage?.let {
+            when(message.cardorimage){
+                is CardorImage.CardItem->{
+                    MyItem(
+                        message.cardorimage.carditem,
+                        modifier = Modifier
+                            .clickable (onClick = onItemOptionClick)
+                    )
 
-        message.image?.let {
-            Spacer(modifier = Modifier.height(4.dp))
-            Surface(
-                color = backgroundBubbleColor,
-                shape = ChatBubbleShape
-            ) {
-                Image(
-                    painter = painterResource(it),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(160.dp),
-                    contentDescription = stringResource(id = R.string.attached_image)
-                )
+                }
+                is CardorImage.ImageItem->{
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Surface(
+                        color = backgroundBubbleColor,
+                        shape = ChatBubbleShape
+                    ) {
+                        Image(
+                            painter = painterResource(message.cardorimage.image),
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.size(160.dp),
+                            contentDescription = stringResource(id = R.string.attached_image)
+                        )
+                    }
+                }
             }
         }
     }
@@ -398,14 +414,13 @@ fun ClickableMessage(
 
 @Composable
 private fun AuthorNameTimestamp(msg: Message) {
-    // Combine author and timestamp for a11y.
     Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Text(
             text = msg.author,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .alignBy(LastBaseline)
-                .paddingFrom(LastBaseline, after = 8.dp) // Space to 1st bubble
+                .paddingFrom(LastBaseline, after = 8.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(

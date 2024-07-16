@@ -68,6 +68,8 @@ android {
 
 dependencies {
     //implementation(libs.androidx.material3.android)
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation ("com.google.dagger:hilt-android:2.51")
     //Room
     implementation("androidx.compose.material:material-icons-extended")
 

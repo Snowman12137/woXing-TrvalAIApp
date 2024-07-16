@@ -1,8 +1,18 @@
 package com.example.kamteamapp.data
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.room.PrimaryKey
 import com.example.kamteamapp.R
+import com.example.kamteamapp.ui.chat.CardorImage
+import com.example.kamteamapp.ui.chat.ConversationUiState
+import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_CLOUDS
+import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_FLAMINGO
+import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_MELTING
+import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_PINK_HEART
+import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_POINTS
+import com.example.kamteamapp.ui.chat.Message
 //import com.example.inventory.R
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -63,8 +73,8 @@ enum class BodyColor(val color: Color) {
 
 
 data class Temp_Weather_Items(
-    val weather_id: Int,
-    val number_day : Int,
+    val weather_id: Int,  //
+    val number_day : Int, //
     val where : String,
     val data: LocalDate,
     val week: DayOfWeek,
@@ -85,9 +95,16 @@ data class Temp_Trval_Items(
     val data :LocalDate,
     val ready : Int, // 0否 1是，2没有该选项
     val time :  Between,
-    val content : String
+    val content : String,
+    val MyMoney :List<Money_Data> = emptyList()
+)
 
 
+
+data class Money_Data(
+    val Lable:String,
+    val Money: Float,
+    val CheckState: String // 0是预计花费 1是可选花费 2是已付款
 )
 
 data class Between(
@@ -99,3 +116,68 @@ data class Time(
     val hour: Int,
     val minite : Int =0
 )
+
+
+val exampleUiState: ConversationUiState
+    get() = ConversationUiState(
+        initialMessages = initialMessages,
+        channelName = "新对话",
+    )
+
+@RequiresApi(Build.VERSION_CODES.O)
+private val initialMessages = listOf(
+    Message(
+        "me",
+        "Check it out!",
+        "8:07 PM"
+    ),
+    Message(
+        "me",
+        "Thank you!$EMOJI_PINK_HEART",
+        "8:06 PM",
+    ),
+    Message(
+        "蓝心大模型",
+        "You can use all the same stuff",
+        "8:05 PM"
+    ),
+    Message(
+        "蓝心大模型",
+        "或者你可以选择",
+        "8:05 PM"
+    ),
+    Message(
+        "蓝心大模型",
+        "我了解你的需求了，我生成了一个预制方案，请你查看结果是否满意",
+        "8:04 PM",
+        CardorImage.CardItem(
+            Temp_Main_Items(
+                id = 1,
+                time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+                trval_day = 5,
+                weathers_id = 1,
+                trvals_id = 1,
+                name = "实例1",
+                other1 = "广州->澳门->香港->深圳"
+            )
+        )
+
+
+    ),
+    Message(
+        "me",
+        "我想去广州附近玩五天，明天就想出发，我们有两个人，我喜欢时间安排的紧凑一些，多去一些地方，预算大概在3000块左右，酒店我们希望中等价格就可以",
+        "8:03 PM"
+    )
+)
+
+
+object EMOJI{
+    val Bus = "\uD83D\uDE8C"
+    val Plane = "\u2708\uFE0F"
+    val Photo = "\uD83D\uDCF7"
+    val DestiNation = "\uD83D\uDCCD"
+    val Food = "\uD83C\uDF71"
+    val Home = "\uD83D\uDECF\uFE0F"
+}
+

@@ -1,5 +1,6 @@
 package com.example.kamteamapp
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons.Filled
@@ -11,7 +12,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -24,8 +24,8 @@ import com.example.kamteamapp.ui.navigation.MyNavHost
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MyApp(navController: NavHostController = rememberNavController(), state: State, actions: Actions) {
-    MyNavHost(navController = navController,state = state,actions = actions)
+fun MyApp(navController: NavHostController = rememberNavController(), state: State, actions: Actions, context: Context) {
+    MyNavHost(navController = navController, state = state, actions = actions, context = context)
 }
 
 

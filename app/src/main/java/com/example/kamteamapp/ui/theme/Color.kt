@@ -63,6 +63,9 @@ val md_theme_dark_outlineVariant = Color(0xFF49454E)
 val md_theme_dark_scrim = Color(0xFF000000)
 
 
+val Card2Time = Color(0xFFB252C1)
+val Card2TimeBackGround = Color(0x80F1A1F8)
+
 
 
 

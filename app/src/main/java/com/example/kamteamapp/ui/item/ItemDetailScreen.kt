@@ -2,6 +2,7 @@
 
 package com.example.kamteamapp.ui.item
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
@@ -75,13 +76,14 @@ object ItemDetailsDestination : NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ItemDetailsScreen(
+    context: Context,
     state: State,
     actions: Actions,
     //navigateToEditItem: (Int) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 
-){
+    ){
     val viewModel = remember {
         DetailMainViewModel()
     }
@@ -99,6 +101,7 @@ fun ItemDetailsScreen(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             ItemDetailsBody(
                 actions = actions,
+                context = context,
                 state=state,
                 contentPadding = innerPadding,
                 modifier = Modifier
@@ -112,6 +115,7 @@ fun ItemDetailsScreen(
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun ItemDetailsBody(
+    context: Context,
     state: State,
     actions: Actions,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -123,7 +127,7 @@ fun ItemDetailsBody(
     ){
         TimeLiner()
         Spacer(modifier = Modifier.width(8.dp))
-        MainBody(state = state, actions = actions)
+        MainBody(state = state, actions = actions,context=context)
     }
 }
 
@@ -202,6 +206,7 @@ fun TimeLiner(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainBody(
+    context: Context,
     state: State,
     actions: Actions,
     modifier: Modifier = Modifier,
@@ -209,7 +214,8 @@ fun MainBody(
     Column {
         LazyMainBoay(
             state = state,
-            actions = actions
+            actions = actions,
+            context = context
         )
     }
 }

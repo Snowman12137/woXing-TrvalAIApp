@@ -1,5 +1,6 @@
 package com.example.kamteamapp.ui.navigation
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import com.example.kamteamapp.ui.chat.ChatDestination
 import com.example.kamteamapp.ui.chat.ConversationScreen
 import com.example.kamteamapp.ui.home.HomeDestination
 import com.example.kamteamapp.ui.home.HomeScreen
+import com.example.kamteamapp.ui.intrest.IntrestScreen
 import com.example.kamteamapp.ui.item.Actions
 import com.example.kamteamapp.ui.item.ItemDetailsDestination
 import com.example.kamteamapp.ui.item.ItemDetailsScreen
@@ -25,11 +27,12 @@ fun MyNavHost(
     state: State,
     actions: Actions,
     navController: NavHostController,
+    context: Context,
     modifier: Modifier = Modifier,
 ){
     NavHost(
         navController = navController,
-        startDestination = ChatDestination.route,
+        startDestination = ItemDetailsDestination.route,
         modifier = modifier
     ){
 
@@ -50,6 +53,7 @@ fun MyNavHost(
          ItemDetailsScreen(
              state = state,
              actions = actions,
+             context=context,
              //navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
              navigateBack = { navController.navigateUp() },
          )
@@ -64,6 +68,13 @@ fun MyNavHost(
                 }
             )
 
+        }
+        composable(route = ItemDetailsDestination.route){
+            IntrestScreen(
+                navigateToAIUpdate = {
+                    navController.navigate(ChatDestination.route)
+                }
+            )
         }
 
     }

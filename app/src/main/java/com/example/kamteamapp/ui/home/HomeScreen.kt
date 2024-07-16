@@ -3,6 +3,7 @@ package com.example.kamteamapp.ui.home
 import android.content.ClipData.Item
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -156,11 +157,12 @@ fun MyList(
 
 // 每个卡片的展示界面
 @Composable
-private fun MyItem(
+fun MyItem(
     item:Temp_Main_Items,modifier: Modifier = Modifier
 ){
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.inversePrimary),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(

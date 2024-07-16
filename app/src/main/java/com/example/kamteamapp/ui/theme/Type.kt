@@ -2,6 +2,7 @@ package com.example.kamteamapp.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -115,6 +116,78 @@ val Typography.Card2Time:TextStyle
         return TextStyle(
             fontFamily = FontFamily(Font(R.font.ligconsolataregular)),
             fontSize = 15.sp,
+            fontWeight = FontWeight.Bold,
+            lineHeight = 16.sp,
+            letterSpacing = 0.7.sp,
+            color = com.example.kamteamapp.ui.theme.Card2Time
+        )
+    }
+
+val Typography.Card3Content1:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.fangzhengkaisong)),
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            lineHeight = 21.sp,
+            letterSpacing = 0.5.sp
+        )
+    }
+
+val Typography.Card4Content2:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.fangzhengkai)),
+            fontSize = 14.sp,
+            lineHeight = 15.sp,
+            letterSpacing = 0.5.sp
+        )
+    }
+
+val Typography.Card5Content3:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.fangzhengkai)),
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            lineHeight = 15.sp,
+            letterSpacing = 0.5.sp
+        )
+    }
+
+val Typography.Interest1:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.dingtalkjinbuti)),
+            fontSize = 30.sp,
+            lineHeight = 21.sp,
+            letterSpacing = 1.sp
+        )
+    }
+
+val Typography.Interest2:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.dingtalkjinbuti)),
+            color = Color(0x80000000),
+            fontSize = 25.sp,
+            lineHeight = 21.sp,
+            letterSpacing = 1.sp
+        )
+    }
+
+
+val Typography.Interest3:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.dingtalkjinbuti)),
+            fontSize = 20.sp,
             lineHeight = 16.sp,
             letterSpacing = 1.sp
         )
