@@ -158,6 +158,43 @@ val Typography.Card5Content3:TextStyle
         )
     }
 
+val Typography.Card6Title:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.fangzhengkaisong)),
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            lineHeight = 15.sp,
+            letterSpacing = 0.5.sp
+        )
+    }
+
+val Typography.Card7ContentMoney:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.fangzhengkaisong)),
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            lineHeight = 15.sp,
+            letterSpacing = 0.5.sp
+        )
+    }
+
+val Typography.Card8Res:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.fangzhengkai)),
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            lineHeight = 15.sp,
+            letterSpacing = 0.5.sp,
+            color = Color(0xFF3A0092)
+        )
+    }
+
 val Typography.Interest1:TextStyle
     @Composable
     get(){
@@ -192,3 +229,37 @@ val Typography.Interest3:TextStyle
             letterSpacing = 1.sp
         )
     }
+
+val Typography.Detail1:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.dingtalkjinbuti)),
+            fontSize = 30.sp,
+            lineHeight = 16.sp,
+            letterSpacing = 1.sp
+        )
+    }
+
+val Typography.Detail2:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.fangzhengkai)),
+            fontSize = 20.sp,
+            lineHeight = 16.sp,
+            letterSpacing = 1.sp
+        )
+    }
+
+val Typography.Detail3:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ligconsolataregular)),
+            fontSize = 25.sp,
+            lineHeight = 27.sp,
+            letterSpacing = 1.sp
+        )
+    }
+

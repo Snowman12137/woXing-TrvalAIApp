@@ -48,9 +48,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -58,7 +60,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,6 +70,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.PackageManagerCompat.LOG_TAG
@@ -76,6 +81,7 @@ import com.example.kamteamapp.data.Between
 import com.example.kamteamapp.data.BodyColor
 import com.example.kamteamapp.data.ColorPart
 import com.example.kamteamapp.data.Money_Data
+import com.example.kamteamapp.data.Temp_Main_Items
 import com.example.kamteamapp.data.Temp_Trval_Items
 import com.example.kamteamapp.data.Temp_Weather_Items
 import com.example.kamteamapp.data.Time
@@ -90,6 +96,9 @@ import com.example.kamteamapp.ui.theme.Card2TimeBackGround
 import com.example.kamteamapp.ui.theme.Card3Content1
 import com.example.kamteamapp.ui.theme.Card4Content2
 import com.example.kamteamapp.ui.theme.Card5Content3
+import com.example.kamteamapp.ui.theme.Card6Title
+import com.example.kamteamapp.ui.theme.Card7ContentMoney
+import com.example.kamteamapp.ui.theme.Card8Res
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import com.example.kamteamapp.ui.theme.Weather1
 import com.example.kamteamapp.ui.theme.Weather2
@@ -107,17 +116,19 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection as NestedSc
 fun LazyMainBoay(
     state: State,
     actions: Actions,
-    context: Context,
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     val lazyLayoutState = rememberLazyLayoutState()
-    actions.setTrvalItem(combineItems(TempRes, TempWeath) )
-        val CardWeid = 200.dp
+    val paramter = actions.get_Paramter()
+
+        val CardWeid = (paramter.DayLangDP - paramter.BasePadding).dp
         CustomLazyLayout(
             numState = state,
             actions = actions,
             state = lazyLayoutState,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
         ){items(state.items){item->
              // 每个块的组件在这里
             when(item.hereItem){
@@ -127,16 +138,19 @@ fun LazyMainBoay(
                     WeatherCard(item = item.hereItem.weatheritem,colorpart,CardWeid)
                 }
                 is DisplayItem.TravelItem->{
-                    ShowCard(item.hereItem.trvalitem,CardWeid,modifier)
+                    ShowCard(
+                        item.hereItem.trvalitem,
+                        CardWeid,
+                        onItemClick = {onItemClick(it.trval_id)},
+                        numState = state,
+                    )
                 }
                 is DisplayItem.BackGroundItem->{
                     val groupIndex = (item.hereItem.backGround.index % ColorPart.values().size)
                     val colorpart = ColorPart.values()[groupIndex].colors
-                    CardLayout(item.hereItem,colorpart,context)
+                    CardLayout(item.hereItem,colorpart)
                 }
             }
-
-
         }
     }
 }
@@ -155,16 +169,20 @@ fun CustomLazyLayout(
     content: CustomLazyListScope.() -> Unit
 ){
     val itemProvider = rememberItemProvider(content)
+    //var updatedArray: List<Int> = listOf()
+    var updatedArray by remember { mutableStateOf(listOf<Int>()) }
     LazyLayout(
         modifier = modifier
             .clipToBounds()
-            .lazyLayoutPointerInput(state),
+            .lazyLayoutPointerInput(state, numState),
         itemProvider = itemProvider,
     ){constraints ->
         val boundaries = state.getBoundaries(constraints)
         val indexes = itemProvider.getItemIndexesInRange(boundaries)
 
-        val updatedArray = ensureContainsZeroTonum(indexes,numState.data).sorted()
+        updatedArray = ensureContainsZeroTonum(indexes,numState.data).sorted()
+
+
 
         val indexesWithPlaceables = updatedArray.associateWith {
             measure(it, Constraints())
@@ -178,15 +196,48 @@ fun CustomLazyLayout(
             }
         }
 
+        //solve_constrain(numState,updatedArray,actions)
+    }
+    //Log.d("res","myres")
+    //solve_constrain(numState,updatedArray,actions)
+}
+
+
+fun solve_constrain(numState: State,actions: Actions){
+//    val travelItemIndices = updatedArray.filterIndexed { index, _ ->
+//        numState.items[index].hereItem is DisplayItem.TravelItem
+//    }
+
+    val travelItemIndices = numState.items.filterIndexed { index, item ->
+        item.hereItem is DisplayItem.TravelItem
+    }.map { val temp = it
+        state.items.indexOfFirst { item ->
+            item.hereItem is DisplayItem.TravelItem && (item.hereItem as DisplayItem.TravelItem).trvalitem == temp
+    }
+
+    Log.d("res",travelItemIndices.toString())
+     //检查是否有冲突，因为事件ID是随机分布的，所以需要进行两次循环进行检查
+    travelItemIndices.forEach{index1 ->
+        travelItemIndices.forEach{index2->
+            if (numState.items[index2].y > numState.items[index1].y && numState.items[index1].x == numState.items[index2].x){
+                if (numState.items[index2].y - numState.items[index1].y -numState.items[index1].long < 0){
+                    actions.ChangeXY_Top(numState.items[index1].y,numState.items[index1].long)
+                    //numState.items[index2].y = numState.items[index1].y + numState.items[index1].long
+                    Log.d("res","inde2xxxxxx:"+index2+":y:"+numState.items[index2].y+":long:"+numState.items[index2].long)
+                    Log.d("res","inde1xxxxxx:"+index1+":y:"+numState.items[index1].y+":long:"+numState.items[index1].long)
+                    //actions.ChangeXY_Top(numState.items[index1].y ,numState.items[index1].long)
+                }
+            }
+            Log.d("res","index1"+index1+"long"+numState.items[index1].long)
+        }
     }
 }
 
 
 
-
-
-
-private fun Modifier.lazyLayoutPointerInput(state: LazyLayoutState): Modifier {
+private fun Modifier.lazyLayoutPointerInput(state: LazyLayoutState,numState:State): Modifier {
+    state.set_bounary(numState.maxX,numState.maxY)
+    Log.d(LOG_TAG,"numState.maxX"+numState.maxX.toString()+"numState.maxY"+numState.maxY.toString())
     return pointerInput(Unit) {
         detectDragGestures { change, dragAmount ->
             change.consume()
@@ -222,7 +273,6 @@ private fun Placeable.PlacementScope.placeItem(actions: Actions,index: Int,state
     }
 
     placeables.forEach { placeable ->
-        Log.d(LOG_TAG,xPosition.toString()+"   "+yPosition.toString())
         placeable.placeRelative(
             xPosition,
             yPosition
@@ -230,10 +280,7 @@ private fun Placeable.PlacementScope.placeItem(actions: Actions,index: Int,state
     }
 }
 
-fun combineItems(trvalItems: List<Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>): List<DisplayItem> {
-    return trvalItems.map { DisplayItem.TravelItem(it) } +
-            weatherItems.map { DisplayItem.WeatherItem(it) }
-}
+
 
 
 
@@ -242,9 +289,8 @@ fun combineItems(trvalItems: List<Temp_Trval_Items>, weatherItems: List<Temp_Wea
 fun CardLayout(
     item:DisplayItem.BackGroundItem,
     MyColor:List<BodyColor>,
-    context: Context
 ){
-    Log.d(LOG_TAG,item.backGround.weide.dp.toString()+item.backGround.hight.dp.toString())
+    //Log.d(LOG_TAG,item.backGround.weide.dp.toString()+item.backGround.hight.dp.toString())
     if (item.backGround.isWeather){
         Card(
             colors = CardDefaults.cardColors(
@@ -287,8 +333,16 @@ fun ensureContainsZeroTonum(inputList: List<Int>,maxnum:Int): List<Int> {
 fun ShowCard(
     item: Temp_Trval_Items,
     CardWeid:Dp,
-    modifier: Modifier
+    onItemClick: (Temp_Trval_Items) -> Unit,
+    numState:State,
 ){
+    //val hight = remember { mutableStateOf<Int?>(null) }
+    val hight = remember { mutableStateOf<Int?>(null) }
+
+//    LaunchedEffect(Unit) {
+//        hight.value = null
+//    }
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -298,7 +352,13 @@ fun ShowCard(
         modifier = Modifier
             .padding(5.dp)
             .width(CardWeid)
-
+            .clickable { onItemClick(item) }
+            .onGloballyPositioned { coordinates: LayoutCoordinates ->
+                if (hight.value == null) { // 仅在首次测量时更新
+                    hight.value = coordinates.size.width
+                }
+                //width.value = coordinates.size.width
+            }
     ) {
         Column (
             modifier = Modifier
@@ -348,14 +408,23 @@ fun ShowCard(
                         style = MaterialTheme.typography.Card4Content2
                     )
                 }
-
             }
             MoneyCaculate(item.MyMoney)
-
         }
-
     }
 
+    LaunchedEffect(hight.value) {
+        if (hight.value != null) {
+            Log.d("mylog",hight.value.toString())
+            //val index = numState.items.indexOfFirst { it is DisplayItem.TravelItem && it.trvalitem == item }
+
+            val index = numState.items.indexOfFirst { listItem ->
+                listItem.hereItem is DisplayItem.TravelItem && listItem.hereItem.trvalitem == item
+            }
+            numState.items[index].long = hight.value ?: 0
+            //items.long = hight.value ?: 0
+        }
+    }
 }
 
 
@@ -533,10 +602,11 @@ fun MoneyShow(
                 Text(text = "类别")
             }
             val allData = buildList {
-                add(MonyRow.Labels(mymoney.map { it.Lable }))
-                add(MonyRow.Moneys(mymoney.map { it.Money }))
+                add(MonyRow.Labels(mymoney.map { it.Lable }+"已付总金额"))
+                add(MonyRow.Moneys(mymoney.map { it.Money }+890f))
                 add(MonyRow.CheckStates(mymoney.map { it.CheckState }))
             }
+            Log.d(LOG_TAG,printAllData(allData).toString())
             LazyRow (
                 state = scrollState,
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
@@ -547,19 +617,28 @@ fun MoneyShow(
 
                 }
             }
-            Row (
-                horizontalArrangement = Arrangement.Center
-            ){
-                Text(text = "总金额")
-                Spacer(modifier = Modifier.width(20.dp))
-                Text(text = "180")
-            }
-
         }
     }
 
 }
 
+
+fun printAllData(allData: List<MonyRow>) {
+    allData.forEachIndexed { index, item ->
+        println("Item $index: ")
+        when (item) {
+            is MonyRow.Labels -> {
+                println("Labels: ${item.labels}")
+            }
+            is MonyRow.Moneys -> {
+                println("Moneys: ${item.moneys}")
+            }
+            is MonyRow.CheckStates -> {
+                println("CheckStates: ${item.checkstates}")
+            }
+        }
+    }
+}
 
 sealed class MonyRow {
     data class Labels(val labels:  List<String>) : MonyRow()
@@ -569,39 +648,51 @@ sealed class MonyRow {
 
 @Composable
 fun ShowRow(item: MonyRow){
-
-
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        var isChecked by remember { mutableStateOf(false) }
         when (item) {
             is MonyRow.Labels -> {
-                item.labels.forEach { label ->
-                    Text(text = label, Modifier.padding(vertical = 4.dp))
+                item.labels.forEachIndexed {index, label ->
+                    if (index == item.labels.size-1){
+                        Spacer(modifier = Modifier.height(3.dp))
+                        Text(text = label, Modifier.padding(vertical = 4.dp), style = MaterialTheme.typography.Card8Res )
+                    }else{
+                        Text(text = label, Modifier.padding(vertical = 4.dp), style = MaterialTheme.typography.Card7ContentMoney)
+                    }
                 }
             }
             is MonyRow.Moneys -> {
-                item.moneys.forEach { money ->
-                    Text(text = " ${money.toString()}", Modifier.padding(vertical = 4.dp))
+                item.moneys.forEachIndexed { index, money ->
+                    if (index == item.moneys.size-1){
+                        Spacer(modifier = Modifier.height(3.dp))
+                        Text(text = " ${money.toString()}", Modifier.padding(vertical = 4.dp), style = MaterialTheme.typography.Card8Res )
+                    }else{
+                        Text(text = " ${money.toString()}", Modifier.padding(vertical = 4.dp), style = MaterialTheme.typography.Card7ContentMoney)
+                    }
                 }
             }
             is MonyRow.CheckStates -> {
-                val checkStates by item.checkStatesState()
 
-                checkStates.forEachIndexed { index,state ->
+                item.checkstates.forEachIndexed { index,state ->
                     if (state == "0" ){
                         Checkbox(
-                            checked = state.toCustomBoolean(),
+                            checked = state.toCustomBoolean() || isChecked,
                             onCheckedChange = {isCheck ->
-                                //checkStates[index] = isCheck.toString()
+                                isChecked = isCheck
                             },
+                            modifier = Modifier
+                                .size(23.dp)
+                                .padding(3.dp)
                         )
                     }else if (state == "1"){
                         Checkbox(
+                            enabled = false,
                             checked = state.toCustomBoolean(),
                             onCheckedChange = null,
-                        )
+                            modifier = Modifier
+                                .size(23.dp))
                     }else{
 
                     }
@@ -610,58 +701,35 @@ fun ShowRow(item: MonyRow){
         }
 
     }
-}
+}}
 
 
-@Composable
-fun MonyRow.CheckStates.checkStatesState(): MutableState<List<String>> {
-    // 使用 remember 来创建一个不可变的状态
-    return remember { mutableStateOf(this.checkstates) }
-}
 
-
-fun String.toCustomBoolean(): Boolean {
-    return this == "1"
-}
-
-@Composable
-fun FormAble(text1:String,text2:String,text3:String){
-    Row (
-        horizontalArrangement = Arrangement.Center
-    ){
-        Text(text = text1)
-        Spacer(modifier = Modifier.width(20.dp))
-        Text(text = text2)
-        Spacer(modifier = Modifier.width(20.dp))
-        Text(text = text3)
-    }
-}
-
-
-@Preview
-@Composable
-fun show(){
-    KamTeamAppTheme {
-        MoneyShow(
-            mymoney = listOf(
-                Money_Data(
-                    "飞机票",
-                    890f,
-                    "2"
-                ),Money_Data(
-                    "保险",
-                    10f,
-                    "2"
-                ),Money_Data(
-                    "额外托运",
-                    100f,
-                    "1"
-                ),Money_Data(
-                    "机场小吃",
-                    50f,
-                    "0"
-                )
-            )
-        )
-    }
-}
+//
+//@Preview
+//@Composable
+//fun show(){
+//    KamTeamAppTheme {
+//        MoneyShow(
+//            mymoney = listOf(
+//                Money_Data(
+//                    "飞机票",
+//                    890f,
+//                    "2"
+//                ),Money_Data(
+//                    "保险",
+//                    10f,
+//                    "2"
+//                ),Money_Data(
+//                    "额外托运",
+//                    100f,
+//                    "1"
+//                ),Money_Data(
+//                    "机场小吃",
+//                    50f,
+//                    "0"
+//                )
+//            )
+//        )
+//    }
+//}

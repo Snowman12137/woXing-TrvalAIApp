@@ -21,9 +21,17 @@ class LazyLayoutState {
     private val _offsetState = mutableStateOf(IntOffset(0, 0))
     val offsetState = _offsetState
 
+    private var maxXOffset = 100 // 示例值
+    private var maxYOffset = 300 // 示例值
+
+    fun set_bounary(setX:Int,setY: Int){
+        maxXOffset = setX
+        maxYOffset = setY
+    }
+
     fun onDrag(offset: IntOffset) {
-        val x = (_offsetState.value.x - offset.x).coerceAtLeast(0)
-        val y = (_offsetState.value.y - offset.y).coerceAtLeast(0)
+        val x = (_offsetState.value.x - offset.x).coerceIn(0,maxXOffset)
+        val y = (_offsetState.value.y - offset.y).coerceIn(0,maxYOffset)
         _offsetState.value = IntOffset(x, y)
     }
 

@@ -2,6 +2,7 @@ package com.example.kamteamapp
 
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,13 +13,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
 import com.example.kamteamapp.ui.item.DetailMainViewModel
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.kamteamapp.Utils.ScreenSizeManager
 
 class MainActivity : ComponentActivity() {
-    private val viewModel by viewModels<DetailMainViewModel>()
-
+    val viewModel by viewModels<DetailMainViewModel>()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyApp(state = state, actions = viewModel, context = this)
+                    val ScreenSize =  ScreenSizeManager(this)
+                    val res1 = ScreenSize.getRes()
+                    val res2 = ScreenSize.getDestiy()
+                    viewModel.setParamter(res1,res2)
+                    MyApp(state = state, actions = viewModel)
                 }
             }
         }

@@ -30,9 +30,7 @@ data class Temp_Main_Items(
 
 
 
-enum class Week(){
 
-}
 
 // 天气枚举
 enum class Weather(val imageResources: Int) {
@@ -99,6 +97,17 @@ data class Temp_Trval_Items(
     val MyMoney :List<Money_Data> = emptyList()
 )
 
+data class Temp_Detail_Items(
+    val trval_id: Int,
+    val model :Int,
+    val imageResources: Int ?,
+    val name: String,
+    val special :List<String>,
+    val jianjie :String,
+
+)
+
+
 
 
 data class Money_Data(
@@ -116,6 +125,41 @@ data class Time(
     val hour: Int,
     val minite : Int =0
 )
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+val tempMainItem1 = Temp_Main_Items(
+    id = 1,
+    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+    trval_day = 5,
+    weathers_id = 1,
+    trvals_id = 1,
+    name = "粤港澳5日游",
+    other1 = "广州->澳门->香港->深圳"
+)
+@RequiresApi(Build.VERSION_CODES.O)
+val tempMainItem2 = Temp_Main_Items(
+    id = 2,
+    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+    trval_day = 3,
+    weathers_id = 5,
+    trvals_id = 5,
+    name = "粤港澳3日游",
+    other1 = "澳门->香港->深圳"
+)
+
+@RequiresApi(Build.VERSION_CODES.O)
+val tempMainItem3 = Temp_Main_Items(
+    id = 3,
+    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+    trval_day = 3,
+    weathers_id = 5,
+    trvals_id = 5,
+    name = "西安3日游",
+    other1 = "西安"
+)
+
 
 
 val exampleUiState: ConversationUiState
@@ -143,26 +187,19 @@ private val initialMessages = listOf(
     ),
     Message(
         "蓝心大模型",
-        "或者你可以选择",
-        "8:05 PM"
+        "或者你可以选择方案二",
+        "8:05 PM",
+        CardorImage.CardItem(
+            tempMainItem2
+        )
     ),
     Message(
         "蓝心大模型",
         "我了解你的需求了，我生成了一个预制方案，请你查看结果是否满意",
         "8:04 PM",
         CardorImage.CardItem(
-            Temp_Main_Items(
-                id = 1,
-                time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-                trval_day = 5,
-                weathers_id = 1,
-                trvals_id = 1,
-                name = "实例1",
-                other1 = "广州->澳门->香港->深圳"
-            )
+            tempMainItem1
         )
-
-
     ),
     Message(
         "me",

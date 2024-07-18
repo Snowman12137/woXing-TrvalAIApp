@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.kamteamapp.Utils.ScreenSizeManager
 import com.example.kamteamapp.ui.item.Actions
 import com.example.kamteamapp.ui.item.State
 //import com.example.inventory.R
@@ -24,8 +25,8 @@ import com.example.kamteamapp.ui.navigation.MyNavHost
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MyApp(navController: NavHostController = rememberNavController(), state: State, actions: Actions, context: Context) {
-    MyNavHost(navController = navController, state = state, actions = actions, context = context)
+fun MyApp(navController: NavHostController = rememberNavController(), state: State, actions: Actions) {
+    MyNavHost(navController = navController, state = state, actions = actions)
 }
 
 

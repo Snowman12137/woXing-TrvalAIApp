@@ -4,6 +4,7 @@ package com.example.kamteamapp.ui.item
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -46,12 +47,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.PackageManagerCompat.LOG_TAG
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kamteamapp.MyTopAppBar
 import com.example.kamteamapp.R
+import com.example.kamteamapp.Utils.ScreenSizeManager
 import com.example.kamteamapp.data.BodyColor
 import com.example.kamteamapp.data.ColorPart
+import com.example.kamteamapp.data.TempRes
+import com.example.kamteamapp.data.TempRes2
+import com.example.kamteamapp.data.TempWeath
+import com.example.kamteamapp.data.TempWeath2
+import com.example.kamteamapp.data.Temp_Trval_Items
 import com.example.kamteamapp.data.Temp_Weather_Items
 import com.example.kamteamapp.data.Weather
 import com.example.kamteamapp.ui.navigation.NavigationDestination
@@ -60,6 +68,7 @@ import com.example.kamteamapp.ui.theme.Weather1
 import com.example.kamteamapp.ui.theme.Weather2
 import com.example.kamteamapp.ui.theme.Weather3
 import com.example.kamteamapp.ui.theme.Weather4
+import kotlinx.coroutines.flow.combine
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -76,18 +85,18 @@ object ItemDetailsDestination : NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ItemDetailsScreen(
-    context: Context,
+    itemIdTime :Int?,
     state: State,
     actions: Actions,
-    //navigateToEditItem: (Int) -> Unit,
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
-
+    navigateToItemUpdate: (Int) -> Unit,
     ){
-    val viewModel = remember {
-        DetailMainViewModel()
+
+    if (itemIdTime == 1){
+        actions.setTrvalItem(combineItems(TempRes, TempWeath) )
+    } else{
+        actions.setTrvalItem(combineItems(TempRes2, TempWeath2) )
     }
-    //val state by viewModel.state.collectAsState()
 
     Scaffold (
         topBar = {
@@ -101,9 +110,9 @@ fun ItemDetailsScreen(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             ItemDetailsBody(
                 actions = actions,
-                context = context,
                 state=state,
                 contentPadding = innerPadding,
+                onItemClick = navigateToItemUpdate,
                 modifier = Modifier
                     .fillMaxSize()
 
@@ -115,10 +124,10 @@ fun ItemDetailsScreen(
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun ItemDetailsBody(
-    context: Context,
     state: State,
     actions: Actions,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     Row (
@@ -127,7 +136,7 @@ fun ItemDetailsBody(
     ){
         TimeLiner()
         Spacer(modifier = Modifier.width(8.dp))
-        MainBody(state = state, actions = actions,context=context)
+        MainBody(state = state, actions = actions, onItemClick = onItemClick)
     }
 }
 
@@ -206,21 +215,23 @@ fun TimeLiner(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainBody(
-    context: Context,
     state: State,
     actions: Actions,
-    modifier: Modifier = Modifier,
+    onItemClick: (Int) -> Unit,
 ){
     Column {
         LazyMainBoay(
             state = state,
             actions = actions,
-            context = context
+            onItemClick = onItemClick
         )
     }
 }
 
 
 
-
+fun combineItems(trvalItems: List<Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>): List<DisplayItem> {
+    return trvalItems.map { DisplayItem.TravelItem(it) } +
+            weatherItems.map { DisplayItem.WeatherItem(it) }
+}
 
