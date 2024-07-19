@@ -92,7 +92,7 @@ val Typography.Weather4:TextStyle
     get(){
         return TextStyle(
             fontFamily = FontFamily(Font(R.font.ar)),
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             lineHeight = 10.sp,
             letterSpacing = 0.5.sp
         )
@@ -152,7 +152,7 @@ val Typography.Card5Content3:TextStyle
         return TextStyle(
             fontFamily = FontFamily(Font(R.font.fangzhengkai)),
             fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
+            fontSize = 18.sp,
             lineHeight = 15.sp,
             letterSpacing = 0.5.sp
         )
@@ -162,13 +162,26 @@ val Typography.Card6Title:TextStyle
     @Composable
     get(){
         return TextStyle(
-            fontFamily = FontFamily(Font(R.font.fangzhengkaisong)),
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
+            fontFamily = FontFamily(Font(R.font.dingtalkjinbuti)),
+            //fontWeight = FontWeight.Bold,
+            fontSize = 27.sp,
             lineHeight = 15.sp,
             letterSpacing = 0.5.sp
         )
     }
+
+val Typography.Card7Content:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ar)),
+            //fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            lineHeight = 15.sp,
+            letterSpacing = 0.5.sp
+        )
+    }
+
 
 val Typography.Card7ContentMoney:TextStyle
     @Composable

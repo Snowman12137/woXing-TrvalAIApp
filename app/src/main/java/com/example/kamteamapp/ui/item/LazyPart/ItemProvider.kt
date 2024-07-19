@@ -41,6 +41,10 @@ class ItemProvider(
         item?.itemContent?.invoke(item.item)
     }
 
+    fun refresh_y(){
+
+    }
+
     fun getItemIndexesInRange(boundaries: ViewBoundaries): List<Int> {
         val result = mutableListOf<Int>()
         Log.d(LOG_TAG, "Starting to process list with size: ${itemsState.value.size}")
@@ -53,7 +57,7 @@ class ItemProvider(
             ) {
                 result.add(index)
             }
-            Log.d(LOG_TAG, "Processing item at index $index: x = ${listItem.x}, y = ${listItem.y}")
+            Log.d(LOG_TAG, "Processing item at index $index: x = ${listItem.x}, y = ${listItem.y},long = ${listItem.long}")
         }
 
         return result

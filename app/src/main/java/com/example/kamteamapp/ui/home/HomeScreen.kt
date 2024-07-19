@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.KeyboardDoubleArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -44,7 +49,12 @@ import com.example.kamteamapp.ui.navigation.NavigationDestination
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kamteamapp.R
+import com.example.kamteamapp.data.BodyColor
 import com.example.kamteamapp.data.Temp_Main_Items
+import com.example.kamteamapp.ui.theme.Card1
+import com.example.kamteamapp.ui.theme.Card5Content3
+import com.example.kamteamapp.ui.theme.Card6Title
+import com.example.kamteamapp.ui.theme.Card7Content
 import java.time.LocalDate
 
 object HomeDestination : NavigationDestination{
@@ -161,31 +171,58 @@ fun MyItem(
     item:Temp_Main_Items,modifier: Modifier = Modifier
 ){
     Card(
-        modifier = modifier
-            .background(color = MaterialTheme.colorScheme.inversePrimary),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = BodyColor.SECOND_WEATHER1.color
+        ),
+        shape = RoundedCornerShape(8.dp),
+        modifier = modifier,
+        //elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxSize()
             ) {
+                Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.Card6Title
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
                     text = stringResource(id = R.string.in_stock,item.trval_day),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.Card5Content3
                 )
             }
-            Text(
-                text =item.other1,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = BodyColor.SECOND_WEATHER2.color
+                ),
+                shape = RoundedCornerShape(4.dp),
+                modifier = modifier
+                    .padding(5.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+
+                ){
+                    Text(
+                        text =item.other1,
+                        style = MaterialTheme.typography.Card7Content,
+                        //modifier = Modifier.align(Alignment.Start)
+                    )
+                    Icon(
+                        imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
+                        contentDescription = null,
+                        //modifier = Modifier.align(Alignment.End)
+                    )
+                }
+            }
+
+
 
             
         }

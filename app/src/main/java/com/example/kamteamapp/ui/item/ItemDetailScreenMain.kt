@@ -121,7 +121,6 @@ fun LazyMainBoay(
 ){
     val lazyLayoutState = rememberLazyLayoutState()
     val paramter = actions.get_Paramter()
-
         val CardWeid = (paramter.DayLangDP - paramter.BasePadding).dp
         CustomLazyLayout(
             numState = state,
@@ -143,6 +142,8 @@ fun LazyMainBoay(
                         CardWeid,
                         onItemClick = {onItemClick(it.trval_id)},
                         numState = state,
+                        actions,
+                        item
                     )
                 }
                 is DisplayItem.BackGroundItem->{
@@ -192,52 +193,38 @@ fun CustomLazyLayout(
         layout(constraints.maxWidth, constraints.maxHeight) {
             indexesWithPlaceables.forEach { (index, placeables) ->
                 val item = itemProvider.getItem(index)
-                item?.let { placeItem(actions,index,state, item, placeables) }
+
+                item?.let { placeItem(numState,actions,index,state, item, placeables) }
             }
         }
-
-        //solve_constrain(numState,updatedArray,actions)
     }
-    //Log.d("res","myres")
-    //solve_constrain(numState,updatedArray,actions)
 }
 
 
 fun solve_constrain(numState: State,actions: Actions){
-//    val travelItemIndices = updatedArray.filterIndexed { index, _ ->
-//        numState.items[index].hereItem is DisplayItem.TravelItem
-//    }
-
-    val travelItemIndices = numState.items.filterIndexed { index, item ->
-        item.hereItem is DisplayItem.TravelItem
-    }.map { val temp = it
-        state.items.indexOfFirst { item ->
-            item.hereItem is DisplayItem.TravelItem && (item.hereItem as DisplayItem.TravelItem).trvalitem == temp
-    }
-
-    Log.d("res",travelItemIndices.toString())
-     //检查是否有冲突，因为事件ID是随机分布的，所以需要进行两次循环进行检查
-    travelItemIndices.forEach{index1 ->
-        travelItemIndices.forEach{index2->
-            if (numState.items[index2].y > numState.items[index1].y && numState.items[index1].x == numState.items[index2].x){
-                if (numState.items[index2].y - numState.items[index1].y -numState.items[index1].long < 0){
-                    actions.ChangeXY_Top(numState.items[index1].y,numState.items[index1].long)
-                    //numState.items[index2].y = numState.items[index1].y + numState.items[index1].long
-                    Log.d("res","inde2xxxxxx:"+index2+":y:"+numState.items[index2].y+":long:"+numState.items[index2].long)
-                    Log.d("res","inde1xxxxxx:"+index1+":y:"+numState.items[index1].y+":long:"+numState.items[index1].long)
-                    //actions.ChangeXY_Top(numState.items[index1].y ,numState.items[index1].long)
+    numState.items.forEachIndexed{index1,items1->
+        if (items1.hereItem is DisplayItem.TravelItem){
+            numState.items.forEachIndexed{index2,items2->
+                if (items2.hereItem is DisplayItem.TravelItem){
+                    if (items2.y > items1.y && items2.x == items1.x){
+                        if (items2.y - items1.y - items1.long*2/3 <0){
+                            items2.y = items1.y + items1.long*2/3
+                            //actions.ChangeXY_Top(numState,items1.y,items1.long,items2)
+                        }
+                    }
                 }
             }
-            Log.d("res","index1"+index1+"long"+numState.items[index1].long)
         }
     }
 }
+
+
 
 
 
 private fun Modifier.lazyLayoutPointerInput(state: LazyLayoutState,numState:State): Modifier {
     state.set_bounary(numState.maxX,numState.maxY)
-    Log.d(LOG_TAG,"numState.maxX"+numState.maxX.toString()+"numState.maxY"+numState.maxY.toString())
+    //Log.d(LOG_TAG,"numState.maxX"+numState.maxX.toString()+"numState.maxY"+numState.maxY.toString())
     return pointerInput(Unit) {
         detectDragGestures { change, dragAmount ->
             change.consume()
@@ -246,21 +233,26 @@ private fun Modifier.lazyLayoutPointerInput(state: LazyLayoutState,numState:Stat
     }
 }
 
-private fun Placeable.PlacementScope.placeItem(actions: Actions,index: Int,state: LazyLayoutState, listItem: ListItem, placeables: List<Placeable>) {
+private fun Placeable.PlacementScope.placeItem(numState:State,actions: Actions,index: Int,state: LazyLayoutState, listItem: ListItem, placeables: List<Placeable>) {
     val xPosition : Int
     val yPosition : Int
     when (listItem.hereItem){
         is DisplayItem.TravelItem->{
+            solve_constrain(numState,actions)
             xPosition = listItem.x - state.offsetState.value.x
             yPosition = listItem.y - state.offsetState.value.y
         }
         is DisplayItem.WeatherItem->{
-            actions.ChangeXY_Top(state.offsetState.value.y)
+            actions.ChangeXY_Top(numState,state.offsetState.value.y)
             xPosition = listItem.x - state.offsetState.value.x
             yPosition = 0
         }
         is DisplayItem.BackGroundItem->{
-            actions.ChangeXY_Top(state.offsetState.value.y)
+            actions.ChangeXY_Top(numState,state.offsetState.value.y)
+//            if ( listItem.hereItem.backGround.isWeather ){
+//                listItem.y = state.offsetState.value.y
+//            }
+
             if (listItem.hereItem.backGround.isWeather){
                 xPosition = listItem.x - state.offsetState.value.x
                 yPosition = 0
@@ -335,6 +327,8 @@ fun ShowCard(
     CardWeid:Dp,
     onItemClick: (Temp_Trval_Items) -> Unit,
     numState:State,
+    actions: Actions,
+    itemss: ListItem
 ){
     //val hight = remember { mutableStateOf<Int?>(null) }
     val hight = remember { mutableStateOf<Int?>(null) }
@@ -412,17 +406,18 @@ fun ShowCard(
             MoneyCaculate(item.MyMoney)
         }
     }
+    if (hight.value != null) {
+        Log.d("mylog",item.trval_id.toString()+"  "+hight.value.toString())
+        //val index = numState.items.indexOfFirst { it is DisplayItem.TravelItem && it.trvalitem == item }
 
-    LaunchedEffect(hight.value) {
-        if (hight.value != null) {
-            Log.d("mylog",hight.value.toString())
-            //val index = numState.items.indexOfFirst { it is DisplayItem.TravelItem && it.trvalitem == item }
-
-            val index = numState.items.indexOfFirst { listItem ->
-                listItem.hereItem is DisplayItem.TravelItem && listItem.hereItem.trvalitem == item
-            }
-            numState.items[index].long = hight.value ?: 0
-            //items.long = hight.value ?: 0
+        val index = numState.items.indexOfFirst { listItem ->
+            listItem.hereItem is DisplayItem.TravelItem && listItem.hereItem.trvalitem == item
+        }
+        hight.value?.let { intValue ->
+            itemss.long =  intValue
+            //numState.items[index].long = intValue
+            //solve_constrain(numState,actions)
+            val a1=1
         }
     }
 }
@@ -701,7 +696,7 @@ fun ShowRow(item: MonyRow){
         }
 
     }
-}}
+}
 
 
 

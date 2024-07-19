@@ -1,9 +1,14 @@
 package com.example.kamteamapp.ui.chat
 
+import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.toMutableStateList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_CLOUDS
 import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_FLAMINGO
 import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_MELTING
@@ -11,20 +16,101 @@ import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_PINK_HEART
 import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_POINTS
 import com.example.kamteamapp.R
 import com.example.kamteamapp.data.Temp_Main_Items
+import com.example.kamteamapp.data.tempMainItem2
+import com.example.kamteamapp.data.tempMainItem3
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+//class ConversationUiState(
+//    val channelName: String,
+//    initialMessages: List<Message>
+//) {
+//    private val _messages: MutableList<Message> = initialMessages.toMutableStateList()
+//    val messages: List<Message> = _messages
+//
+//    fun addMessage(msg: Message) {
+//        _messages.add(0, msg)
+//    }
+//}
+
 
 class ConversationUiState(
     val channelName: String,
     initialMessages: List<Message>
 ) {
-    private val _messages: MutableList<Message> = initialMessages.toMutableStateList()
-    val messages: List<Message> = _messages
+    private val _messages: MutableLiveData<List<Message>> = MutableLiveData(initialMessages)
+    val messages: LiveData<List<Message>> = _messages
 
     fun addMessage(msg: Message) {
-        _messages.add(0, msg)
+        val newMessages = _messages.value?.toMutableList() ?: mutableListOf()
+        newMessages.add(0, msg)
+        _messages.value = newMessages
     }
 }
+
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+class ConversationViewModel : ViewModel() {
+    val conversation = ConversationUiState("General", listOf())
+
+    init {
+        viewModelScope.launch {
+            delay(8000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "请说出你本次出行的计划要求",
+                "8:05 PM"))
+            delay(8000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "请问你们从哪里出发",
+                "8:05 PM"))
+
+            delay(8000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "好的，请问你们希望选择什么交通工具往返西安",
+                "8:05 PM"))
+            delay(8000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "好的请问你们的预算是多少",
+                "8:06 PM"))
+            delay(8000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "已为您生成出行方案",
+                "8:06 PM",
+                CardorImage.CardItem(
+                    tempMainItem3
+                )
+            ))
+
+
+            delay(30000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "已为您更新出行方案",
+                "8:06 PM",
+                CardorImage.CardItem(
+                    tempMainItem3
+                )
+            ))
+
+
+
+        }
+    }
+
+    fun getMessages(): LiveData<List<Message>> {
+        return conversation.messages
+    }
+}
+
 
 
 @Immutable

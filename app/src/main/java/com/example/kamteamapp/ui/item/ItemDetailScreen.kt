@@ -34,8 +34,10 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,18 +87,16 @@ object ItemDetailsDestination : NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ItemDetailsScreen(
-    itemIdTime :Int?,
     state: State,
     actions: Actions,
     navigateBack: () -> Unit,
     navigateToItemUpdate: (Int) -> Unit,
+    //isInitialized: MutableState<Boolean>
     ){
+    //val isInitialized = remember(backStackEntry) { mutableStateOf(true) }
 
-    if (itemIdTime == 1){
-        actions.setTrvalItem(combineItems(TempRes, TempWeath) )
-    } else{
-        actions.setTrvalItem(combineItems(TempRes2, TempWeath2) )
-    }
+
+
 
     Scaffold (
         topBar = {

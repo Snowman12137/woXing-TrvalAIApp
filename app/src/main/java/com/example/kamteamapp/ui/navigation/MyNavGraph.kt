@@ -4,6 +4,9 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,6 +14,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.kamteamapp.Utils.ScreenSizeManager
+import com.example.kamteamapp.data.TempRes
+import com.example.kamteamapp.data.TempRes2
+import com.example.kamteamapp.data.TempWeath
+import com.example.kamteamapp.data.TempWeath2
 import com.example.kamteamapp.ui.chat.ChatDestination
 import com.example.kamteamapp.ui.chat.ConversationScreen
 import com.example.kamteamapp.ui.home.HomeDestination
@@ -23,7 +30,7 @@ import com.example.kamteamapp.ui.item.Detail.DetailScreen
 import com.example.kamteamapp.ui.item.ItemDetailsDestination
 import com.example.kamteamapp.ui.item.ItemDetailsScreen
 import com.example.kamteamapp.ui.item.State
-
+import com.example.kamteamapp.ui.item.combineItems
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -67,15 +74,32 @@ fun MyNavHost(
              type = NavType.IntType
          }),
      ){backStackEntry ->
+         val isInitialized = remember { mutableStateOf(false) }
+
+         LaunchedEffect(backStackEntry) {
+             // 每次进入页面时执行
+             isInitialized.value = true
+         }
+
+         if (isInitialized.value){
+             if (backStackEntry.arguments?.getInt(ItemDetailsDestination.itemIdArg) == 1){
+                 actions.setTrvalItem(combineItems(TempRes, TempWeath) )
+             } else{
+                 actions.setTrvalItem(combineItems(TempRes2, TempWeath2) )
+             }
+             isInitialized.value = false
+         }
+
+
          ItemDetailsScreen(
-             itemIdTime=backStackEntry.arguments?.getInt(ItemDetailsDestination.itemIdArg),
-             state = state,
+             //itemIdTime=backStackEntry.arguments?.getInt(ItemDetailsDestination.itemIdArg),
+             state = actions.get_state(),
              actions = actions,
              //navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
              navigateBack = { navController.navigateUp() },
              navigateToItemUpdate = {
                  navController.navigate("${DetailDestination.route}/${it}")
-             }
+             },
          )
      }
         // 主界面 对话界面

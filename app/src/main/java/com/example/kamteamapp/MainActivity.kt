@@ -12,12 +12,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import com.example.kamteamapp.ui.item.DetailMainViewModel
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kamteamapp.Utils.ScreenSizeManager
+import com.example.kamteamapp.data.TempRes
+import com.example.kamteamapp.data.TempRes2
+import com.example.kamteamapp.data.TempWeath
+import com.example.kamteamapp.data.TempWeath2
+import com.example.kamteamapp.ui.item.combineItems
 
 class MainActivity : ComponentActivity() {
     val viewModel by viewModels<DetailMainViewModel>()
@@ -27,6 +34,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KamTeamAppTheme {
+
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -36,6 +44,11 @@ class MainActivity : ComponentActivity() {
                     val res1 = ScreenSize.getRes()
                     val res2 = ScreenSize.getDestiy()
                     viewModel.setParamter(res1,res2)
+//                    if (isInitialized.value){
+//                        viewModel.setTrvalItem(combineItems(TempRes, TempWeath))
+//                        isInitialized.value=false
+//                    }
+
                     MyApp(state = state, actions = viewModel)
                 }
             }

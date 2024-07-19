@@ -161,6 +161,18 @@ val tempMainItem3 = Temp_Main_Items(
 )
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+val tempMainItem4 = Temp_Main_Items(
+    id = 3,
+    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+    trval_day = 3,
+    weathers_id = 5,
+    trvals_id = 5,
+    name = "西安3日游(新)",
+    other1 = "西安"
+)
+
+
 
 val exampleUiState: ConversationUiState
     get() = ConversationUiState(

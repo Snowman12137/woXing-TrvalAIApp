@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.Utils.WideThing
 import com.example.kamteamapp.data.Between
+import com.example.kamteamapp.data.TempRes
+import com.example.kamteamapp.data.TempWeath
 import com.example.kamteamapp.data.Temp_Trval_Items
 import com.example.kamteamapp.data.Temp_Weather_Items
 import com.example.kamteamapp.data.Time
@@ -25,6 +27,7 @@ import kotlinx.coroutines.launch
 class DetailMainViewModel : ViewModel(), Actions {
 
     val state = MutableStateFlow(State())
+    val hour:Int = 26
 
     var params:WideThing = WideThing()
     var destiy :Float =0f
@@ -51,7 +54,9 @@ class DetailMainViewModel : ViewModel(), Actions {
         destiy = destiys
     }
 
-
+//    init {
+//        setTrvalItem(combineItems(TempRes, TempWeath) )
+//    }
 
 
     override fun get_Paramter():WideThing{
@@ -73,6 +78,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                         ListItem(
                             x = (item.hereItem.trvalitem.day  -1)*params.DayLang,
                             y = time_long(item.hereItem.trvalitem.time.start)+params.BaseHight,
+                            long = item.long,
                             hereItem =item.hereItem
                         )
                     }
@@ -105,13 +111,13 @@ class DetailMainViewModel : ViewModel(), Actions {
                                 hereItem =item.hereItem
                             )
                         }
-
                     }
                 }
             }
             state.value = currentState.copy(items = items)
         }
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun setTrvalItem(Temp: List<DisplayItem>) {
@@ -125,7 +131,7 @@ class DetailMainViewModel : ViewModel(), Actions {
     private fun calculateTrval(Temp: List<DisplayItem>):ResultVal{
 
         val size: Int = Temp.size
-        var maxY: Int = params.TimeLang*24
+        var maxY: Int = params.TimeLang*hour
         var numberday :Int =0
 
 
@@ -168,7 +174,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                         index = index,
                         color = Color.White,
                         weide = (params.DayLang/destiy -params.BasePadding).toInt(), // 这里的Weide和hight应该是DP类型，最后再转化也可以
-                        hight = (24 * params.TimeLang/destiy).toInt()  // 因为最后输入modify的size是DP类型
+                        hight = (hour * params.TimeLang/destiy).toInt()  // 因为最后输入modify的size是DP类型
                     )                               // 坐标偏移是px和DP不一样
                 )
             )
@@ -176,64 +182,73 @@ class DetailMainViewModel : ViewModel(), Actions {
         val Res = itembackground + items
 
 
-        return ResultVal(numberday,size, numberday * params.DayLang  - params.screenWidth + params.BasePadding , maxY - params.screenHeight+ params.BasePadding, Res)
+        return ResultVal(numberday,size, numberday * params.DayLang  - params.screenWidth + params.BasePadding , maxY - params.screenHeight+ params.BasePadding*destiy.toInt(), Res)
         //return ResultVal(numberday,size, ((numberday * params.DayLang + params.screenWidth )/ destiy).toInt(), ((maxY+params.screenHeight)/destiy).toInt(), Res)
     }
 
 
 
+     override fun ChangeXY_Top(statess: State,offsetStateY: Int, longs: Int, itemss: ListItem?) {
+         generateJob = viewModelScope.launch {
+             // 首先，获取当前状态的值
+             val currentState = statess
+             // 接着，获取当前索引处的 ListItem
 
-    override fun ChangeXY_Top(offsetStateY: Int,longs: Int){
-        // 首先，获取当前状态的值
-        val currentState = state.value
-        // 接着，获取当前索引处的 ListItem
+             val items = currentState.items.map { item ->
+                 when (item.hereItem) {
+                     is DisplayItem.TravelItem -> {
+                         if (longs != 0 && itemss != null && item == itemss) {
+                             ListItem(
+                                 x = item.x,
+                                 y = offsetStateY + longs,
+                                 long = item.long,
+                                 hereItem = item.hereItem
+                             )
+                         } else {
+                             ListItem(
+                                 x = item.x,
+                                 y = item.y,
+                                 long = item.long,
+                                 hereItem = item.hereItem
+                             )
+                         }
+                     }
 
-        val items = currentState.items.map{item->
-            when(item.hereItem){
-                is DisplayItem.TravelItem->{
-                    if (longs !=0){
-                        ListItem(
-                            x = item.x,
-                            y = offsetStateY + longs,
-                            long = item.long,
-                            hereItem=item.hereItem
-                        )
-                    }
-                    ListItem(
-                        x = item.x,
-                        y = item.y,
-                        long = item.long,
-                        hereItem=item.hereItem
-                    )
-                }
-                is DisplayItem.WeatherItem->{
-                    ListItem(
-                        x= item.x,
-                        y= offsetStateY,
-                        hereItem=item.hereItem
-                    )
-                }
-                is DisplayItem.BackGroundItem->{
-                    if (item.hereItem.backGround.isWeather){
-                        ListItem(
-                            x = item.x,
-                            y = offsetStateY,
-                            hereItem=item.hereItem
-                        )
-                    }else{
-                        ListItem(
-                            x = item.x,
-                            y = item.y,
-                            hereItem=item.hereItem
-                        )
-                    }
-                }
-            }
-        }
-        state.value = currentState.copy(items = items)
-    }
+                     is DisplayItem.WeatherItem -> {
+                         ListItem(
+                             x = item.x,
+                             y = offsetStateY,
+                             hereItem = item.hereItem
+                         )
+                     }
+
+                     is DisplayItem.BackGroundItem -> {
+                         if (item.hereItem.backGround.isWeather) {
+                             ListItem(
+                                 x = item.x,
+                                 y = offsetStateY,
+                                 hereItem = item.hereItem
+                             )
+                         } else {
+                             ListItem(
+                                 x = item.x,
+                                 y = item.y,
+                                 hereItem = item.hereItem
+                             )
+                         }
+                     }
+                 }
+             }
+             state.value = currentState.copy(items = items)
+         }
+         val a1 =1
+     }
     fun time_long(time:Time):Int{
         return (time.hour*params.TimeLang+time.minite*params.TimeLang/60)
+    }
+
+    override fun get_state(): State {
+        return state.value
     }
 
 
@@ -284,9 +299,10 @@ data class BackGround(
 interface Actions {
 
     fun setTrvalItem(Temp: List<DisplayItem>)
-    fun ChangeXY_Top(offsetStateY: Int,longs: Int=0)
+    fun ChangeXY_Top(statess: State,offsetStateY: Int,longs: Int =0 ,itemss: ListItem ?=null)
     fun get_Paramter():WideThing
     fun get_Size():Pair<Float, Float>
+    fun get_state():State
 }
 
 
