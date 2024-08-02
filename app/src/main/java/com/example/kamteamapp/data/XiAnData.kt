@@ -17,14 +17,14 @@ val TempRes2 = listOf(
         0,
         Between(
             Time(
-                8,
+                5,
                 30
             )
         ),
         "行李放到酒店，下一行程->钟楼",
         listOf(
             Money_Data(
-                "飞机票",
+                "高铁",
                 450f,
                 "2"
             ), Money_Data(
@@ -32,11 +32,7 @@ val TempRes2 = listOf(
                 10f,
                 "2"
             ), Money_Data(
-                "额外托运",
-                100f,
-                "1"
-            ), Money_Data(
-                "机场小吃",
+                "高铁小吃",
                 50f,
                 "0"
             )

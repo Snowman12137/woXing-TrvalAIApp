@@ -207,8 +207,8 @@ fun solve_constrain(numState: State,actions: Actions){
             numState.items.forEachIndexed{index2,items2->
                 if (items2.hereItem is DisplayItem.TravelItem){
                     if (items2.y > items1.y && items2.x == items1.x){
-                        if (items2.y - items1.y - items1.long*2/3 <0){
-                            items2.y = items1.y + items1.long*2/3
+                        if (items2.y - items1.y - items1.long <0){
+                            items2.y = items1.y + items1.long
                             //actions.ChangeXY_Top(numState,items1.y,items1.long,items2)
                         }
                     }

@@ -18,6 +18,7 @@ import com.example.kamteamapp.R
 import com.example.kamteamapp.data.Temp_Main_Items
 import com.example.kamteamapp.data.tempMainItem2
 import com.example.kamteamapp.data.tempMainItem3
+import com.example.kamteamapp.data.tempMainItem4
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,12 +60,12 @@ class ConversationViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            delay(8000)
+            delay(3000)
             conversation.addMessage(Message(
                 "蓝心大模型",
                 "请说出你本次出行的计划要求",
                 "8:05 PM"))
-            delay(8000)
+            delay(15000)
             conversation.addMessage(Message(
                 "蓝心大模型",
                 "请问你们从哪里出发",
@@ -75,12 +76,12 @@ class ConversationViewModel : ViewModel() {
                 "蓝心大模型",
                 "好的，请问你们希望选择什么交通工具往返西安",
                 "8:05 PM"))
-            delay(8000)
+            delay(10000)
             conversation.addMessage(Message(
                 "蓝心大模型",
                 "好的请问你们的预算是多少",
                 "8:06 PM"))
-            delay(8000)
+            delay(10000)
             conversation.addMessage(Message(
                 "蓝心大模型",
                 "已为您生成出行方案",
@@ -89,15 +90,28 @@ class ConversationViewModel : ViewModel() {
                     tempMainItem3
                 )
             ))
-
-
             delay(30000)
             conversation.addMessage(Message(
                 "蓝心大模型",
-                "已为您更新出行方案",
+                "您可以对出行方案随时进行评价",
+                "8:06 PM",
+            ))
+
+
+            delay(15000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "请问是否需要重新修改第二日方案，推迟参观兵马俑时间",
+                "8:06 PM",
+            ))
+
+            delay(8000)
+            conversation.addMessage(Message(
+                "蓝心大模型",
+                "已为您重新规划方案",
                 "8:06 PM",
                 CardorImage.CardItem(
-                    tempMainItem3
+                    tempMainItem4
                 )
             ))
 
