@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.Utils.WideThing
 import com.example.kamteamapp.data.Between
+import com.example.kamteamapp.data.New_Temp_Trval_Items
 import com.example.kamteamapp.data.TempRes
 import com.example.kamteamapp.data.TempWeath
 import com.example.kamteamapp.data.Temp_Trval_Items
@@ -49,7 +50,9 @@ class DetailMainViewModel : ViewModel(), Actions {
             TimeLangDP = params1.TimeLangDP,
             DayLangDP = params1.DayLangDP,
             screenWidth = params1.screenWidth,
-            screenHeight = params1.screenHeight
+            screenHeight = params1.screenHeight,
+            start_part = params1.start_part,
+            destiys = destiys
         )
         destiy = destiys
     }
@@ -76,7 +79,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                 when(item.hereItem){
                     is DisplayItem.TravelItem->{
                         ListItem(
-                            x = (item.hereItem.trvalitem.day  -1)*params.DayLang,
+                            x = (params.start_part*destiy).toInt()+(item.hereItem.trvalitem.day  -1)*params.DayLang,
                             y = time_long(item.hereItem.trvalitem.time.start)+params.BaseHight,
                             long = item.long,
                             hereItem =item.hereItem
@@ -84,7 +87,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                     }
                     is DisplayItem.WeatherItem->{
                         ListItem(
-                            x= (item.hereItem.weatheritem.number_day-1) * params.DayLang + params.BasePadding,
+                            x= (params.start_part*destiy).toInt()+(item.hereItem.weatheritem.number_day-1) * params.DayLang + params.BasePadding,
                             y= params.DayHight,
                             hereItem =item.hereItem
                         )
@@ -92,7 +95,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                     is DisplayItem.BackGroundItem->{
                         if (index == state.value.data){
                             ListItem(
-                                x= 0,
+                                x= (params.start_part*destiy).toInt(),
                                 y= 0,
                                 hereItem =DisplayItem.BackGroundItem(
                                     BackGround(
@@ -106,11 +109,26 @@ class DetailMainViewModel : ViewModel(), Actions {
                             )
                         }else{
                             ListItem(
-                                x= index * params.DayLang,
+                                x= (params.start_part*destiy).toInt()+index * params.DayLang,
                                 y= 0,
                                 hereItem =item.hereItem
                             )
                         }
+                    }
+                    is DisplayItem.TimeLiner->{
+                        ListItem(
+                            x =0,
+                            y=0,
+                            hereItem = item.hereItem
+                        )
+                    }
+                    is DisplayItem.New_Temp_Trval->{
+                        ListItem(
+                            x = (params.start_part*destiy).toInt()+(item.hereItem.new_temp_trval_Items.day  -1)*params.DayLang,
+                            y = time_long(item.hereItem.new_temp_trval_Items.time.start)+params.BaseHight,
+                            long = item.long,
+                            hereItem =item.hereItem
+                        )
                     }
                 }
             }
@@ -163,6 +181,22 @@ class DetailMainViewModel : ViewModel(), Actions {
                         hereItem =DisplayItem.BackGroundItem(BackGround(color = Color.White, weide = 0, hight = 0))
                     )
                 }
+                is DisplayItem.TimeLiner->{
+                    ListItem(
+                        0,
+                        0,
+                        hereItem =DisplayItem.TimeLiner(TimeLinerItem())
+                    )
+                }
+                is DisplayItem.New_Temp_Trval->{
+                    ListItem(
+                        x = 0,
+                        y = 0,
+                        long = 0,
+                        hereItem =DisplayItem.New_Temp_Trval(item.new_temp_trval_Items)
+                    )
+                }
+
             }
         }
         val itembackground: List<ListItem> = List(numberday+1){index->
@@ -179,7 +213,17 @@ class DetailMainViewModel : ViewModel(), Actions {
                 )
             )
         }
-        val Res = itembackground + items
+        val TimeLin:List<ListItem> = List(1){
+            ListItem(
+                0,
+                0,
+                hereItem = DisplayItem.TimeLiner(
+                    TimeLinerItem()
+                )
+            )
+        }
+
+        val Res =  itembackground + items + TimeLin
 
 
         return ResultVal(numberday,size, numberday * params.DayLang  - params.screenWidth + params.BasePadding , maxY - params.screenHeight+ params.BasePadding*destiy.toInt(), Res)
@@ -188,7 +232,7 @@ class DetailMainViewModel : ViewModel(), Actions {
 
 
 
-     override fun ChangeXY_Top(statess: State,offsetStateY: Int, longs: Int, itemss: ListItem?) {
+     override fun ChangeXY_Top(statess: State,offsetStateX: Int,offsetStateY: Int, longs: Int, itemss: ListItem?) {
          generateJob = viewModelScope.launch {
              // 首先，获取当前状态的值
              val currentState = statess
@@ -226,7 +270,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                          if (item.hereItem.backGround.isWeather) {
                              ListItem(
                                  x = item.x,
-                                 y = offsetStateY,
+                                 y = item.y,
                                  hereItem = item.hereItem
                              )
                          } else {
@@ -236,6 +280,21 @@ class DetailMainViewModel : ViewModel(), Actions {
                                  hereItem = item.hereItem
                              )
                          }
+                     }
+                     is DisplayItem.TimeLiner->{
+                         ListItem(
+                             offsetStateX,
+                             item.y,
+                             hereItem = item.hereItem
+                         )
+                     }
+                     is DisplayItem.New_Temp_Trval->{
+                         ListItem(
+                             x = item.x,
+                             y = item.y,
+                             long = item.long,
+                             hereItem = item.hereItem
+                         )
                      }
                  }
              }
@@ -284,7 +343,14 @@ sealed class DisplayItem {
     data class TravelItem(val trvalitem: Temp_Trval_Items) : DisplayItem()
     data class WeatherItem(val weatheritem: Temp_Weather_Items) : DisplayItem()
     data class BackGroundItem(val backGround: BackGround):DisplayItem()
+    data class TimeLiner(val timeliner :TimeLinerItem):DisplayItem()
+    data class New_Temp_Trval(val new_temp_trval_Items: New_Temp_Trval_Items):DisplayItem()
 }
+
+data class TimeLinerItem(
+    val sunraise : Int =0,
+    val night : Int =0,
+)
 
 data class BackGround(
     val index : Int = 0,
@@ -299,7 +365,7 @@ data class BackGround(
 interface Actions {
 
     fun setTrvalItem(Temp: List<DisplayItem>)
-    fun ChangeXY_Top(statess: State,offsetStateY: Int,longs: Int =0 ,itemss: ListItem ?=null)
+    fun ChangeXY_Top(statess: State,offsetStateX: Int,offsetStateY: Int,longs: Int =0 ,itemss: ListItem ?=null)
     fun get_Paramter():WideThing
     fun get_Size():Pair<Float, Float>
     fun get_state():State

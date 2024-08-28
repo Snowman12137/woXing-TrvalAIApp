@@ -15,12 +15,12 @@ import com.example.kamteamapp.data.Temp_Trval_Items
 
 @Composable
 fun CardTopEmoji(
-    item: Temp_Trval_Items
+    item: Int
 ){
     var emoji = ""
-    if (item.model==0){
+    if (item==0){
         emoji = "$Plane"
-    }else if (item.model==1){
+    }else if (item==1){
         emoji = "$DestiNation"
     }else {
         emoji = "$Food"

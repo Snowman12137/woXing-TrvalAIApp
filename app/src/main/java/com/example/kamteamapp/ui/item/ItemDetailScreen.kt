@@ -57,6 +57,7 @@ import com.example.kamteamapp.R
 import com.example.kamteamapp.Utils.ScreenSizeManager
 import com.example.kamteamapp.data.BodyColor
 import com.example.kamteamapp.data.ColorPart
+import com.example.kamteamapp.data.New_Temp_Trval_Items
 import com.example.kamteamapp.data.TempRes
 import com.example.kamteamapp.data.TempRes2
 import com.example.kamteamapp.data.TempWeath
@@ -134,83 +135,11 @@ fun ItemDetailsBody(
         verticalAlignment = Alignment.Top,
         modifier = Modifier.padding(top = 100.dp)
     ){
-        TimeLiner()
+        //TimeLiner()
         Spacer(modifier = Modifier.width(8.dp))
         MainBody(state = state, actions = actions, onItemClick = onItemClick)
     }
 }
-
-
-@RequiresApi(Build.VERSION_CODES.R)
-@Composable
-fun TimeLiner(
-    modifier: Modifier = Modifier
-){
-    // 时间轴组件
-    LazyColumn(
-        modifier = Modifier
-            .width(20.dp) // 时间轴的宽度
-            .background(
-                //shape = RoundedCornerShape(10.dp),
-                color = colorScheme.background
-            )
-    ) {
-            // 月份
-        item{
-            Text(
-                text = "6月",
-                style = MaterialTheme.typography.labelMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth() // 填充宽度
-                    .padding(vertical = 4.dp)
-                    .height(50.dp)
-            )
-        }
-
-
-            items(13) { hour ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(1f)
-                        .height(70.dp)
-                        .background(
-                            shape = RectangleShape,
-                            color = MaterialTheme.colorScheme.inversePrimary
-                        ),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "$hour",
-                        color = Color.Black,
-                        style = MaterialTheme.typography.labelMedium, // 确保从MaterialTheme获取typography
-                        textAlign = TextAlign.Center, // 文本居中对齐
-                        modifier = Modifier
-                            .fillMaxWidth() // 填充宽度
-                            .padding(vertical = 4.dp) // 根据需要添加垂直方向的间距
-                    )
-                    // 先把颜色取出来
-                    val colors = MaterialTheme.colorScheme.secondary
-                    Canvas(
-                        modifier = Modifier
-                            .size(16.dp)
-                            .align(Alignment.CenterHorizontally)
-
-                    ){
-                        // 画笔颜色
-                        drawCircle(
-                            color = colors, // 设置圆形颜色
-                            radius = 8f // 设置半径，确保它小于 Canvas 的一半尺寸
-                        )
-                    }
-                }
-
-            }
-
-
-    }
-}
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -230,8 +159,8 @@ fun MainBody(
 
 
 
-fun combineItems(trvalItems: List<Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>): List<DisplayItem> {
-    return trvalItems.map { DisplayItem.TravelItem(it) } +
+fun combineItems(detailss:List<New_Temp_Trval_Items>,trvalItems: List<Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>): List<DisplayItem> {
+    return detailss.map { DisplayItem.New_Temp_Trval(it) }+trvalItems.map { DisplayItem.TravelItem(it) } +
             weatherItems.map { DisplayItem.WeatherItem(it) }
 }
 

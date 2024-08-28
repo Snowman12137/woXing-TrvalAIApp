@@ -69,6 +69,49 @@ enum class BodyColor(val color: Color) {
     THIRD_BODY(Color(0xFFFEDDFF))
 }
 
+enum class TimeLinerColor(val color: Color){
+    HOUR_4_light(Color(0x4D12ACA2)),
+    HOUR_4_normal(Color(0xFF155E8B)),
+    HOUR_8_light(Color(0x4DF48BDC)),
+    HOUR_8_normal(Color(0xFFE95A3C)),
+    HOUR_12_light(Color(0x4DFAA342)),
+    HOUR_12_normal(Color(0xFFF12B27)),
+
+    HOUR_16_light(Color(0x4DE54791)),
+    HOUR_16_normal(Color(0xFF6F2668)),
+    HOUR_20_light(Color(0x4D817DB9)),
+    HOUR_20_normal(Color(0xFF2658B0)),
+    HOUR_24_light(Color(0x4D48B6F1)),
+    HOUR_24_normal(Color(0xFF399A64))
+    ;
+
+    fun getColorByNumber1(number:Int):Color{
+        check(number in 1..5) { "Number must be between 1 and 6" }
+        return when (number){
+            1->HOUR_4_normal.color
+            2->HOUR_8_normal.color
+            3->HOUR_12_normal.color
+            4->HOUR_16_normal.color
+            5->HOUR_20_normal.color
+            else -> throw IllegalArgumentException("Unsupported number: $number")
+        }
+
+    }
+    fun getColorByNumber2(number:Int):Color{
+        check(number in 1..5) { "Number must be between 1 and 6" }
+        return when (number){
+            1->HOUR_8_light.color
+            2->HOUR_12_light.color
+            3->HOUR_16_light.color
+            4->HOUR_20_light.color
+            5->HOUR_24_light.color
+            else -> throw IllegalArgumentException("Unsupported number: $number")
+        }
+    }
+
+}
+
+
 
 data class Temp_Weather_Items(
     val weather_id: Int,  //
@@ -108,6 +151,30 @@ data class Temp_Detail_Items(
 )
 
 
+data class New_Temp_Trval_Items(
+    val trval_id :Int,
+    val model : Int,
+    val day : Int,
+    val Detail_trval : Int,
+    val trval_name : String,
+    val time :  Between,
+    val abbreviate_thing:String,
+    val detailThings: List<Detail_Trval_Data> = listOf(),
+    val taval_tar:Travels_Data
+)
+data class Travels_Data(
+    val start_tar:String="",
+    val end_tar :String="",
+
+    val other:String=""
+)
+
+data class Detail_Trval_Data(
+    val detail_trval_id: Int,
+    val others:String="",
+    val times:Between,
+    val my_content:String
+)
 
 
 data class Money_Data(

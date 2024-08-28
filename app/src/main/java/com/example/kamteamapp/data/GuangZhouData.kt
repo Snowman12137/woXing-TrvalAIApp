@@ -4,44 +4,101 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDate
 
+val New_Temp_Res = listOf(
 
-@RequiresApi(Build.VERSION_CODES.O)
-val TempRes = listOf(
-    Temp_Trval_Items(
+    New_Temp_Trval_Items(
         1,
         0,
         1,
         1,
         "西安->广州",
-        LocalDate.of(2024,7,7),
-        0,
         Between(
             Time(
                 0,
                 30
+            ),
+            Time(
+                1
             )
         ),
-        "行李放到酒店，下一行程->打车",
+        "行李在转盘B307",
         listOf(
-            Money_Data(
-                "飞机票",
-                890f,
-                "2"
-            ), Money_Data(
-                "保险",
-                10f,
-                "2"
-            ), Money_Data(
-                "额外托运",
-                100f,
-                "1"
-            ), Money_Data(
-                "机场小吃",
-                50f,
-                "0"
+            Detail_Trval_Data(
+                1,
+                others = "",
+                Between(
+                    Time(
+                        0,
+                        30
+                    ),
+                ),
+                "到达时间较晚，请注意休息"
+            ),
+            Detail_Trval_Data(
+                2,
+                others = "取行李",
+                Between(
+                    Time(
+                        0,
+                        45
+                    ),
+                ),
+                "行李在转盘B307"
+            ),
+            Detail_Trval_Data(
+                3,
+                others = "网约车",
+                Between(
+                    Time(
+                        1,
+                    ),
+                ),
+                "请前往B1层网约车区域打车"
             )
-        )
+        ),
+        Travels_Data()
     ),
+
+
+    New_Temp_Trval_Items(
+        2,
+        1,
+        1,
+        1,
+        "出租车->酒店",
+        Between(
+            Time(
+                1,
+
+            ),
+            Time(
+                1,
+                26
+            )
+        ),
+        "约花费30分钟/35元",
+        listOf(),
+        Travels_Data(
+            start_tar = "白云国际机场T1航站楼",
+            end_tar = "8天国际酒店",
+
+            other = "已为您打车，为减少您的等待时间，请慢步走向B1层网约车层，B1层无空调"
+        )
+    )
+
+
+
+
+
+
+
+
+)
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+val TempRes = listOf(
+
     Temp_Trval_Items(
         2,
         1,

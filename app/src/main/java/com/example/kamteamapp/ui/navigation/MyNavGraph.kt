@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.kamteamapp.Utils.ScreenSizeManager
+import com.example.kamteamapp.data.New_Temp_Res
 import com.example.kamteamapp.data.TempRes
 import com.example.kamteamapp.data.TempRes2
 import com.example.kamteamapp.data.TempWeath
@@ -27,6 +28,7 @@ import com.example.kamteamapp.ui.intrest.IntrestScreen
 import com.example.kamteamapp.ui.item.Actions
 import com.example.kamteamapp.ui.item.Detail.DetailDestination
 import com.example.kamteamapp.ui.item.Detail.DetailScreen
+import com.example.kamteamapp.ui.item.DisplayItem
 import com.example.kamteamapp.ui.item.ItemDetailsDestination
 import com.example.kamteamapp.ui.item.ItemDetailsScreen
 import com.example.kamteamapp.ui.item.State
@@ -83,9 +85,9 @@ fun MyNavHost(
 
          if (isInitialized.value){
              if (backStackEntry.arguments?.getInt(ItemDetailsDestination.itemIdArg) == 1){
-                 actions.setTrvalItem(combineItems(TempRes, TempWeath) )
+                 actions.setTrvalItem(combineItems(New_Temp_Res,TempRes, TempWeath) )
              } else{
-                 actions.setTrvalItem(combineItems(TempRes2, TempWeath2) )
+                 actions.setTrvalItem(combineItems(New_Temp_Res,TempRes2, TempWeath2) )
              }
              isInitialized.value = false
          }

@@ -53,7 +53,53 @@ val typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
+// login部分
 
+val Typography.login_h1:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ab)),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
+val Typography.login_body1:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ab)),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
+val Typography.login_body2:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ab)),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
+val Typography.login_botton:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ab)),
+            fontSize = 20.sp,
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+    }
+
+
+
+// other
 val Typography.Weather1:TextStyle
     @Composable
     get(){
@@ -129,7 +175,7 @@ val Typography.Card3Content1:TextStyle
         return TextStyle(
             fontFamily = FontFamily(Font(R.font.fangzhengkaisong)),
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
+            fontSize = 15.sp,
             lineHeight = 21.sp,
             letterSpacing = 0.5.sp
         )
@@ -276,3 +322,30 @@ val Typography.Detail3:TextStyle
         )
     }
 
+val Typography.TimeLiner:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ab)),
+            color = Color.White,
+            fontSize = 15.sp,
+            lineHeight = 22.sp,
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
+
+
+val Typography.TimeLiner2:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ar)),
+            color = Color.White,
+            fontSize = 20.sp,
+            lineHeight = 30.sp,
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }

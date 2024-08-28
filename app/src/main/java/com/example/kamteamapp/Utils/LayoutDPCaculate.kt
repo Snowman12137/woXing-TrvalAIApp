@@ -23,7 +23,7 @@ class ScreenSizeManager(private val context: Context) {
         _res.DayLang =  (screenWidth / 1.8f).toInt()
         _res.DayHight = screenHeight / 150
         _res.TimeLang = (screenHeight / 10f).toInt()
-        _res.BaseHight = screenHeight / 14
+        _res.BaseHight = screenHeight / 9
         _res.BasePadding = screenWidth / 100
         _res.screenWidth= screenWidth
         _res.screenHeight= screenHeight
@@ -49,14 +49,16 @@ data class WideThing(
     var TimeLang : Int = 200, //200 // 1小时长度
     var DayLang  : Int = 600, //550 // 1天宽度
     var DayHight : Int = 20,
-    var BaseHight : Int = 150,
+    var BaseHight : Int = 200,
     var BasePadding: Int = 20,
     var screenWidth: Int =0,
     var screenHeight: Int =0 ,
+    var start_part:Int = 26,//(dp大小)
 
 
     var TimeLangDP :Float = 0f,
     var DayLangDP :Float = 0f,
+    var destiys:Float=0f,
 )
 
 
