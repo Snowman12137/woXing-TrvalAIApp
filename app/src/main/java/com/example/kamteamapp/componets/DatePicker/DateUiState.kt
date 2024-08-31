@@ -1,4 +1,4 @@
-package com.example.kamteamapp.ui.intrest
+package com.example.kamteamapp.componets.DatePicker
 
 data class DateNDaysUiState(
     val isIllegalBirthdayDate: Boolean = false,

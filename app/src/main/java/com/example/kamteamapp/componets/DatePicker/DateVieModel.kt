@@ -1,7 +1,5 @@
-package com.example.kamteamapp.ui.intrest
+package com.example.kamteamapp.componets.DatePicker
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,8 +13,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
-import javax.inject.Inject
 
 @HiltViewModel
 class DateNDaysViewModel :ViewModel() {

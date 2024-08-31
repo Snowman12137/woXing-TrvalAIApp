@@ -230,78 +230,6 @@ class DetailMainViewModel : ViewModel(), Actions {
         //return ResultVal(numberday,size, ((numberday * params.DayLang + params.screenWidth )/ destiy).toInt(), ((maxY+params.screenHeight)/destiy).toInt(), Res)
     }
 
-
-
-     override fun ChangeXY_Top(statess: State,offsetStateX: Int,offsetStateY: Int, longs: Int, itemss: ListItem?) {
-         generateJob = viewModelScope.launch {
-             // 首先，获取当前状态的值
-             val currentState = statess
-             // 接着，获取当前索引处的 ListItem
-
-             val items = currentState.items.map { item ->
-                 when (item.hereItem) {
-                     is DisplayItem.TravelItem -> {
-                         if (longs != 0 && itemss != null && item == itemss) {
-                             ListItem(
-                                 x = item.x,
-                                 y = offsetStateY + longs,
-                                 long = item.long,
-                                 hereItem = item.hereItem
-                             )
-                         } else {
-                             ListItem(
-                                 x = item.x,
-                                 y = item.y,
-                                 long = item.long,
-                                 hereItem = item.hereItem
-                             )
-                         }
-                     }
-
-                     is DisplayItem.WeatherItem -> {
-                         ListItem(
-                             x = item.x,
-                             y = offsetStateY,
-                             hereItem = item.hereItem
-                         )
-                     }
-
-                     is DisplayItem.BackGroundItem -> {
-                         if (item.hereItem.backGround.isWeather) {
-                             ListItem(
-                                 x = item.x,
-                                 y = item.y,
-                                 hereItem = item.hereItem
-                             )
-                         } else {
-                             ListItem(
-                                 x = item.x,
-                                 y = item.y,
-                                 hereItem = item.hereItem
-                             )
-                         }
-                     }
-                     is DisplayItem.TimeLiner->{
-                         ListItem(
-                             offsetStateX,
-                             item.y,
-                             hereItem = item.hereItem
-                         )
-                     }
-                     is DisplayItem.New_Temp_Trval->{
-                         ListItem(
-                             x = item.x,
-                             y = item.y,
-                             long = item.long,
-                             hereItem = item.hereItem
-                         )
-                     }
-                 }
-             }
-             state.value = currentState.copy(items = items)
-         }
-         val a1 =1
-     }
     fun time_long(time:Time):Int{
         return (time.hour*params.TimeLang+time.minite*params.TimeLang/60)
     }
@@ -365,7 +293,7 @@ data class BackGround(
 interface Actions {
 
     fun setTrvalItem(Temp: List<DisplayItem>)
-    fun ChangeXY_Top(statess: State,offsetStateX: Int,offsetStateY: Int,longs: Int =0 ,itemss: ListItem ?=null)
+    //fun ChangeXY_Top(statess: State,offsetStateX: Int,offsetStateY: Int,longs: Int =0 ,itemss: ListItem ?=null)
     fun get_Paramter():WideThing
     fun get_Size():Pair<Float, Float>
     fun get_state():State
@@ -394,3 +322,110 @@ fun TimeString(time: Between):String{
     }
 }
 
+
+fun ChangeXY_Top(statess: State,offsetStateX: Int,offsetStateY: Int) {
+    statess.items.forEach { items->
+        when(items.hereItem){
+            is DisplayItem.TravelItem ->{
+                    items.copy(
+                        x = items.x,
+                        y = items.y,
+                        long = items.long,
+                        hereItem = items.hereItem
+                    )
+            }
+            is DisplayItem.WeatherItem->{
+                items.copy(
+                    items.x,
+                    offsetStateY,
+                    hereItem = items.hereItem
+                )
+            }
+            is DisplayItem.BackGroundItem->{
+                items.copy(
+                    x = items.x,
+                    y = items.y,
+                    hereItem = items.hereItem
+                )
+            }
+            is DisplayItem.TimeLiner->{
+                items.copy(
+                    offsetStateX,
+                    items.y,
+                    hereItem = items.hereItem
+                )
+            }
+            is DisplayItem.New_Temp_Trval->{
+                items.copy(
+                    x = items.x,
+                    y = items.y,
+                    long = items.long,
+                    hereItem = items.hereItem
+                )
+            }
+
+        }
+    }
+
+//    val items = statess.items.map { item ->
+//            when (item.hereItem) {
+//                is DisplayItem.TravelItem -> {
+//                    if (longs != 0 && itemss != null && item == itemss) {
+//                        ListItem(
+//                            x = item.x,
+//                            y = offsetStateY + longs,
+//                            long = item.long,
+//                            hereItem = item.hereItem
+//                        )
+//                    } else {
+//                        ListItem(
+//                            x = item.x,
+//                            y = item.y,
+//                            long = item.long,
+//                            hereItem = item.hereItem
+//                        )
+//                    }
+//                }
+//
+//                is DisplayItem.WeatherItem -> {
+//                    ListItem(
+//                        item.x,
+//                        offsetStateY,
+//                        hereItem = item.hereItem
+//                    )
+//                }
+//
+//                is DisplayItem.BackGroundItem -> {
+//                    if (item.hereItem.backGround.isWeather) {
+//                        ListItem(
+//                            x = item.x,
+//                            y = item.y,
+//                            hereItem = item.hereItem
+//                        )
+//                    } else {
+//                        ListItem(
+//                            x = item.x,
+//                            y = item.y,
+//                            hereItem = item.hereItem
+//                        )
+//                    }
+//                }
+//                is DisplayItem.TimeLiner->{
+//                    ListItem(
+//                        offsetStateX,
+//                        item.y,
+//                        hereItem = item.hereItem
+//                    )
+//                }
+//                is DisplayItem.New_Temp_Trval->{
+//                    ListItem(
+//                        x = item.x,
+//                        y = item.y,
+//                        long = item.long,
+//                        hereItem = item.hereItem
+//                    )
+//                }
+//            }
+//        }
+//    itemss?.copy(items = items)
+}

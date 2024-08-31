@@ -1,4 +1,4 @@
-package com.example.kamteamapp.ui.item
+package com.example.kamteamapp.componets
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -7,14 +7,11 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -34,17 +31,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.kamteamapp.data.Between
-import com.example.kamteamapp.data.New_Temp_Res
 import com.example.kamteamapp.data.New_Temp_Trval_Items
+import com.example.kamteamapp.ui.item.CardTopEmoji
+import com.example.kamteamapp.ui.item.TimeString
 import com.example.kamteamapp.ui.theme.Card1
 import com.example.kamteamapp.ui.theme.Card2Time
 import com.example.kamteamapp.ui.theme.Card2TimeBackGround
 import com.example.kamteamapp.ui.theme.Card4Content2
-import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import com.example.kamteamapp.ui.theme.typography
 
 @Composable

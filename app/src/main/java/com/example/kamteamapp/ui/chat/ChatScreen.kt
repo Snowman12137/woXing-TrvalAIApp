@@ -2,7 +2,6 @@ package com.example.kamteamapp.ui.chat
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,7 +28,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material3.Divider
@@ -45,8 +43,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -56,25 +52,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kamteamapp.R
-import com.example.kamteamapp.data.exampleUiState
-import com.example.kamteamapp.ui.home.MyItem
-import com.example.kamteamapp.ui.navigation.NavigationDestination
-import com.example.kamteamapp.ui.theme.KamTeamAppTheme
+import com.example.kamteamapp.ui.HistoryProgram.MyItem
 import kotlinx.coroutines.launch
 
 
@@ -84,17 +73,13 @@ data class TopMassage(
 )
 
 
-object ChatDestination : NavigationDestination {
-    override val route = "chatpart"
-    override val titleRes = R.string.app_name
-}
+
 
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationScreen(
-    navigateToItemUpdate: () -> Unit,
-    //uiState: ConversationUiState = exampleUiState,
+    //navigateToItemUpdate: () -> Unit,
     viewModels: ConversationViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ){
@@ -111,7 +96,7 @@ fun ConversationScreen(
     Scaffold(
         topBar = {
             ChannelNameBar(
-                navigateToItemUpdate = navigateToItemUpdate,
+                //navigateToItemUpdate = navigateToItemUpdate,
                 channelName = "新对话",
                 //channelMembers = uiState.channelMembers,
                 //onNavIconPressed = onNavIconPressed,
@@ -132,7 +117,7 @@ fun ConversationScreen(
             Messages(
                 data = topmassage,
                 messages = messages,
-                navigateToItemUpdate = navigateToItemUpdate,
+                navigateToItemUpdate = {},
                 modifier = Modifier.weight(1f),
                 scrollState = scrollState
             )
@@ -159,7 +144,7 @@ fun ConversationScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelNameBar(
-    navigateToItemUpdate: () -> Unit,
+    //navigateToItemUpdate: () -> Unit,
     channelName: String,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
@@ -196,7 +181,7 @@ fun ChannelNameBar(
                 imageVector = Icons.Rounded.Apps,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
-                    .clickable(onClick = navigateToItemUpdate )
+                    .clickable(onClick = {} )
                     .padding(horizontal = 12.dp, vertical = 16.dp)
                     .height(24.dp),
                 contentDescription = stringResource(id = R.string.info)

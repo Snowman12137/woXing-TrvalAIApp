@@ -9,11 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_CLOUDS
-import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_FLAMINGO
-import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_MELTING
-import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_PINK_HEART
-import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_POINTS
 import com.example.kamteamapp.R
 import com.example.kamteamapp.data.Temp_Main_Items
 import com.example.kamteamapp.data.tempMainItem2
@@ -147,15 +142,15 @@ object EMOJIS {
     // EMOJI 15
     const val EMOJI_PINK_HEART = "\uD83E\uDE77"
 
-    // EMOJI 14 🫠
-    const val EMOJI_MELTING = "\uD83E\uDEE0"
-
-    // ANDROID 13.1 😶‍🌫️
-    const val EMOJI_CLOUDS = "\uD83D\uDE36\u200D\uD83C\uDF2B️"
-
-    // ANDROID 12.0 🦩
-    const val EMOJI_FLAMINGO = "\uD83E\uDDA9"
-
-    // ANDROID 12.0  👉
-    const val EMOJI_POINTS = " \uD83D\uDC49"
+//    // EMOJI 14 🫠
+//    const val EMOJI_MELTING = "\uD83E\uDEE0"
+//
+//    // ANDROID 13.1 😶‍🌫️
+//    const val EMOJI_CLOUDS = "\uD83D\uDE36\u200D\uD83C\uDF2B️"
+//
+//    // ANDROID 12.0 🦩
+//    const val EMOJI_FLAMINGO = "\uD83E\uDDA9"
+//
+//    // ANDROID 12.0  👉
+//    const val EMOJI_POINTS = " \uD83D\uDC49"
 }

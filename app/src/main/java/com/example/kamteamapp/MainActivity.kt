@@ -2,7 +2,6 @@ package com.example.kamteamapp
 
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,19 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
 import com.example.kamteamapp.ui.item.DetailMainViewModel
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kamteamapp.Utils.ScreenSizeManager
-import com.example.kamteamapp.data.TempRes
-import com.example.kamteamapp.data.TempRes2
-import com.example.kamteamapp.data.TempWeath
-import com.example.kamteamapp.data.TempWeath2
-import com.example.kamteamapp.ui.item.combineItems
+import com.example.kamteamapp.componets.MyApp
 
 class MainActivity : ComponentActivity() {
     val viewModel by viewModels<DetailMainViewModel>()

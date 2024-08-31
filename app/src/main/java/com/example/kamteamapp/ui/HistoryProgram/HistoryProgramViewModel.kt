@@ -1,20 +1,18 @@
-package com.example.kamteamapp.ui.home
+package com.example.kamteamapp.ui.HistoryProgram
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import com.example.kamteamapp.data.Main_Items
 import com.example.kamteamapp.data.Temp_Main_Items
 import com.example.kamteamapp.data.tempMainItem1
 import com.example.kamteamapp.data.tempMainItem2
 import com.example.kamteamapp.data.tempMainItem3
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.time.LocalDate
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-class HomeViewModel:ViewModel(){
+class HistoryProgramScreenViewModel:ViewModel(){
     // 创建Flow实例
     private val _homeUiState = MutableStateFlow(HomeUiState(itemList = listOf()))
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
