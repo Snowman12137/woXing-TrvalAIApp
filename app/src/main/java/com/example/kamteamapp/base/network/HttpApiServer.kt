@@ -26,14 +26,14 @@ private val retrofit = Retrofit.Builder()
 
 // 定义 Retrofit 服务接口
 interface MarsApiService {
-    @GET(".")
+//    @GET(".")
     //@GET("sug")
     //@GET("chat/4565847819")
-    //@GET("AI_travel_get")
+    @GET("AI_travel_get")
     suspend fun getinputinformation(
-        //@Query("message") message: String,
-        @Query("name") name: String,
-        @Query("age") age: Int
+        @Query("message") message: String,
+//        @Query("name") name: String,
+//        @Query("age") age: Int
         //@Query("code") code: String,
         //@Query("q") q: String,
         //@Query("appid") appid: Int,
