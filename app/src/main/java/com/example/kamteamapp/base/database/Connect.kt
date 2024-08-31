@@ -5,6 +5,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.kamteamapp.base.database.Detailthings_item
+import com.example.kamteamapp.base.database.Main_item
+import com.example.kamteamapp.base.database.Travel_item
+import com.example.kamteamapp.base.database.Weather_item
+import com.example.kamteamapp.base.database.mainwithtravel
+import com.example.kamteamapp.base.database.mainwithweather
+import com.example.kamteamapp.base.database.travelwithdetail
 import kotlinx.coroutines.flow.Flow
 @Dao
 interface Connect {
@@ -37,7 +44,7 @@ interface Connect {
     fun deleteweatheritem(item: Weather_item)
 
     @Delete
-    fun deletedetailthingsitem(item:Detailthings_item)
+    fun deletedetailthingsitem(item: Detailthings_item)
 
 
     @Query("SELECT * from main_items")

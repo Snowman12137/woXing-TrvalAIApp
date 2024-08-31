@@ -1,5 +1,10 @@
 package com.example.myapplication.Roomfinal
 
+import com.example.kamteamapp.base.database.Detailthings_item
+import com.example.kamteamapp.base.database.Main_item
+import com.example.kamteamapp.base.database.Travel_item
+import com.example.kamteamapp.base.database.Weather_item
+
 class example {
 }
 
