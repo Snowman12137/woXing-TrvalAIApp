@@ -1,4 +1,4 @@
-package com.example.myapplication.Roomfinal
+package com.example.kamteamapp.base.database
 
 import androidx.room.Embedded
 import androidx.room.Entity

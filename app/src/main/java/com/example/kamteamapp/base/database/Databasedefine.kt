@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.kamteamapp.base.database.Detailthings_item
+import com.example.kamteamapp.base.database.Main_item
+import com.example.kamteamapp.base.database.Travel_item
+import com.example.kamteamapp.base.database.Weather_item
 
 class Databasedefine {
 }
 
-@Database(entities = [Main_item::class, Travel_item::class,Weather_item::class,Detailthings_item::class], version = 1, exportSchema = false)
+@Database(entities = [Main_item::class, Travel_item::class, Weather_item::class, Detailthings_item::class], version = 1, exportSchema = false)
 abstract class  Traveldatabase : RoomDatabase() {
     abstract fun databaseDao(): Connect
     companion object {

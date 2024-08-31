@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
 fun MarsPhotosScreen(httpViewModel: HttpViewModel) {
     val marsUiState by httpViewModel.marsUiState.collectAsState()
 //    var message by remember { mutableStateOf("") }
-    var message ="背景：我们出行一共3人，包括两个20岁男生和一个70岁爷爷;预算：我们的旅行预算是每个人2000元；问题：我们打算从7月16日出发，游玩3天；偏好：钟楼、大雁塔、兵马俑。"
+    var message ="我们想去西安旅游，我们一共四个人，想去大雁塔，玩三天，请帮我们规划旅游行程"
     Column {
         Spacer(modifier = Modifier.height(32.dp))
         Text(text = "message is $message")
