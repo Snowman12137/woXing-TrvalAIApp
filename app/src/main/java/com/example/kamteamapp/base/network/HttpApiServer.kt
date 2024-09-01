@@ -29,7 +29,8 @@ interface MarsApiService {
 //    @GET(".")
     //@GET("sug")
     //@GET("chat/4565847819")
-    @GET("AI_travel_get")
+//    @GET("AI_travel_get")
+    @GET("return_json")
     suspend fun getinputinformation(
         @Query("message") message: String,
 //        @Query("name") name: String,

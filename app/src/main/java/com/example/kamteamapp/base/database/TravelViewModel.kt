@@ -16,7 +16,6 @@ class TravelViewModel(application: Application):AndroidViewModel(application) {
     val mainWithWeatherItems: Flow<List<mainwithweather>> = databasefun.getMainWithWeatherItems()
     val travelwithdetails: Flow<List<travelwithdetail>> = databasefun.getTravelWithDetailthingsItems()
 
-
     fun findmainwithtravel(id: Int): Flow<List<mainwithtravel>> {
         return databasefun.getMainWithTravelItemsbyid(id)
     }
