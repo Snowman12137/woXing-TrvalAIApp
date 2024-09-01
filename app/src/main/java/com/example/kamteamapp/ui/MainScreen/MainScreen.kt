@@ -2,12 +2,27 @@ package com.example.kamteamapp.ui.MainScreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -20,7 +35,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -58,6 +76,12 @@ fun MainScreen(
         NavigationItem("我的", R.drawable.ic_bottom_bar_user),
     )
     Scaffold(
+        topBar={
+            SearchBar(
+                onNavigateToSearch = {},
+                onNavigateToShareArticle = {}
+            )
+        },
         bottomBar = {
             BottomNavigation(
                 items = navItems
@@ -91,7 +115,8 @@ fun MainScreen(
                 }
 
                 2 -> saveableStateHolder.SaveableStateProvider(navItems[2].label){
-                    ConversationScreen()
+                    onNavigateToAIChat()
+                    //ConversationScreen()
                 }
 
                 3 -> saveableStateHolder.SaveableStateProvider(navItems[3].label){
@@ -154,6 +179,67 @@ fun BottomNavigation(
                     unselectedIconColor = colorResource(item.unselectedColor),
                     unselectedTextColor = colorResource(item.unselectedColor)
                 )
+            )
+        }
+    }
+}
+
+
+@Composable
+fun SearchBar(
+    //data: List<HotKey>?,
+    onNavigateToSearch: (key: String) -> Unit = {},
+    onNavigateToShareArticle: () -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .background(colorResource(R.color.theme))
+            .fillMaxWidth()
+            .height(60.dp)
+            .padding(vertical = 8.dp)
+            .padding(top = 20.dp, ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(Modifier.width(15.dp))
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(50))
+                .clipToBounds()
+                .background(colorResource(R.color.three_nine_gray))
+                .weight(1f)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null,
+                modifier = Modifier.padding(10.dp, 5.dp, 0.dp, 5.dp),
+                tint = colorResource(R.color.white)
+            )
+//            LoopVerticalPager(data = data) { _, _, item ->
+//                Box(
+//                    modifier = Modifier
+//                        .clickable { onNavigateToSearch(item.name) }
+//                        .fillMaxSize(),
+//                    contentAlignment = Alignment.CenterStart
+//                ) {
+//                    Text(
+//                        text = item.name,
+//                        modifier = Modifier.padding(start = 40.dp),
+//                        fontSize = 13.sp,
+//                        color = colorResource(R.color.text_fff),
+//                    )
+//                }
+//            }
+        }
+        IconButton(
+            modifier = Modifier.height(45.dp),
+            onClick = onNavigateToShareArticle
+        ) {
+            Icon(
+                Icons.Filled.Add,
+                contentDescription = null,
+                tint = colorResource(R.color.white)
             )
         }
     }

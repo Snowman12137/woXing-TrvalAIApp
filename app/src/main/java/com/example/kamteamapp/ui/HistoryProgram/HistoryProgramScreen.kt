@@ -58,13 +58,13 @@ fun HistoryProgramScreen(
 ){
     val homeUiState by viewModel.homeUiState.collectAsState()
     Scaffold(
-        topBar = {
-            MyTopAppBar(
-                navigateUp = navigateUp,
-                onNavigateToMain = onNavigateToMain,
-                modifier = Modifier
-            )
-        }
+//        topBar = {
+//            MyTopAppBar(
+//                navigateUp = navigateUp,
+//                onNavigateToMain = onNavigateToMain,
+//                modifier = Modifier
+//            )
+//        }
 
     ) {innerPadding ->
         HistoryProgramBody(

@@ -94,39 +94,3 @@ interface Connect {
     fun deleteAlldetailthingsitems() // New method to delete all items
 
 }
-
-//@Dao
-//interface TravelMainItemsDao {
-//    @Insert(onConflict = OnConflictStrategy.IGNORE)
-//    fun insert(item: Temp_Main_Items)
-//
-//    @Update
-//    fun update(item: Temp_Main_Items)
-//
-//    @Delete
-//    fun delete(item: Temp_Main_Items)
-//
-//    @Query("SELECT * from travel_main_items WHERE id = :id")
-//    fun getItem(id: Int): Flow<Temp_Main_Items>
-//
-//    @Query("SELECT * from travel_main_items ORDER BY id ASC")
-//    fun getAllItems(): Flow<List<Temp_Main_Items>>
-//
-//    @Query("DELETE FROM travel_main_items")
-//    fun deleteAllItems() // New method to delete all items
-//
-//    //插入旅游事件
-//    @Insert(onConflict = OnConflictStrategy.IGNORE)
-//    fun insertTravelItem(item: Temp_Travel_Items)
-//
-//    //从数据库中获取所有的旅游事件
-//    @Query("SELECT * FROM Temp_Travel_Items  ORDER BY trval_id ASC")
-//    fun getTravelItemsForMainItem(): Flow<List<Temp_Travel_Items>>
-//
-//    @Transaction
-//    @Query("SELECT * FROM travel_main_items")
-//    fun getMainWithTravelItems(): Flow<List<MainWithTravelItems>>
-//
-//    @Query("DELETE FROM Temp_Travel_Items")
-//    fun deleteAlltravelItems() // New method to delete all items
-//}

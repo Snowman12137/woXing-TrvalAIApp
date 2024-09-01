@@ -21,11 +21,11 @@
     <string name="conversations">Conversations</string>
     <string name="profile">Profile</string>
     <string name="jumpBottom">Jump to bottom</string>
-    <string name="send">Send</string>
+    <string name="send">发送</string>
     <string name="author_me">me</string>
     <string name="now">8:30 PM</string>
     <string name="members">%d members</string>
-    <string name="textfield_hint">Message #composers</string>
+    <string name="textfield_hint">请输入消息</string>
     <string name="swipe_to_cancel_recording">&#x25C0; Swipe to cancel</string>
     <string name="emojis_label">Emojis</string>
     <string name="stickers_label">Stickers</string>
