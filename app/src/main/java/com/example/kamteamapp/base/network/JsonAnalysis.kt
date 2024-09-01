@@ -4,6 +4,8 @@ import com.example.kamteamapp.base.database.Travel_item
 import com.example.kamteamapp.base.database.Weather_item
 import org.json.JSONObject
 import org.json.JSONArray
+
+//gson库
 class JsonAnalysis {
     fun parseJsonToItems(jsonString: String): Triple<Main_item, List<Travel_item>, List<Weather_item>> {
         val jsonObject = JSONObject(jsonString)
