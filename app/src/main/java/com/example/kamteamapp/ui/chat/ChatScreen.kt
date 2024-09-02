@@ -92,6 +92,7 @@ data class TopMassage(
 @Composable
 fun ConversationScreen(
     //navigateToItemUpdate: () -> Unit,
+    navigateUp:() -> Unit,
     viewModels: ConversationViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ){
@@ -156,7 +157,7 @@ fun ConversationScreen(
     Scaffold(
         topBar = {
             ChannelNameBar(
-                //navigateToItemUpdate = navigateToItemUpdate,
+                navigateUp = navigateUp,
                 channelName = "新对话",
                 //channelMembers = uiState.channelMembers,
                 //onNavIconPressed = onNavIconPressed,
@@ -212,6 +213,7 @@ fun ConversationScreen(
 @Composable
 fun ChannelNameBar(
     //navigateToItemUpdate: () -> Unit,
+    navigateUp: () -> Unit ,
     channelName: String,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
@@ -232,6 +234,7 @@ fun ChannelNameBar(
                 )
             }
         },
+        navigateUp = navigateUp,
         actions = {
             // Search icon
             Icon(

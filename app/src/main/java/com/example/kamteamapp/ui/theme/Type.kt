@@ -356,7 +356,7 @@ val Typography.MainPart1:TextStyle
     get(){
         return TextStyle(
             fontFamily = FontFamily(Font(R.font.dingtalkjinbuti)),
-            fontSize = 40.sp,
+            fontSize = 30.sp,
             lineHeight = 30.sp,
             letterSpacing = 1.sp,
             fontWeight = FontWeight.Bold
