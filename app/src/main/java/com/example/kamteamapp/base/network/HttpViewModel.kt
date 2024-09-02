@@ -1,7 +1,6 @@
 package com.example.kamteamapp.network
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kamteamapp.ui.chat.Message
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +10,7 @@ class HttpViewModel : ViewModel() {
     private val _marsUiState = MutableStateFlow<MarsUiState>(MarsUiState.Loading)
     val marsUiState: StateFlow<MarsUiState> = _marsUiState
 
-    fun getinformation(message: String) {
+    fun sendquestion(message: String) {
         viewModelScope.launch {
             _marsUiState.value = try {
                 val listResult = MarsApi.retrofitService.getinputinformation(
