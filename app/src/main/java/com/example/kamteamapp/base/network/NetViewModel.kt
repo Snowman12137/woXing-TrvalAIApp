@@ -9,17 +9,16 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.example.kamteamapp.network.HttpViewModel
 import com.example.kamteamapp.network.MarsUiState
 
-class NettoRoomViewModel(
+class NetViewModel(
     val marsUiState: MarsUiState,
     val httpViewModel: HttpViewModel
 ) : ViewModel() {
     // ViewModel implementation
-    var message = "我们想去西安旅游，我们一共四个人，想玩三天，帮我规划下旅游行程"
-    fun getinformation() {
-        httpViewModel.getinformation(message)
+    fun sendmessage(message:String) {
+        httpViewModel.sendquestion(message)
     }
 
-    fun getreturninformation(state:MarsUiState): String {
+    fun getresponse(state:MarsUiState): String {
         return when (state) {
             is MarsUiState.Success -> {
                 (state as MarsUiState.Success).photos
@@ -35,24 +34,24 @@ class NettoRoomViewModel(
 
 }
 
-class NettoRoomViewModelFactory(
+class NetViewModelFactory(
     private val httpViewModel: HttpViewModel,
     private val marsUiState: MarsUiState
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(NettoRoomViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(NetViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return NettoRoomViewModel(marsUiState, httpViewModel) as T
+            return NetViewModel(marsUiState, httpViewModel) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
 @Composable
-fun NettoRoomViewModelProvider(httpViewModel: HttpViewModel): NettoRoomViewModel {
+fun NetViewModelProvider(httpViewModel: HttpViewModel): NetViewModel {
     val marsUiState by httpViewModel.marsUiState.collectAsState()
     return ViewModelProvider(
         LocalViewModelStoreOwner.current!!,
-        NettoRoomViewModelFactory(httpViewModel, marsUiState)
-    ).get(NettoRoomViewModel::class.java)
+        NetViewModelFactory(httpViewModel, marsUiState)
+    ).get(NetViewModel::class.java)
 }
