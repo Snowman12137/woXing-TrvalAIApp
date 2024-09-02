@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kamteamapp.R
+import com.example.kamteamapp.data.Tempss
 import com.example.kamteamapp.ui.HistoryProgram.HistoryProgramScreen
 import com.example.kamteamapp.ui.MainScreen.MyScreen.MyScreen
 import com.example.kamteamapp.ui.MainScreen.home.HomeScreen
@@ -103,7 +104,7 @@ fun MainScreen(
             when(navIndex){
                 0 -> saveableStateHolder.SaveableStateProvider(navItems[0].label){
                     HomeScreen(
-
+                        Tempss
                     )
                 }
                 1 -> saveableStateHolder.SaveableStateProvider(navItems[1].label){
