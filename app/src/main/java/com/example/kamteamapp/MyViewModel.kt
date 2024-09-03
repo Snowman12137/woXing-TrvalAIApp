@@ -29,11 +29,11 @@ class MyViewModel: ViewModel(){
     init {
 //插入数据
         viewModelScope.launch {
-            DatabaseHelper.insertmessage(22, Data_my)
+            DatabaseHelper.insertmessage(1, Data_my)
         }
 //根据特定值获取数据
         viewModelScope.launch {
-            DatabaseHelper.getmessage(22).collect { message ->
+            DatabaseHelper.getmessage(1).collect { message ->
                 _uiState.update { state ->
                     val temp = TransPartToDisplay()
                     state.test_data = temp.getDisPlay(temp.getString(message.toString()))

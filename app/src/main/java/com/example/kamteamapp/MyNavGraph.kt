@@ -35,8 +35,8 @@ import com.example.kamteamapp.ui.login.register.RegisterPage
 fun MyNavHost(
     Main:MainActivity,
     modifier: Modifier = Modifier,
+    actions : DetailMainViewModel =viewModel(),
     viewModel: MyViewModel = viewModel(),
-    actions : DetailMainViewModel =viewModel()
 ){
 
     val ScreenSize =  ScreenSizeManager(Main)
