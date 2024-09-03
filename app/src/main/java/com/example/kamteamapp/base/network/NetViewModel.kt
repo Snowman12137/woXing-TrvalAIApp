@@ -24,11 +24,9 @@ class NetViewModel(
             is MarsUiState.Success -> {
                 emit((state as MarsUiState.Success).photos)
             }
-
             is MarsUiState.Error -> {
                 emit("Error")
             }
-
             is MarsUiState.Loading -> {
                 emit("Loading")
             }

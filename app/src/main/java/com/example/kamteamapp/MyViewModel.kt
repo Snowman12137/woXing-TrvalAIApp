@@ -7,7 +7,12 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.Utils.TransPartToDisplay
-import com.example.kamteamapp.base.databasenew.DatabaseHelper
+import com.example.kamteamapp.base.databasefinal.DataHelper
+import com.example.kamteamapp.base.databasefinal.Mainitems
+import com.example.kamteamapp.base.databasefinal.Messagechat
+import com.example.kamteamapp.base.databasefinal.TravelDatabase
+import com.example.kamteamapp.base.databasefinal.Travelitems
+import com.example.kamteamapp.base.prase.TravelData
 import com.example.kamteamapp.data.Data_my
 import com.example.kamteamapp.ui.item.DisplayItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,37 +24,68 @@ import kotlinx.coroutines.flow.collect
 
 
 data class MyUiState(
+
+    var main_data: List<Mainitems> = ArrayList(),
     var test_data: List<DisplayItem> = ArrayList(),
     var updateTime: Long = 0
 )
 
+
+
+
 @RequiresApi(Build.VERSION_CODES.O)
 class MyViewModel: ViewModel(){
-
     private val _uiState = MutableStateFlow(MyUiState())
-
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
-
     init {
-//插入数据
+//插入测试
         viewModelScope.launch {
-            DatabaseHelper.insertMessage(22,Data_my)
+            val temp = TransPartToDisplay()
+            val data = temp.getString(Data_my)
+            val mainitem = convertdata(data)
+            val messagetest = Messagechat(1,mainitem.message_id,"这是测试消息")
+            val traveltest = Travelitems(1,mainitem.travel_id, Data_my)
+            DataHelper.insertmessagechat(messagetest)
+            DataHelper.insertmainitem(mainitem)
+            DataHelper.inserttravelitems(traveltest)
         }
-//根据特定值获取数据
+
         viewModelScope.launch {
-            DatabaseHelper.getMessageByKey(22).collect { message ->
-                Log.d("MyViewModel", "message: $message")
+            DataHelper.getallmainitems().collect { mainitems ->
                 _uiState.update { state ->
-                    val temp = TransPartToDisplay()
-                    state.test_data = temp.getDisPlay(temp.getString(message?.value!!))
+                    state.main_data = mainitems
                     state.copy(updateTime = System.nanoTime())
                 }
             }
-        }
 
+
+        }
+        viewModelScope.launch {
+            DataHelper.getmainitembyid(1).collect { mainitem ->
+                Log.d("MAINtest", "mainitem is ${mainitem.toString()}")
+                val messagetest = DataHelper.get_chat(mainitem)
+                Log.d("MESSAGEtest", "messagetest is ${messagetest.toString()}")
+                val traveltest = DataHelper.get_travel(mainitem)
+                Log.d("TRAVELtest", "traveltest is  ${traveltest.toString()}")
+                }
+        }
     }
 }
 
+
+
+
+fun convertdata(data:TravelData): Mainitems{
+    val id = 1
+    val time_start = data.main.time_start
+    val travelday = data.main.trval_day
+    val travelname = data.main.name
+    val other1 =  "other1"
+    val messageid = id
+    val travelid = id
+    return Mainitems(id, time_start, travelday, travelname, other1, messageid, travelid)
+
+}
 
 
     //async { WanHelper.insertmessage(22, Data_my) }

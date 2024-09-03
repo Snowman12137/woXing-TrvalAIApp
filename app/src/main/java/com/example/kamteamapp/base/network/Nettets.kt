@@ -18,8 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.kamteamapp.base.database.MessageViewModel
-import com.example.kamteamapp.base.database.NettoRoomScreen
 import com.example.kamteamapp.network.HttpViewModel
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import kotlinx.coroutines.coroutineScope
@@ -27,6 +25,7 @@ import kotlinx.coroutines.runBlocking
 import androidx.lifecycle.viewModelScope
 
 class Nettests : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

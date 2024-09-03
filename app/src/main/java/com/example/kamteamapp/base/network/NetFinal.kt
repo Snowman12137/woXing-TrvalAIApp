@@ -1,7 +1,6 @@
-package com.example.kamteamapp.base.prase
+package com.example.kamteamapp.base.network
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,12 +11,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.example.kamteamapp.base.database.MessageViewModel
+import com.example.kamteamapp.network.HttpViewModel
+import com.example.kamteamapp.network.MarsUiState
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 
-class databasetest : ComponentActivity() {
-    private val messageViewModel: MessageViewModel by viewModels()
+class NetFinal : ComponentActivity() {
+    private val httpViewModel: HttpViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,7 +29,9 @@ class databasetest : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyApp()
+                    val nettoRoomViewModel = NetViewModelProvider(httpViewModel)
+                    getresponse(netViewModel = nettoRoomViewModel, messagesend = "请求回应")
+
                 }
             }
         }
@@ -35,25 +39,14 @@ class databasetest : ComponentActivity() {
 }
 
 @Composable
-fun MyApp() {
-//    InsertMessageItem(message = data, id = 11)
-    val messageItem = getMessageItemById( 11)
-    val result = messageItem?.let { parseTravelData(it.message) }
-    val a = result?.main
-    val b = result?.weather
-    val c = result?.trval
+fun getresponse(netViewModel: NetViewModel,messagesend: String) {
+
+    val marsUiState by netViewModel.httpViewModel.marsUiState.collectAsState()
+    val response = getresponse(netViewModel = netViewModel, state = marsUiState,messagesend=messagesend)
 
     LazyColumn {
         item {
-            Text("Message Items=========================================================================================================")
-        }
-        item {
-            Text(text = "a is $a")
-        }
-        item {
-            Text(text = "b is $b")
+            Text(text = response.toString())
         }
     }
 }
-
-

@@ -58,3 +58,6 @@ fun parseTravelData(jsonString: String): TravelData {
     val gson = Gson()
     return gson.fromJson(jsonString, TravelData::class.java)
 }
+
+
+
