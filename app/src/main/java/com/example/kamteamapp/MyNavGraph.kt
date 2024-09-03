@@ -128,6 +128,7 @@ fun MyNavHost(
         // 主界面 对话界面
         composable(MyDestinations.CHAT_PART){
             ConversationScreen(
+                navigateUp = {MyNavActions.navigateToMainScreen()}
                 //navigateToItemUpdate = { MyNavActions.navigateToHistoryProgram() }
             )
 

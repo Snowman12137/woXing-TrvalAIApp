@@ -7,3 +7,5 @@ fun String.toCustomBoolean(): Boolean {
         else -> throw IllegalArgumentException("Invalid boolean value")
     }
 }
+
+

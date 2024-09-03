@@ -50,6 +50,8 @@ import androidx.compose.material.icons.outlined.Mood
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -95,6 +97,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kamteamapp.R
+import com.example.kamteamapp.data.TimeLinerColor
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -272,7 +275,7 @@ private fun UserInputSelector(
 ) {
     Row(
         modifier = modifier
-            .height(72.dp)
+            .height(52.dp)
             .wrapContentHeight()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -402,7 +405,7 @@ private fun UserInputText(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp),
+            .height(50.dp),
         horizontalArrangement = Arrangement.End
     ) {
         AnimatedContent(
@@ -411,6 +414,7 @@ private fun UserInputText(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
+
         ) { recording ->
             Box(Modifier.fillMaxSize()) {
                 if (recording) {
@@ -462,41 +466,54 @@ private fun BoxScope.UserInputTextField(
     modifier: Modifier = Modifier
 ) {
     var lastFocusState by remember { mutableStateOf(false) }
-    BasicTextField(
-        value = textFieldValue,
-        onValueChange = { onTextChanged(it) },
-        modifier = modifier
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        modifier = Modifier
             .padding(start = 32.dp)
             .align(Alignment.CenterStart)
-            .onFocusChanged { state ->
-                if (lastFocusState != state.isFocused) {
-                    onTextFieldFocused(state.isFocused)
-                }
-                lastFocusState = state.isFocused
+            .height(30.dp)
+    ) {
+        BasicTextField(
+            value = textFieldValue,
+            onValueChange = { onTextChanged(it) },
+            modifier = modifier
+                //.padding(start = 32.dp)
+                .fillMaxSize()
+                //.align(Alignment.CenterStart)
+                .onFocusChanged { state ->
+                    if (lastFocusState != state.isFocused) {
+                        onTextFieldFocused(state.isFocused)
+                    }
+                    lastFocusState = state.isFocused
+                },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = ImeAction.Send
+            ),
+            keyboardActions = KeyboardActions {
+                if (textFieldValue.text.isNotBlank()) onMessageSent(textFieldValue.text)
             },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType,
-            imeAction = ImeAction.Send
-        ),
-        keyboardActions = KeyboardActions {
-            if (textFieldValue.text.isNotBlank()) onMessageSent(textFieldValue.text)
-        },
-        maxLines = 1,
-        cursorBrush = SolidColor(LocalContentColor.current),
-        textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
-    )
-
-    val disableContentColor =
-        MaterialTheme.colorScheme.onSurfaceVariant
-    if (textFieldValue.text.isEmpty() && !focusState) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 32.dp),
-            text = stringResource(R.string.textfield_hint),
-            style = MaterialTheme.typography.bodyLarge.copy(color = disableContentColor)
+            maxLines = 1,
+            cursorBrush = SolidColor(LocalContentColor.current),
+            textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
         )
+
+        val disableContentColor =
+            MaterialTheme.colorScheme.onSurfaceVariant
+        if (textFieldValue.text.isEmpty() && !focusState) {
+            Text(
+                modifier = Modifier
+                    //.align(Alignment.CenterStart)
+                    .padding(start = 10.dp),
+                text = stringResource(R.string.textfield_hint),
+                style = MaterialTheme.typography.bodyLarge.copy(color = disableContentColor)
+            )
+        }
     }
+
 }
 
 @Composable

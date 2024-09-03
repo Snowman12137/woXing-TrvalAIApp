@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,9 +31,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,6 +46,8 @@ import com.example.kamteamapp.data.Temp_Main_Items
 import com.example.kamteamapp.ui.theme.Card5Content3
 import com.example.kamteamapp.ui.theme.Card6Title
 import com.example.kamteamapp.ui.theme.Card7Content
+import com.example.kamteamapp.ui.theme.KamTeamAppTheme
+import java.time.LocalDate
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -57,26 +62,13 @@ fun HistoryProgramScreen(
     viewModel: HistoryProgramScreenViewModel = viewModel()
 ){
     val homeUiState by viewModel.homeUiState.collectAsState()
-    Scaffold(
-        topBar = {
-            MyTopAppBar(
-                navigateUp = navigateUp,
-                onNavigateToMain = onNavigateToMain,
-                modifier = Modifier
-            )
-        }
 
-    ) {innerPadding ->
         HistoryProgramBody(
             itemList = homeUiState.itemList,
             onItemClick = navigateToItemUpdate,
-            contentPadding=innerPadding ,
             modifier = modifier
                 .fillMaxSize()
         )
-    }
-
-
 }
 
 
@@ -166,70 +158,86 @@ fun MyItem(
                     style = MaterialTheme.typography.Card5Content3
                 )
             }
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = BodyColor.SECOND_WEATHER2.color
-                ),
-                shape = RoundedCornerShape(4.dp),
-                modifier = modifier
-                    .padding(5.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = BodyColor.SECOND_WEATHER2.color
+                    ),
+                    shape = RoundedCornerShape(4.dp),
+                    modifier = modifier
+                        .padding(2.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
 
-                ){
+                        ){
+                        Text(
+                            text =item.other1,
+                            style = MaterialTheme.typography.Card7Content,
+                            //modifier = Modifier.align(Alignment.Start)
+                        )
+                        Icon(
+                            imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
+                            contentDescription = null,
+                            //modifier = Modifier.align(Alignment.End)
+                        )
+                    }
+                }
+                //Spacer(modifier = Modifier.padding(start = 10.dp))
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(4.dp),
+                    modifier = modifier
+                        .padding(5.dp),
+
+
+                ) {
                     Text(
-                        text =item.other1,
-                        style = MaterialTheme.typography.Card7Content,
-                        //modifier = Modifier.align(Alignment.Start)
-                    )
-                    Icon(
-                        imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
-                        contentDescription = null,
-                        //modifier = Modifier.align(Alignment.End)
+                        text = "历史会话",
+                        modifier = Modifier.padding(2.dp)
                     )
                 }
             }
-
-
-
-            
         }
-
-
     }
 }
 
 
 
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Preview(showBackground = true)
-//@Composable
-//fun HomeBodyPreview(){
-//    KamTeamAppTheme {
-//        HomeBody(listOf(
-//            Temp_Main_Items(
-//                id = 1,
-//                time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-//                trval_day = 5,
-//                weathers_id = 1,
-//                trvals_id = 1,
-//                name = "实例1",
-//                other1 = "广州->澳门->深圳五日游"
-//            ),
-//            Temp_Main_Items(
-//                id = 2,
-//                time_start = LocalDate.of(2024,7,10), // 使用 LocalDate 实例
-//                trval_day = 3,
-//                weathers_id = 5,
-//                trvals_id = 5,
-//                name = "实例2",
-//                other1 = "西安->宝鸡->关山牧场三日游"
-//            )
-//        ), onItemClick = {})
-//    }
-//}
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun HomeBodyPreview(){
+    KamTeamAppTheme {
+        HistoryProgramBody(listOf(
+            Temp_Main_Items(
+                id = 1,
+                time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+                trval_day = 5,
+                weathers_id = 1,
+                trvals_id = 1,
+                name = "实例1",
+                other1 = "广州->澳门->深圳五日游"
+            ),
+            Temp_Main_Items(
+                id = 2,
+                time_start = LocalDate.of(2024,7,10), // 使用 LocalDate 实例
+                trval_day = 3,
+                weathers_id = 5,
+                trvals_id = 5,
+                name = "实例2",
+                other1 = "西安->宝鸡->关山牧场三日游"
+            )
+        ), onItemClick = {})
+    }
+}
 
 
 

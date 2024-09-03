@@ -1,23 +1,21 @@
-package com.example.kamteamapp.ui.chat
+package com.example.kamteamapp.componets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.kamteamapp.R
-import com.example.kamteamapp.ui.theme.KamTeamAppTheme
-
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +23,7 @@ import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 fun MyAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    onNavIconPressed: () -> Unit = { },
+    navigateUp: () -> Unit,
     title: @Composable () -> Unit,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
@@ -35,12 +33,19 @@ fun MyAppBar(
         title = title,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            JetchatIcon(
-                contentDescription = stringResource(id = R.string.navigation_drawer_open),
+//            JetchatIcon(
+//                contentDescription = stringResource(id = R.string.navigation_drawer_open),
+//                modifier = Modifier
+//                    .size(64.dp)
+//                    .clickable(onClick = navigateUp)
+//                    .padding(16.dp)
+//            )
+            Icon(
+                imageVector = Icons.Filled.ArrowBackIosNew,
+                contentDescription = null,
                 modifier = Modifier
-                    .size(64.dp)
-                    .clickable(onClick = onNavIconPressed)
-                    .padding(16.dp)
+                    .padding(10.dp, 5.dp, 0.dp, 5.dp)
+                    .clickable { navigateUp() }
             )
         }
     )

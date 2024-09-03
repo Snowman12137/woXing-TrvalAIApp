@@ -349,3 +349,28 @@ val Typography.TimeLiner2:TextStyle
             fontWeight = FontWeight.Bold
         )
     }
+
+
+val Typography.MainPart1:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.dingtalkjinbuti)),
+            fontSize = 30.sp,
+            lineHeight = 30.sp,
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+
+val Typography.MainPart2:TextStyle
+    @Composable
+    get(){
+        return TextStyle(
+            fontFamily = FontFamily(Font(R.font.ab)),
+            fontSize = 15.sp,
+            lineHeight = 30.sp,
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }

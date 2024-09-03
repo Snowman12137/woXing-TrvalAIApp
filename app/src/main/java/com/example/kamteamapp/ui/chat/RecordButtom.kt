@@ -103,7 +103,7 @@ fun RecordButton(
                 tint = iconColor.value,
                 modifier = modifier
                     .sizeIn(minWidth = 56.dp, minHeight = 6.dp)
-                    .padding(18.dp)
+                    .padding(10.dp)
                     .clickable { }
                     .voiceRecordingGesture(
                         horizontalSwipeProgress = swipeOffset,

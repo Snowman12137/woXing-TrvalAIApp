@@ -1,4 +1,4 @@
-package com.example.kamteamapp.ui.chat
+package com.example.kamteamapp.componets
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Icon

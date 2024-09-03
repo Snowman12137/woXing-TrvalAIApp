@@ -190,6 +190,26 @@ data class Time(
 )
 
 
+// 首页暂时的数据存储
+data class Main_items(
+    val imageResources: Int,
+    val my_text:String,
+)
+
+val Tempss = listOf(
+    Main_items(
+        R.drawable.temp1,
+        "哈尔滨两天一夜极限挑战"
+    ),Main_items(
+        R.drawable.temp2,
+        "天津两日游攻略"
+    ),Main_items(
+        R.drawable.temp3,
+        "深圳悠闲四日游"
+    ),
+
+)
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 val tempMainItem1 = Temp_Main_Items(
