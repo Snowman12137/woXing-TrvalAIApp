@@ -13,6 +13,7 @@ class RoomInterface {
 @Composable
 fun findMessageItem(id: Int,messageViewModel: MessageViewModel): String {
     val messageinroom by messageViewModel.findMessageItem(id).collectAsState(initial = null)
+//    val messageinroom = messageViewModel.findMessageItem(id)
     val output = messageinroom?.message.toString()
     Log.d("test", "dataprase: $output")
     return output

@@ -38,7 +38,7 @@ class NettoRoom : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val nettoRoomViewModel = NetViewModelProvider(httpViewModel)
+                    val nettoRoomViewModel = NetViewModelProvider(httpViewModel,)
                     NettoRoomScreen(nettoRoomViewModel, messageViewModel)
                 }
             }
@@ -48,9 +48,9 @@ class NettoRoom : ComponentActivity() {
 @Composable
 fun NettoRoomScreen(netViewModel: NetViewModel, messageViewModel: MessageViewModel) {
     val marsUiState by netViewModel.httpViewModel.marsUiState.collectAsState()
-    val allMessageItems by messageViewModel.allMessageItems.collectAsState(initial = emptyList())
     val all = findallMessageItem(messageViewModel = messageViewModel)
     val item  = findMessageItem(id = 1, messageViewModel = messageViewModel)
+
     var number =1
     var messagesend = "我们想去西安旅游，我们一共四个人，想玩三天，帮我规划下旅游行程"
     LazyColumn {
@@ -79,9 +79,11 @@ fun NettoRoomScreen(netViewModel: NetViewModel, messageViewModel: MessageViewMod
             }
         }
         item {
-            Text(text = "Total items: ${allMessageItems.size}")
+            Text(text = "Total items: ${all.size}")
             Text(text = "All items: ${all}")
+            Text(text = "==================================")
             Text(text = "Item: ${item}")
+            Text(text = "==================================")
         }
 
     }
