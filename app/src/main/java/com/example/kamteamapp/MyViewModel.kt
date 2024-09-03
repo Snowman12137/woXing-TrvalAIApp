@@ -3,26 +3,17 @@ package com.example.kamteamapp
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kamteamapp.Utils.TransPartToDisplay
-import com.example.kamteamapp.base.database.MessageViewModel
-import com.example.kamteamapp.base.databasenew.WanHelper
-import com.example.kamteamapp.base.prase.InsertMessageItem
-import com.example.kamteamapp.base.prase.getMessageItemById
-import com.example.kamteamapp.base.prase.parseTravelData
+import com.example.kamteamapp.base.databasenew.DatabaseHelper
 import com.example.kamteamapp.data.Data_my
-import com.example.kamteamapp.ui.chat.Message
 import com.example.kamteamapp.ui.item.DisplayItem
-import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import androidx.activity.viewModels
+import kotlinx.coroutines.flow.collect
 data class MyUiState(
     var test_data: List<DisplayItem> = ArrayList(),
     var updateTime: Long = 0
@@ -36,9 +27,27 @@ class MyViewModel: ViewModel(){
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
     init {
+//插入数据
         viewModelScope.launch {
+            DatabaseHelper.insertmessage(22, Data_my)
+        }
+//根据特定值获取数据
+        viewModelScope.launch {
+            DatabaseHelper.getmessage(22).collect { message ->
+                _uiState.update { state ->
+                    val temp = TransPartToDisplay()
+                    state.test_data = temp.getDisPlay(temp.getString(message.toString()))
+                    state.copy(updateTime = System.nanoTime())
+                }
+            }
+        }
 
-            //async { WanHelper.insertmessage(22, Data_my) }
+    }
+}
+
+
+
+    //async { WanHelper.insertmessage(22, Data_my) }
 //            val test_data = async{WanHelper.getmessage(1)}
 //            _uiState.update { state ->
 //                test_data.await().let {
@@ -49,24 +58,24 @@ class MyViewModel: ViewModel(){
 //                }
 //                state.copy(updateTime = System.nanoTime())
 //            }
-        }
-    }
 
-    fun add(){
-        viewModelScope.launch{
-            WanHelper.insertmessage(22, Data_my)
-        }
-    }
 
-    fun find(){
-        val test_datas = WanHelper.getmessage(22)
-        _uiState.update {
-            val temp = TransPartToDisplay()
-            it.copy(test_data = temp.getDisPlay(temp.getString(test_datas)))
-        }
-    }
 
-}
+
+//    fun add(){
+//        viewModelScope.launch{
+//            WanHelper.insertmessage(22, Data_my)
+//        }
+//    }
+//
+//    fun find(){
+//        val test_datas = WanHelper.getmessage(22)
+//        _uiState.update {
+//            val temp = TransPartToDisplay()
+//            it.copy(test_data = temp.getDisPlay(temp.getString(test_datas)))
+//        }
+//    }
+
 
 
 //InsertMessageItem(message = data, id = 23)

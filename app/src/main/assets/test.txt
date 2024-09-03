@@ -1,0 +1,138 @@
+{
+     "main": {
+         "time_start": "2024-9-1",
+         "trval_day": "3",
+         "name": "西安三日游"
+     },
+     "weather": [
+         {
+             "number_day": 1,
+             "where": "西安市",
+             "data": "2024-9-1",
+             "week": 3,
+             "day_weather": "晴",
+             "day_temp": "35",
+             "night_weather": "晴",
+             "night_temp": "24",
+             "attention": "注意防晒和补水"
+         },
+         {
+             "number_day": 2,
+             "where": "西安市",
+             "data": "2024-9-2",
+             "week": 4,
+             "day_weather": "多云",
+             "day_temp": "35",
+             "night_weather": "多云",
+             "night_temp": "25",
+             "attention": "带件外套，晚上较凉爽"
+         },
+         {
+             "number_day": 3,
+             "where": "西安市",
+             "data": "2024-9-3",
+             "week": 5,
+             "day_weather": "晴",
+             "day_temp": "36",
+             "night_weather": "晴",
+             "night_temp": "24",
+             "attention": "注意防晒和补水"
+         }
+     ],
+     "trval": [
+         {
+             "trval_id": 1,
+             "model": 0,
+             "day": 1,
+             "trval_name": "武汉->西安",
+             "time": "08:00-10:00",
+             "abbreviate_thing": "飞机",
+             "detailThings": [
+                 {
+                     "detail_id": 1,
+                     "others": "",
+                     "times": "08:00",
+                     "my_content": "请提前到达机场办理值机手续"
+                 }
+             ]
+         },
+         {
+             "trval_id": 2,
+             "model": 0,
+             "day": 1,
+             "trval_name": "西安咸阳国际机场->酒店",
+             "time": "10:00-10:30",
+             "abbreviate_thing": "约30分钟/35元",
+             "detailThings": [
+                 {
+                     "detail_id": 1,
+                     "others": "",
+                     "times": "10:00",
+                     "my_content": "到达酒店后可先休息一会儿"
+                 }
+             ]
+         },
+         {
+             "trval_id": 3,
+             "model": 1,
+             "day": 1,
+             "trval_name": "酒店->钟楼",
+             "time": "14:00-16:00",
+             "abbreviate_thing": "约花费2小时/打车费约50元",
+             "Travels_data": [
+                 {
+                     "start_star": "8天国际酒店",
+                     "end_star": "钟楼",
+                     "other": "钟楼是古城西安的标志性建筑，周围有很多美食和商店，可以逛逛品尝当地特色小"
+                 }
+             ]
+         },
+         {
+             "trval_id": 4,
+             "model": 1,
+             "day": 2,
+             "trval_name": "酒店->大雁塔",
+             "time": "09:00-12:00",
+             "abbreviate_thing": "约花费3小时/门票约40元",
+             "Travels_data": [
+                 {
+                     "start_star": "8天国际酒店",
+                     "end_star": "大雁塔",
+                     "other": "大雁塔是唐代佛教建筑，是中国著名的古代建筑之一，可以欣赏到壮观的佛教文化"
+                 }
+             ]
+         },
+         {
+             "trval_id": 5,
+             "model": 0,
+             "day": 3,
+             "trval_name": "酒店->兵马俑",
+             "time": "08:00-12:00",
+             "abbreviate_thing": "约花费4小时/门票约120元",
+             "detailThings": [
+                 {
+                     "detail_id": 1,
+                     "others": "",
+                     "times": "08:00",
+                     "my_content": "请提前到达兵马俑景区，以免错过开放时间"
+                 }
+             ]
+         },
+         {
+             "trval_id": 6,
+             "model": 0,
+             "day": 3,
+             "trval_name": "兵马俑->西安咸阳国际机场",
+             "time": "12:30-14:00",
+             "abbreviate_thing": "约花费1.5小时/约80元",
+             "detailThings": [
+                 {
+                     "detail_id": 1,
+                     "others": "",
+                     "times": "12:30",
+                     "my_content": "返回机场，结束愉快的旅程"
+                 }
+             ]
+         }
+     ]
+}
