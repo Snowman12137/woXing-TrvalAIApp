@@ -50,7 +50,6 @@ fun NettoRoomScreen(netViewModel: NetViewModel, messageViewModel: MessageViewMod
     val marsUiState by netViewModel.httpViewModel.marsUiState.collectAsState()
     val all = findallMessageItem(messageViewModel = messageViewModel)
     val item  = findMessageItem(id = 1, messageViewModel = messageViewModel)
-
     var number =1
     var messagesend = "我们想去西安旅游，我们一共四个人，想玩三天，帮我规划下旅游行程"
     LazyColumn {

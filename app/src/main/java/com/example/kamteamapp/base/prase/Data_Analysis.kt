@@ -5,7 +5,7 @@ class PraseViewModel {
 }
 // 定义数据类以映射 JSON 数据
 
-data class TravelData(
+data class TravelData1(
     val main: Main,
     val weather: List<Weather>,
     val trval: List<Travel>
@@ -37,7 +37,7 @@ data class Travel(
     val time: String,
     val abbreviate_thing: String,
     val detailThings: List<DetailThing>? = null,
-    val Travels_data: TravelDataDetail? = null
+    val Travels_data: List<TravelDataDetail>? = null
 )
 
 data class DetailThing(
@@ -54,7 +54,10 @@ data class TravelDataDetail(
 )
 
 // 函数来解析 JSON 字符串
-fun parseTravelData(jsonString: String): TravelData {
+fun parseTravelData(jsonString: String): TravelData1 {
     val gson = Gson()
-    return gson.fromJson(jsonString, TravelData::class.java)
+    return gson.fromJson(jsonString, TravelData1::class.java)
 }
+
+
+

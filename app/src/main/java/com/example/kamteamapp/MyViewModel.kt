@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kamteamapp.Utils.TransPartToDisplay
 import com.example.kamteamapp.base.databasenew.DatabaseHelper
 import com.example.kamteamapp.data.Data_my
 import com.example.kamteamapp.ui.item.DisplayItem
@@ -34,16 +33,16 @@ class MyViewModel: ViewModel(){
             DatabaseHelper.insertMessage(22,Data_my)
         }
 //根据特定值获取数据
-        viewModelScope.launch {
-            DatabaseHelper.getMessageByKey(22).collect { message ->
-                Log.d("MyViewModel", "message: $message")
-                _uiState.update { state ->
-                    val temp = TransPartToDisplay()
-                    state.test_data = temp.getDisPlay(temp.getString(message?.value!!))
-                    state.copy(updateTime = System.nanoTime())
-                }
-            }
-        }
+//        viewModelScope.launch {
+//            DatabaseHelper.getMessageByKey(22).collect { message ->
+//                Log.d("MyViewModel", "message: $message")
+//                _uiState.update { state ->
+//
+//                    state.test_data = temp.getDisPlay(temp.getString(message?.value!!))
+//                    state.copy(updateTime = System.nanoTime())
+//                }
+//            }
+//        }
 
     }
 }

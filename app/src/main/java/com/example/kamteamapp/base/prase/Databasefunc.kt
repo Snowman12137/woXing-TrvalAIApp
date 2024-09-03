@@ -49,7 +49,6 @@ fun DeleteAllMessageItems() {
 }
 
 
-
 @Composable
 fun getMessageItems(): List<Message_item> {
     val context = LocalContext.current
