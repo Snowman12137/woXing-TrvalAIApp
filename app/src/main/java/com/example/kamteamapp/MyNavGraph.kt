@@ -139,7 +139,7 @@ fun MyNavHost(
         // 主界面 对话界面
         composable(MyDestinations.CHAT_PART){
             ConversationScreen(
-                navigateUp = {MyNavActions.navigateToMainScreen()}
+                //navigateUp = {MyNavActions.navigateToMainScreen()}  //注释
                 //navigateToItemUpdate = { MyNavActions.navigateToHistoryProgram() }
             )
 
