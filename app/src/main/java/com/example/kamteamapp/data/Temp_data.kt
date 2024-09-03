@@ -18,10 +18,9 @@ data class Temp_Main_Items(
     val id: Int ,  // 主键
     val time_start: LocalDate,  // 起始时间
     val trval_day: Int,   // 旅游天数
-    val weathers_id: Int,  // 天气信息主键
-    val trvals_id : Int,  // 旅游事件主键
     val name : String,   // 事件名称
-    val other1 : String // 其他简略信息
+    val other1 : String, // 其他简略信息
+    val other2 : String
 )
 
 
@@ -217,97 +216,97 @@ val Tempss = listOf(
 )
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-val tempMainItem1 = Temp_Main_Items(
-    id = 1,
-    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-    trval_day = 5,
-    weathers_id = 1,
-    trvals_id = 1,
-    name = "粤港澳5日游",
-    other1 = "广州->澳门->香港->深圳"
-)
-@RequiresApi(Build.VERSION_CODES.O)
-val tempMainItem2 = Temp_Main_Items(
-    id = 2,
-    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-    trval_day = 3,
-    weathers_id = 5,
-    trvals_id = 5,
-    name = "粤港澳3日游",
-    other1 = "澳门->香港->深圳"
-)
+//@RequiresApi(Build.VERSION_CODES.O)
+//val tempMainItem1 = Temp_Main_Items(
+//    id = 1,
+//    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+//    trval_day = 5,
+//    weathers_id = 1,
+//    trvals_id = 1,
+//    name = "粤港澳5日游",
+//    other1 = "广州->澳门->香港->深圳"
+//)
+//@RequiresApi(Build.VERSION_CODES.O)
+//val tempMainItem2 = Temp_Main_Items(
+//    id = 2,
+//    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+//    trval_day = 3,
+//    weathers_id = 5,
+//    trvals_id = 5,
+//    name = "粤港澳3日游",
+//    other1 = "澳门->香港->深圳"
+//)
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//val tempMainItem3 = Temp_Main_Items(
+//    id = 3,
+//    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+//    trval_day = 3,
+//    weathers_id = 5,
+//    trvals_id = 5,
+//    name = "西安3日游",
+//    other1 = "西安"
+//)
+//
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//val tempMainItem4 = Temp_Main_Items(
+//    id = 3,
+//    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+//    trval_day = 3,
+//    weathers_id = 5,
+//    trvals_id = 5,
+//    name = "西安3日游(新)",
+//    other1 = "西安"
+//)
 
-@RequiresApi(Build.VERSION_CODES.O)
-val tempMainItem3 = Temp_Main_Items(
-    id = 3,
-    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-    trval_day = 3,
-    weathers_id = 5,
-    trvals_id = 5,
-    name = "西安3日游",
-    other1 = "西安"
-)
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-val tempMainItem4 = Temp_Main_Items(
-    id = 3,
-    time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-    trval_day = 3,
-    weathers_id = 5,
-    trvals_id = 5,
-    name = "西安3日游(新)",
-    other1 = "西安"
-)
+//val exampleUiState: ConversationUiState
+//    get() = ConversationUiState(
+//        initialMessages = initialMessages,
+//        channelName = "新对话",
+//    )
 
-
-
-val exampleUiState: ConversationUiState
-    get() = ConversationUiState(
-        initialMessages = initialMessages,
-        channelName = "新对话",
-    )
-
-@RequiresApi(Build.VERSION_CODES.O)
-private val initialMessages = listOf(
-    Message(
-        "me",
-        "Check it out!",
-        "8:07 PM"
-    ),
-    Message(
-        "me",
-        "Thank you!$EMOJI_PINK_HEART",
-        "8:06 PM",
-    ),
-    Message(
-        "蓝心大模型",
-        "You can use all the same stuff",
-        "8:05 PM"
-    ),
-    Message(
-        "蓝心大模型",
-        "或者你可以选择方案二",
-        "8:05 PM",
-        CardorImage.CardItem(
-            tempMainItem2
-        )
-    ),
-    Message(
-        "蓝心大模型",
-        "我了解你的需求了，我生成了一个预制方案，请你查看结果是否满意",
-        "8:04 PM",
-        CardorImage.CardItem(
-            tempMainItem1
-        )
-    ),
-    Message(
-        "me",
-        "我想去广州附近玩五天，明天就想出发，我们有两个人，我喜欢时间安排的紧凑一些，多去一些地方，预算大概在3000块左右，酒店我们希望中等价格就可以",
-        "8:03 PM"
-    )
-)
+//@RequiresApi(Build.VERSION_CODES.O)
+//private val initialMessages = listOf(
+//    Message(
+//        "me",
+//        "Check it out!",
+//        "8:07 PM"
+//    ),
+//    Message(
+//        "me",
+//        "Thank you!$EMOJI_PINK_HEART",
+//        "8:06 PM",
+//    ),
+//    Message(
+//        "蓝心大模型",
+//        "You can use all the same stuff",
+//        "8:05 PM"
+//    ),
+//    Message(
+//        "蓝心大模型",
+//        "或者你可以选择方案二",
+//        "8:05 PM",
+//        CardorImage.CardItem(
+//            tempMainItem2
+//        )
+//    ),
+//    Message(
+//        "蓝心大模型",
+//        "我了解你的需求了，我生成了一个预制方案，请你查看结果是否满意",
+//        "8:04 PM",
+//        CardorImage.CardItem(
+//            tempMainItem1
+//        )
+//    ),
+//    Message(
+//        "me",
+//        "我想去广州附近玩五天，明天就想出发，我们有两个人，我喜欢时间安排的紧凑一些，多去一些地方，预算大概在3000块左右，酒店我们希望中等价格就可以",
+//        "8:03 PM"
+//    )
+//)
 
 
 object EMOJI{

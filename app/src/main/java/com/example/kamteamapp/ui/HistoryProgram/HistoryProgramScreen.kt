@@ -211,33 +211,33 @@ fun MyItem(
 
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun HomeBodyPreview(){
-    KamTeamAppTheme {
-        HistoryProgramBody(listOf(
-            Temp_Main_Items(
-                id = 1,
-                time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-                trval_day = 5,
-                weathers_id = 1,
-                trvals_id = 1,
-                name = "实例1",
-                other1 = "广州->澳门->深圳五日游"
-            ),
-            Temp_Main_Items(
-                id = 2,
-                time_start = LocalDate.of(2024,7,10), // 使用 LocalDate 实例
-                trval_day = 3,
-                weathers_id = 5,
-                trvals_id = 5,
-                name = "实例2",
-                other1 = "西安->宝鸡->关山牧场三日游"
-            )
-        ), onItemClick = {})
-    }
-}
-
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeBodyPreview(){
+//    KamTeamAppTheme {
+//        HistoryProgramBody(listOf(
+//            Temp_Main_Items(
+//                id = 1,
+//                time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
+//                trval_day = 5,
+//                weathers_id = 1,
+//                trvals_id = 1,
+//                name = "实例1",
+//                other1 = "广州->澳门->深圳五日游"
+//            ),
+//            Temp_Main_Items(
+//                id = 2,
+//                time_start = LocalDate.of(2024,7,10), // 使用 LocalDate 实例
+//                trval_day = 3,
+//                weathers_id = 5,
+//                trvals_id = 5,
+//                name = "实例2",
+//                other1 = "西安->宝鸡->关山牧场三日游"
+//            )
+//        ), onItemClick = {})
+//    }
+//}
+//
 
 

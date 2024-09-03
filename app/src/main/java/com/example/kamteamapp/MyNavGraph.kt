@@ -30,7 +30,6 @@ import com.example.kamteamapp.ui.item.combineItems
 import com.example.kamteamapp.ui.login.LoginPage
 import com.example.kamteamapp.ui.login.register.RegisterPage
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyNavHost(

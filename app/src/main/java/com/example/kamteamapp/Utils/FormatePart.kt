@@ -6,6 +6,7 @@ import com.example.kamteamapp.base.prase.TravelData
 import com.example.kamteamapp.data.Between
 import com.example.kamteamapp.data.Detail_Trval_Data
 import com.example.kamteamapp.data.New_Temp_Trval_Items
+import com.example.kamteamapp.data.Temp_Main_Items
 import com.example.kamteamapp.data.Temp_Weather_Items
 import com.example.kamteamapp.data.Time
 import com.example.kamteamapp.data.Travels_Data
@@ -21,6 +22,7 @@ class TransPartToDisplay(){
         val gson = Gson()
         return gson.fromJson(jsonString, TravelData::class.java)
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDisPlay(tars:TravelData): List<DisplayItem>{
@@ -38,6 +40,8 @@ class TransPartToDisplay(){
                 attention = item.attention
             )
         }
+
+
         val itemsTrvals = tars.trval.mapNotNull { item ->
             when {
                 item.model == 0 && item.detailThings != null -> New_Temp_Trval_Items(

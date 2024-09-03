@@ -1,9 +1,17 @@
 package com.example.kamteamapp.ui.chat
 
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -11,9 +19,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.lang.reflect.Modifier
+import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 
+
+@Preview
+@Composable
+fun show(){
+    KamTeamAppTheme {
+        InitDialog()
+    }
+}
 
 @Composable
 fun InitDialog(
@@ -34,8 +52,15 @@ fun InitDialog(
                 Column(
 
                 ) {
-                    //TextAndField("出行人数",save_part.value)
-
+                    TextAndField("出行人数",save_part.value.num)
+                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
+                    TextAndField("起始地点",save_part.value.start_part)
+                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
+                    TextAndField("出行终点",save_part.value.end_part)
+                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
+                    TextAndField("出发时间",save_part.value.start_time)
+                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
+                    TextAndField("出行天数",save_part.value.datas)
                 }
             },
 
@@ -44,10 +69,10 @@ fun InitDialog(
                     onClick = {
                         showingDialog.value = false
                     },
-                    //modifier = Modifier
-                        //.padding(16.dp)
+                    modifier = Modifier
+                        .padding(5.dp)
                 ) {
-                    Text("按钮")
+                    Text("确定输入信息")
                 }
             },
         )
@@ -58,18 +83,25 @@ fun InitDialog(
 @Composable
 fun TextAndField(
     text:String,
-    index:Int,
-    contents:String
+    contents:MutableState<String>
 ){
     Row (
-
+        modifier = Modifier
+            .padding(2.dp)
     ){
         Text(text = text)
-        TextField(
-            value = contents,
+        Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
+        OutlinedTextField(
+            value = contents.value,
             onValueChange = {newValue->
                 //contents = newValue
-            }
+                contents.value = newValue
+            },
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.small)
+                .height(30.dp)
+                .fillMaxWidth(0.5f)
+                .border(1.dp, MaterialTheme.colorScheme.primary)
         )
     }
 
@@ -78,9 +110,9 @@ fun TextAndField(
 
 
 data class Formate(
-    var num:String="",
-    var start_part:String="",
-    var end_part:String="",
-    var start_time:String="",
-    var datas:String=""
+    var num: MutableState<String> =mutableStateOf(""),
+    var start_part:MutableState<String> =mutableStateOf(""),
+    var end_part:MutableState<String> =mutableStateOf(""),
+    var start_time:MutableState<String> =mutableStateOf(""),
+    var datas:MutableState<String> =mutableStateOf("")
 )

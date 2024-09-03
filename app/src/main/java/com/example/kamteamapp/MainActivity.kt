@@ -19,7 +19,7 @@ import com.example.kamteamapp.Utils.ScreenSizeManager
 import com.example.kamteamapp.base.databasenew.DatabaseHelper
 
 class MainActivity : ComponentActivity() {
-    //val viewModel by viewModels<DetailMainViewModel>()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +34,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    //viewModel.setParamter(res1,res2)
                     MyNavHost(this)
-                    //this.applicationContext
+
                 }
             }
         }
