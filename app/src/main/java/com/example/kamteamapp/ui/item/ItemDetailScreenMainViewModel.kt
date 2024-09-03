@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kamteamapp.MyUiState
 import com.example.kamteamapp.Utils.WideThing
 import com.example.kamteamapp.data.Between
 import com.example.kamteamapp.data.New_Temp_Trval_Items
@@ -20,6 +21,8 @@ import com.example.kamteamapp.data.Temp_Weather_Items
 import com.example.kamteamapp.data.Time
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
@@ -27,7 +30,10 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 class DetailMainViewModel : ViewModel(), Actions {
 
-    val state = MutableStateFlow(State())
+    val _state = MutableStateFlow(State())
+    val state: StateFlow<State> = _state.asStateFlow()
+
+
     val hour:Int = 26
 
     var params:WideThing = WideThing()
@@ -67,14 +73,14 @@ class DetailMainViewModel : ViewModel(), Actions {
     }
 
     override fun get_Size():Pair<Float, Float>{
-        return Pair(state.value.maxX/destiy,state.value.maxY /destiy  )
+        return Pair(_state.value.maxX/destiy,_state.value.maxY /destiy  )
     }
 
     @SuppressLint("RestrictedApi")
     @RequiresApi(Build.VERSION_CODES.O)
     fun generateTrvalItems() {
         generateJob = viewModelScope.launch {
-            val currentState = state.value
+            val currentState = _state.value
             val items = currentState.items.mapIndexed{index,item->
                 when(item.hereItem){
                     is DisplayItem.TravelItem->{
@@ -93,7 +99,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                         )
                     }
                     is DisplayItem.BackGroundItem->{
-                        if (index == state.value.data){
+                        if (index == _state.value.data){
                             ListItem(
                                 x= (params.start_part*destiy).toInt(),
                                 y= 0,
@@ -101,7 +107,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                                     BackGround(
                                         index = 0,
                                         isWeather = true,
-                                        weide = (state.value.data* params.DayLang/destiy).toInt(),
+                                        weide = (_state.value.data* params.DayLang/destiy).toInt(),
                                         hight = (params.Weather_background /destiy ).toInt(),
                                         color = Color.White
                                     )
@@ -132,7 +138,7 @@ class DetailMainViewModel : ViewModel(), Actions {
                     }
                 }
             }
-            state.value = currentState.copy(items = items)
+            _state.value = currentState.copy(items = items)
         }
     }
 
@@ -142,7 +148,7 @@ class DetailMainViewModel : ViewModel(), Actions {
 
         val res = calculateTrval(Temp)
 
-        state.value = state.value.copy(data = res.data,size = res.size, maxX = res.maxX, maxY = res.maxY, items = res.items)
+        _state.value = _state.value.copy(data = res.data,size = res.size, maxX = res.maxX, maxY = res.maxY, items = res.items)
         generateTrvalItems()
     }
 
@@ -235,7 +241,7 @@ class DetailMainViewModel : ViewModel(), Actions {
     }
 
     override fun get_state(): State {
-        return state.value
+        return _state.value
     }
 
 

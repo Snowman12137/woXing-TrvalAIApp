@@ -206,6 +206,12 @@ val Tempss = listOf(
     ),Main_items(
         R.drawable.temp3,
         "深圳悠闲四日游"
+    ),Main_items(
+        R.drawable.temp4,
+        "大理带老人五日游"
+    ),Main_items(
+        R.drawable.temp5,
+        "单人川西自驾详细攻略"
     ),
 
 )

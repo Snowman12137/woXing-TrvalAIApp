@@ -30,7 +30,6 @@ data class Message_item(
 interface MessageDao {
 //插入message_item
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-
     fun insertmessageitem(item: Message_item)
 
     //删除message_item

@@ -3,6 +3,7 @@
 package com.example.kamteamapp.ui.item
 
 import android.os.Build
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import com.example.kamteamapp.base.database.MessageViewModel
+import com.example.kamteamapp.base.database.NettoRoomInterface
+import com.example.kamteamapp.base.network.NetViewModel
 import com.example.kamteamapp.componets.MyTopAppBar
 import com.example.kamteamapp.data.New_Temp_Trval_Items
 import com.example.kamteamapp.data.Temp_Trval_Items
@@ -92,8 +99,8 @@ fun MainBody(
 
 
 
-fun combineItems(detailss:List<New_Temp_Trval_Items>,trvalItems: List<Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>): List<DisplayItem> {
-    return detailss.map { DisplayItem.New_Temp_Trval(it) }+trvalItems.map { DisplayItem.TravelItem(it) } +
+fun combineItems(detailss:List<New_Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>): List<DisplayItem> {
+    return detailss.map { DisplayItem.New_Temp_Trval(it) } +
             weatherItems.map { DisplayItem.WeatherItem(it) }
 }
 
