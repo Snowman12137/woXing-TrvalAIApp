@@ -37,7 +37,7 @@ data class Travel(
     val time: String,
     val abbreviate_thing: String,
     val detailThings: List<DetailThing>? = null,
-    val Travels_data: List<TravelDataDetail>? = null
+    val Travels_data: TravelDataDetail? = null
 )
 
 data class DetailThing(

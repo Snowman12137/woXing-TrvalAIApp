@@ -38,11 +38,6 @@ import com.example.kamteamapp.ui.item.State
 
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun MyApp(state: State, actions: Actions) {
-    MyNavHost(state = state, actions = actions)
-}
 
 
 

@@ -1,10 +1,12 @@
 package com.example.kamteamapp
 
 import android.os.Build
-import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -12,19 +14,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.kamteamapp.base.database.MessageViewModel
-import com.example.kamteamapp.data.New_Temp_Res
-import com.example.kamteamapp.data.TempRes
-import com.example.kamteamapp.data.TempRes2
-import com.example.kamteamapp.data.TempWeath
-import com.example.kamteamapp.data.TempWeath2
-import com.example.kamteamapp.network.HttpViewModel
+import com.example.kamteamapp.Utils.ScreenSizeManager
+import com.example.kamteamapp.Utils.WideThing
 import com.example.kamteamapp.ui.HistoryProgram.HistoryProgramScreen
 import com.example.kamteamapp.ui.chat.ConversationScreen
 import com.example.kamteamapp.ui.MainScreen.MainScreen
 import com.example.kamteamapp.ui.intrest.IntrestScreen
 import com.example.kamteamapp.ui.item.Actions
 import com.example.kamteamapp.ui.item.Detail.DetailScreen
+import com.example.kamteamapp.ui.item.DetailMainViewModel
 import com.example.kamteamapp.ui.item.ItemDetailsScreen
 import com.example.kamteamapp.ui.item.State
 import com.example.kamteamapp.ui.item.combineItems
@@ -35,10 +33,19 @@ import com.example.kamteamapp.ui.login.register.RegisterPage
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyNavHost(
-    state: State,
-    actions: Actions,
+    Main:MainActivity,
     modifier: Modifier = Modifier,
+    viewModel: MyViewModel = viewModel(),
+    actions : DetailMainViewModel =viewModel()
 ){
+
+    val ScreenSize =  ScreenSizeManager(Main)
+    val res1 = ScreenSize.getRes()
+    val res2 = ScreenSize.getDestiy()
+    actions.setParamter(res1,res2)
+
+    val state by actions._state.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val navController = rememberNavController()
     val MyNavActions = remember(navController) { MyNavActions(navController) }
     NavHost(
@@ -112,17 +119,15 @@ fun MyNavHost(
 
          if (isInitialized.value){
              if (id == "1"){
-                 actions.setTrvalItem(combineItems(New_Temp_Res,TempRes, TempWeath) )
+                 actions.setTrvalItem(uiState.test_data)
              } else{
-                 actions.setTrvalItem(combineItems(New_Temp_Res,TempRes2, TempWeath2) )
+                 //actions.setTrvalItem(combineItems(New_Temp_Res,TempRes2, TempWeath2) )
              }
              isInitialized.value = false
          }
-
-
          ItemDetailsScreen(
-             state = actions.get_state(),
-             actions = actions,
+             state,
+             actions,
              navigateBack = { navController.navigateUp() },
              navigateToItemUpdate = { MyNavActions.navigateToDetail(it.toString()) },
              onNavigateToMain = { MyNavActions.navigateToMainScreen() }
