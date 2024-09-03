@@ -20,7 +20,7 @@ interface MessageDao  {
     suspend fun getByValue(key: Long, value: String): Message?
 
     @Query("SELECT * FROM message WHERE `key` = :key ")
-    suspend fun getBykey(key: Long): Message?
+    suspend fun getBykey(key: Long): Flow<Message?>
 
 
     @Query("SELECT * FROM message")

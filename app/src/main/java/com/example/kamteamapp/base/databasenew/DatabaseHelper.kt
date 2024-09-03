@@ -3,7 +3,8 @@ package com.example.kamteamapp.base.databasenew
 import com.example.kamteamapp.base.databasenew.message.Message
 import kotlinx.coroutines.flow.Flow
 
-object WanHelper{
+
+object DatabaseHelper{
 
     //插入消息
     suspend fun insertmessage(key:Long, message: String) {
@@ -20,7 +21,7 @@ object WanHelper{
     }
 
     //获取消息bykey
-    suspend fun getmessage(key: Long): Message? {
+    suspend fun getmessage(key: Long): Flow<Message?> {
         return AppDatabase.getHistoryDao().getBykey(key)
     }
 
