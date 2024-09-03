@@ -8,9 +8,7 @@ import android.net.Uri
 class BaseContentProvider : ContentProvider() {
 
     companion object {
-
         private lateinit var contentProvider: ContentProvider
-
         @JvmStatic
         fun context() = contentProvider.context!!
 

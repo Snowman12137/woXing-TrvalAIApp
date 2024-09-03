@@ -1,6 +1,8 @@
 package com.example.kamteamapp
 
+import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,14 +31,15 @@ class MyViewModel: ViewModel(){
     init {
 //插入数据
         viewModelScope.launch {
-            DatabaseHelper.insertmessage(1, Data_my)
+            DatabaseHelper.insertMessage(22,Data_my)
         }
 //根据特定值获取数据
         viewModelScope.launch {
-            DatabaseHelper.getmessage(1).collect { message ->
+            DatabaseHelper.getMessageByKey(22).collect { message ->
+                Log.d("MyViewModel", "message: $message")
                 _uiState.update { state ->
                     val temp = TransPartToDisplay()
-                    state.test_data = temp.getDisPlay(temp.getString(message.toString()))
+                    state.test_data = temp.getDisPlay(temp.getString(message?.value!!))
                     state.copy(updateTime = System.nanoTime())
                 }
             }

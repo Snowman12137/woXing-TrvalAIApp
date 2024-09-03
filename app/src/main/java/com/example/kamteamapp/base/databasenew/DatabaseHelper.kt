@@ -1,37 +1,36 @@
 package com.example.kamteamapp.base.databasenew
 
+import android.content.Context
 import com.example.kamteamapp.base.databasenew.message.Message
 import kotlinx.coroutines.flow.Flow
 
+object DatabaseHelper {
+    private lateinit var appDatabase: AppDatabase
 
-object DatabaseHelper{
-
-    //插入消息
-    suspend fun insertmessage(key:Long, message: String) {
-        AppDatabase.getHistoryDao().insert(Message(key = key, value = message))
-    }
-    //删除消息
-    suspend fun deleteallmessage() {
-        AppDatabase.getHistoryDao().deleteall()
+    fun init(context: Context) {
+        appDatabase = AppDatabase.getDatabase(context)
     }
 
-    //获取全部消息
-    suspend fun getallmessage(): Flow<List<Message>> {
-        return AppDatabase.getHistoryDao().getall()
+    suspend fun insertMessage(key: Long, value: String) {
+        appDatabase.messageDao().insert(Message(key = key, value = value))
     }
 
-    //获取消息bykey
-    suspend fun getmessage(key: Long): Flow<Message?> {
-        return AppDatabase.getHistoryDao().getBykey(key)
+    suspend fun deleteAllMessages() {
+        appDatabase.messageDao().deleteall()
     }
 
-    //关闭数据库
-    fun close() {
-        AppDatabase.closeDB()
+    fun getAllMessages(): Flow<List<Message>> {
+        return appDatabase.messageDao().getall()
     }
 
+    fun getMessageByKey(key: Long): Flow<Message?> {
+        return appDatabase.messageDao().getBykey(key)
+    }
+
+    fun closeDatabase() {
+        // Room 自动管理数据库连接，通常不需要手动关闭
+    }
 }
-
 
 
 ////获取发送消息历史
