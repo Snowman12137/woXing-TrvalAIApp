@@ -222,6 +222,7 @@ fun ChannelNameBar(
     if (functionalityNotAvailablePopupShown) {
         FunctionalityNotAvailablePopup { functionalityNotAvailablePopupShown = false }
     }
+    InitDialog()
     MyAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
