@@ -369,8 +369,7 @@ val Typography.MainPart2:TextStyle
         return TextStyle(
             fontFamily = FontFamily(Font(R.font.ab)),
             fontSize = 15.sp,
-            lineHeight = 30.sp,
+            lineHeight = 18.sp,
             letterSpacing = 1.sp,
-            fontWeight = FontWeight.Bold
         )
     }

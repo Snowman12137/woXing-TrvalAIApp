@@ -48,7 +48,7 @@ fun HomeScreen(
 fun TopPart(){
     Column {
         Text(
-            text ="行程广场",
+            text ="攻略分享",
             style = MaterialTheme.typography.MainPart1,
             modifier = Modifier.padding(15.dp)
         )
