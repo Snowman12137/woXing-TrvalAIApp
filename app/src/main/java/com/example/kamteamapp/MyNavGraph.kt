@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,7 +46,9 @@ fun MyNavHost(
     actions.setParamter(res1,res2)
 
     val state by actions._state.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+
     val navController = rememberNavController()
     val MyNavActions = remember(navController) { MyNavActions(navController) }
     NavHost(

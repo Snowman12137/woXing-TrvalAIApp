@@ -16,12 +16,14 @@ import com.example.kamteamapp.ui.item.DetailMainViewModel
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kamteamapp.Utils.ScreenSizeManager
+import com.example.kamteamapp.base.databasenew.DatabaseHelper
 
 class MainActivity : ComponentActivity() {
     //val viewModel by viewModels<DetailMainViewModel>()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DatabaseHelper.init(this)
         enableEdgeToEdge()
         setContent {
             KamTeamAppTheme {

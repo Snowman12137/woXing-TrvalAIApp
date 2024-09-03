@@ -84,6 +84,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
+    implementation("androidx.databinding:compiler:3.2.0-alpha11")
 
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
@@ -109,4 +110,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     //json
     implementation ("com.google.code.gson:gson:2.8.6")
+    //Retrofit
+    implementation("com.google.guava:guava:30.1-android") {
+        exclude(group = "com.google.guava", module = "listenablefuture")
+    }
 }
