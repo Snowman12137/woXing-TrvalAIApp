@@ -13,30 +13,53 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class functions {
-}
-
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun InsertMessageItem(context: Context, message: String) {
+fun InsertMessageItem(message: String,id: Int) {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
         val database = MessageDatabase.getDatabase(context)
-        val messageItem = Message_item(2,message = message)
+        val messageItem = Message_item(id,message = message)
         database.messageDao().insertMessageItem(messageItem)
     }
 }
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun GetMessageItems(context: Context): List<Message_item> {
+fun DeleteMessageItem(id: Int) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    coroutineScope.launch {
+        val database = MessageDatabase.getDatabase(context)
+        database.messageDao().deleteMessageItemById(id)
+    }
+}
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun DeleteAllMessageItems() {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    coroutineScope.launch {
+        val database = MessageDatabase.getDatabase(context)
+        database.messageDao().deleteAllMessageItems()
+    }
+}
+
+
+
+@Composable
+fun getMessageItems(): List<Message_item> {
+    val context = LocalContext.current
     val database = MessageDatabase.getDatabase(context)
     val messageDao = database.messageDao()
     val messageItems = messageDao.getAllMessageItems().collectAsState(initial = emptyList())
     return messageItems.value
 }
-
-fun getMessageItemById(context: Context, id: Int): Message_item? {
+@Composable
+fun getMessageItemById( id: Int): Message_item? {
+    val context = LocalContext.current
     val database = MessageDatabase.getDatabase(context)
     val messageDao = database.messageDao()
     var messageItem: Message_item? = null
@@ -46,31 +69,7 @@ fun getMessageItemById(context: Context, id: Int): Message_item? {
     return messageItem
 }
 
-@Composable
-fun MyApp() {
-    val context = LocalContext.current
-    // 获取并显示数据
-    val messageItems = GetMessageItems(context)
-    val messageItem = getMessageItemById(context, 2)
-    val result = messageItem?.let { parseTravelData(it.message) }
-    val a = result?.main
-    val b = result?.weather
-    val c = result?.trval
-    LazyColumn {
-        item {
-            Text("Message Items=========================================================================================================")
-        }
-        item {
-            Text(text = "a is $a")
-        }
-        item {
-            Text(text = "b is $b")
-        }
-        item {
-            Text(text = "c is $c")
-        }
-    }
-}
+
 
 
 

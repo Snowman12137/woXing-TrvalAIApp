@@ -38,6 +38,15 @@ interface MessageDao {
     // 根据id查询message_item
     @Query("SELECT * FROM Message_items WHERE id = :id")
     fun getMessageItemById(id: Int): Flow<Message_item>
+
+    // 删除message_item
+    @Query("DELETE FROM Message_items WHERE id = :id")
+    suspend fun deleteMessageItemById(id: Int)
+
+
+    // 删除所有message_item
+    @Query("DELETE FROM Message_items")
+    suspend fun deleteAllMessageItems()
 }
 
 

@@ -4,12 +4,12 @@ import com.google.gson.Gson
 class PraseViewModel {
 }
 // 定义数据类以映射 JSON 数据
+
 data class TravelData(
     val main: Main,
     val weather: List<Weather>,
     val trval: List<Travel>
 )
-
 data class Main(
     val time_start: String,
     val trval_day: String,
@@ -27,6 +27,7 @@ data class Weather(
     val night_temp: String,
     val attention: String
 )
+
 
 data class Travel(
     val trval_id: Int,
@@ -51,7 +52,6 @@ data class TravelDataDetail(
     val end_star: String,
     val other: String
 )
-
 
 // 函数来解析 JSON 字符串
 fun parseTravelData(jsonString: String): TravelData {
