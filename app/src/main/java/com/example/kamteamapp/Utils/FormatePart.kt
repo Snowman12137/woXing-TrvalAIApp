@@ -68,9 +68,9 @@ class TransPartToDisplay(){
                     abbreviate_thing = item.abbreviate_thing,
                     detailThings = listOf(), // Empty list if no details
                     Travels_Data(
-                        item.Travels_data.start_star,
-                        item.Travels_data.end_star,
-                        item.Travels_data.other
+                        item.Travels_data[0].start_star,
+                        item.Travels_data[0].end_star,
+                        item.Travels_data[0].other
                     )
                 )
                 else -> null // Return null for items that don't match any condition
