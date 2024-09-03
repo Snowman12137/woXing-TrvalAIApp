@@ -63,11 +63,13 @@ class MyViewModel: ViewModel(){
         viewModelScope.launch {
             DataHelper.getmainitembyid(1).collect { mainitem ->
                 Log.d("MAINtest", "mainitem is ${mainitem.toString()}")
-                val messagetest = DataHelper.get_chat(mainitem)
-                Log.d("MESSAGEtest", "messagetest is ${messagetest.toString()}")
-                val traveltest = DataHelper.get_travel(mainitem)
-                Log.d("TRAVELtest", "traveltest is  ${traveltest.toString()}")
+                DataHelper.get_allmessagechat(mainitem.message_id).collect { messagechat ->
+                    Log.d("MESSAGEtest", "messagechat is ${messagechat.toString()}")
                 }
+                DataHelper.get_travelitems(mainitem.travel_id).collect { travelitems ->
+                    Log.d("TRAVELtest", "travelitems is  ${travelitems.toString()}")
+                }
+            }
         }
     }
 }

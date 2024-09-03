@@ -58,6 +58,7 @@ fun MyNavHost(
 
         composable(MyDestinations.MAIN_SCREEN){
             MainScreen(
+                ListData = uiState.main_data,
                 navigateUp = {MyNavActions.navigateUp()},
                 onNavigateToHistory = {MyNavActions.navigateToDetailItem(it)},
                 onNavigateToAIChat = { MyNavActions.navigateToChat() },
@@ -92,6 +93,7 @@ fun MyNavHost(
 
         composable(MyDestinations.HISTORY_PROGRAM){
             HistoryProgramScreen(
+                ListData = uiState.main_data,
                 navigateUp = {MyNavActions.navigateUp()},
                 onNavigateToMain = {MyNavActions.navigateToMainScreen()},
                 navigateToItemUpdate = {MyNavActions.navigateToDetailItem(it)}
@@ -111,22 +113,25 @@ fun MyNavHost(
         // 方案细节
      composable("${MyDestinations.ITEM_DETAILS}/{id}")
      {backStackEntry ->
-         val id = backStackEntry.arguments?.getString("id").toString()
-         val isInitialized = remember { mutableStateOf(false) }
+         val id = backStackEntry.arguments?.getString("id")
+//         val isInitialized = remember { mutableStateOf(false) }
+//
+//         LaunchedEffect(backStackEntry) {
+//             // 每次进入页面时执行
+//             isInitialized.value = true
+//         }
 
-         LaunchedEffect(backStackEntry) {
-             // 每次进入页面时执行
-             isInitialized.value = true
-         }
+//         if (isInitialized.value){
+//             if (id == "1"){
+//                 actions.setTrvalItem(uiState.test_data)
+//             } else{
+//                 //actions.setTrvalItem(combineItems(New_Temp_Res,TempRes2, TempWeath2) )
+//             }
+//             isInitialized.value = false
+//         }
 
-         if (isInitialized.value){
-             if (id == "1"){
-                 actions.setTrvalItem(uiState.test_data)
-             } else{
-                 //actions.setTrvalItem(combineItems(New_Temp_Res,TempRes2, TempWeath2) )
-             }
-             isInitialized.value = false
-         }
+
+
          ItemDetailsScreen(
              state,
              actions,
@@ -168,7 +173,7 @@ class MyNavActions(
         navigate(MyDestinations.DETAIL + "/$it")
     }
 
-    val navigateToDetailItem:(id:String)->Unit = {
+    val navigateToDetailItem:(trval_id:Int)->Unit = {
         navigate(MyDestinations.ITEM_DETAILS + "/$it")
     }
     val navigateToRegister:()->Unit = {

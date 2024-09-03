@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kamteamapp.R
+import com.example.kamteamapp.base.databasefinal.Mainitems
 import com.example.kamteamapp.componets.MyTopAppBar
 import com.example.kamteamapp.data.BodyColor
 import com.example.kamteamapp.data.Temp_Main_Items
@@ -55,16 +56,17 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryProgramScreen(
+    ListData:List<Mainitems>,
     navigateUp :()->Unit,
     onNavigateToMain:()->Unit,
-    navigateToItemUpdate: (String) -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HistoryProgramScreenViewModel = viewModel()
+    //viewModel: HistoryProgramScreenViewModel = viewModel()
 ){
-    val homeUiState by viewModel.homeUiState.collectAsState()
+    //val homeUiState by viewModel.homeUiState.collectAsState()
 
         HistoryProgramBody(
-            itemList = homeUiState.itemList,
+            itemList = ListData,
             onItemClick = navigateToItemUpdate,
             modifier = modifier
                 .fillMaxSize()
@@ -74,9 +76,9 @@ fun HistoryProgramScreen(
 
 @Composable
 private fun HistoryProgramBody(
-    itemList: List<Temp_Main_Items>,
+    itemList: List<Mainitems>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    onItemClick: (String) -> Unit,
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -93,7 +95,7 @@ private fun HistoryProgramBody(
         }else{
             MyList(
                 itemList = itemList,
-                onItemClick = { onItemClick(it.id.toString()) },
+                onItemClick = { onItemClick(it) },
                 contentPadding = contentPadding,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
@@ -106,8 +108,8 @@ private fun HistoryProgramBody(
 
 @Composable
 fun MyList(
-    itemList: List<Temp_Main_Items>,
-    onItemClick: (Temp_Main_Items) -> Unit,
+    itemList: List<Mainitems>,
+    onItemClick: (Int) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ){
@@ -120,7 +122,7 @@ fun MyList(
                 item = item,
                 modifier = Modifier
                     .padding(dimensionResource(R.dimen.padding_small))
-                    .clickable { onItemClick(item) }
+                    .clickable { onItemClick(item.travel_id) }
             )
         }
     }
@@ -130,7 +132,7 @@ fun MyList(
 // 每个卡片的展示界面
 @Composable
 fun MyItem(
-    item:Temp_Main_Items,modifier: Modifier = Modifier
+    item:Mainitems,modifier: Modifier = Modifier
 ){
     Card(
         colors = CardDefaults.cardColors(
@@ -211,33 +213,5 @@ fun MyItem(
 
 
 
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Preview(showBackground = true)
-//@Composable
-//fun HomeBodyPreview(){
-//    KamTeamAppTheme {
-//        HistoryProgramBody(listOf(
-//            Temp_Main_Items(
-//                id = 1,
-//                time_start = LocalDate.of(2024,7,9), // 使用 LocalDate 实例
-//                trval_day = 5,
-//                weathers_id = 1,
-//                trvals_id = 1,
-//                name = "实例1",
-//                other1 = "广州->澳门->深圳五日游"
-//            ),
-//            Temp_Main_Items(
-//                id = 2,
-//                time_start = LocalDate.of(2024,7,10), // 使用 LocalDate 实例
-//                trval_day = 3,
-//                weathers_id = 5,
-//                trvals_id = 5,
-//                name = "实例2",
-//                other1 = "西安->宝鸡->关山牧场三日游"
-//            )
-//        ), onItemClick = {})
-//    }
-//}
-//
 
 
