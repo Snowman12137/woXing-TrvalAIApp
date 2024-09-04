@@ -74,6 +74,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kamteamapp.R
+import com.example.kamteamapp.base.databasefinal.Messagechat
 import com.example.kamteamapp.componets.MyAppBar
 import com.example.kamteamapp.ui.HistoryProgram.MyItem
 import kotlinx.coroutines.launch
@@ -91,7 +92,7 @@ data class TopMassage(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ConversationScreen(
-    //navigateToItemUpdate: () -> Unit,
+    message:List<Messagechat>,
     navigateUp:() -> Unit,
     viewModels: ConversationViewModel = viewModel(),
     modifier: Modifier = Modifier,
@@ -120,10 +121,6 @@ fun ConversationScreen(
                 if (clipData.itemCount < 1) {
                     return false
                 }
-
-//                uiState.addMessage(
-//                    Message(authorMe, clipData.getItemAt(0).text.toString(), timeNow)
-//                )
 
                 return true
             }
