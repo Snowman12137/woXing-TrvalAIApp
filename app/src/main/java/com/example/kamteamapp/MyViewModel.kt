@@ -116,6 +116,9 @@ class MyViewModel: ViewModel() {
             DataHelper.get_travelitems(maintotravel).collect { travelitems ->
                 _uiState.update { state ->
                     state.travelitem = travelitems
+                    val temp = TransPartToDisplay()
+                    state.test_data = temp.getDisPlay(temp.getString(travelitems!!.tr))
+
 //                    Log.d("test2", "gettravelitem: ${travelitems.toString()}")
                     state.copy(updateTime = System.nanoTime())
                 }

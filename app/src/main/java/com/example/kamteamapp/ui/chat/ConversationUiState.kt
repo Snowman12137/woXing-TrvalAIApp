@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.R
+import com.example.kamteamapp.base.databasefinal.Mainitems
 import com.example.kamteamapp.data.Temp_Main_Items
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,7 +67,7 @@ class ConversationViewModel : ViewModel() {
                 "已为您生成出行方案",
                 "8:06 PM",
 
-            ))
+                ))
             delay(30000)
             conversation.addMessage(Message(
                 "蓝心大模型",
@@ -88,7 +89,7 @@ class ConversationViewModel : ViewModel() {
                 "已为您重新规划方案",
                 "8:06 PM",
 
-            ))
+                ))
 
 
 
@@ -113,7 +114,7 @@ data class Message(
 
 
 sealed class CardorImage{
-    data class CardItem(val carditem: Temp_Main_Items) :CardorImage()
+    data class CardItem(val carditem: Mainitems) :CardorImage()
     data class ImageItem( val image: Int ):CardorImage()
 }
 

@@ -156,7 +156,7 @@ fun MyItem(
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = stringResource(id = R.string.in_stock,item.trval_day),
+                    text = stringResource(id = R.string.in_stock,item.trval_day.toInt()),
                     style = MaterialTheme.typography.Card5Content3
                 )
             }
