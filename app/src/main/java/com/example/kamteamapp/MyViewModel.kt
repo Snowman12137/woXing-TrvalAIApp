@@ -22,6 +22,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
+
+
+class Conversationuistate(
+    val channelName: String,
+    initialMessages: List<Messagechat>
+) {
+    private val _messages: MutableStateFlow<List<Messagechat>> = MutableStateFlow(initialMessages)
+    val messages: StateFlow<List<Messagechat>> = _messages.asStateFlow()
+
+    fun addMessage(msg: Messagechat) {
+        _messages.update {
+            val newMessages = it.toMutableList()
+            newMessages.add(0, msg)
+            newMessages
+        }
+    }
+}
+
+
+
 data class MyUiState(
     var travelitem: Travelitems = Travelitems(0, 0, ""),
     var messagechat: List<Messagechat> = ArrayList(),
@@ -49,12 +69,15 @@ class MyViewModel: ViewModel() {
 
             //定义插入的数据
             val mainitem = convertdata(data)
-            val messagetest = Messagechat(1, mainitem.message_id, "这是测试消息")
-            val traveltest = Travelitems(1, mainitem.travel_id, Data_my)
 
-            //插入数据
+            //插入主要信息
             insertmainitem(mainitem)
-            insertmessagechat(mainitem.message_id, "这是测试消息")
+
+
+            //插入对话消息
+            insertmessagechat("me", mainitem.message_id, "这是测试消息", "2021-10-10", "card")
+
+            //插入旅游信息
             inserttravelitems(mainitem.travel_id, Data_my)
         }
 
@@ -128,8 +151,8 @@ class MyViewModel: ViewModel() {
         }
     }
 
-    fun insertmessagechat(mainidmessage:Int,message: String) {
-        val messagechat = Messagechat(1, mainidmessage, message)
+    fun insertmessagechat(author:String,maintochatid: Int, message: String,timestamp:String,cardorimage:String) {
+        val messagechat = Messagechat(1, author, maintochatid, message, timestamp, cardorimage)
         viewModelScope.launch {
             DataHelper.insertmessagechat(messagechat)
         }

@@ -3,6 +3,8 @@ package com.example.kamteamapp.base.databasefinal
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.kamteamapp.R
+import com.example.kamteamapp.ui.chat.CardorImage
 import java.time.LocalDate
 
 
@@ -24,8 +26,12 @@ data class Mainitems(
 data class Messagechat(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,  // 主键
+    val author : String,  // 作者
     val maintochat: Int,  // 主要信息主键
     val message: String,  // 消息
+    val timestamp : String,  // 时间戳
+    val cardorimage: String? = null,
+    val authorImage: Int = if (author == "me") R.drawable.mypicture else R.drawable.vivo
 )
 
 @Entity
