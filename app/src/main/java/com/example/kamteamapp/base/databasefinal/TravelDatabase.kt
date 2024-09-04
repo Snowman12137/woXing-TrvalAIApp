@@ -18,7 +18,7 @@ abstract class TravelDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): TravelDatabase {
-            return Room.databaseBuilder(context,TravelDatabase::class.java, "app_databasefinal").build()
+            return Room.databaseBuilder(context,TravelDatabase::class.java, "qpp_last3").build()
         }
     }
 }

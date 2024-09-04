@@ -39,8 +39,16 @@ interface DatabaseDao  {
     fun getalltravelitems(maintotravel: Int): Flow<Travelitems>
 
 
-    //删除
-    @Delete
-    suspend fun deletemainitem(mainitems: Mainitems)
+    //删除全部数据
+    @Query("DELETE FROM mainitems")
+    suspend fun deleteallmainitems()
+
+    //删除全部数据
+    @Query("DELETE FROM messagechat")
+    suspend fun deleteallmessagechat()
+
+    //删除全部数据
+    @Query("DELETE FROM travelitems")
+    suspend fun deletealltravelitems()
 
 }

@@ -49,6 +49,20 @@ object DataHelper {
         return travelDatabase.databaseDao().getalltravelitems(maintotravel)
     }
 
+    suspend fun deleteallmainitems() {
+        travelDatabase.databaseDao().deleteallmainitems()
+    }
+
+
+    suspend fun deleteallmessagechat() {
+        travelDatabase.databaseDao().deleteallmessagechat()
+    }
+
+    suspend fun deletealltravelitems() {
+        travelDatabase.databaseDao().deletealltravelitems()
+    }
+
+
     fun closeDatabase() {
         // Room 自动管理数据库连接，通常不需要手动关闭
     }
