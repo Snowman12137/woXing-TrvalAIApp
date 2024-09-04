@@ -31,7 +31,7 @@ data class Messagechat(
     val message: String,  // 消息
     val timestamp : String,  // 时间戳
     val cardorimage: String? = null,
-    val authorImage: Int = if (author == "me") R.drawable.mypicture else R.drawable.vivo
+    val authorImage: Int
 )
 
 @Entity

@@ -40,9 +40,6 @@ class Conversation(
         _messages.value = newMessages
     }
 
-    fun findMessageById(id: Int): Messagechat? {
-        return _messages.value?.find { it.id == id }
-    }
 
 }
 
@@ -75,13 +72,11 @@ class MyViewModel: ViewModel() {
             val mainitem = convertdata(data)
             //插入主要信息
             insertmainitem(mainitem)
+
             //插入对话消息
             insertmessagechat("me", mainitem.message_id, "这是测试消息", "2021-10-10", "card")
-            //conversation更新对话
-            conversation.addMessage(Messagechat(1, "me", mainitem.message_id, "这是测试消息", "2021-10-10", "card"))
-            val a = conversation.findMessageById(1)
-            Log.d("test", "init: ${a.toString()}")
-            //插入旅游信息
+
+//            插入旅游信息
             inserttravelitems(mainitem.travel_id, Data_my)
         }
 
@@ -89,15 +84,17 @@ class MyViewModel: ViewModel() {
             //获取所有的mainitems
             getallmainitems()
             //获取mainitems by id
+
             getmainitembyid(1)
+
             //获取所有的messagechat by id
             getallmessagechat(1)
+
             //获取所有的travelitems by id
             gettravelitem(1)
         }
-
-
     }
+
 
     fun getallmessagechat(maintochat: Int){
         viewModelScope.launch {
@@ -117,7 +114,7 @@ class MyViewModel: ViewModel() {
                 _uiState.update { state ->
                     state.travelitem = travelitems
                     val temp = TransPartToDisplay()
-                    state.test_data = temp.getDisPlay(temp.getString(travelitems!!.tr))
+                    state.test_data = temp.getDisPlay(temp.getString(travelitems.tr))
 
 //                    Log.d("test2", "gettravelitem: ${travelitems.toString()}")
                     state.copy(updateTime = System.nanoTime())
@@ -159,7 +156,7 @@ class MyViewModel: ViewModel() {
     }
 
     fun insertmessagechat(author:String,maintochatid: Int, message: String,timestamp:String,cardorimage:String) {
-        val messagechat = Messagechat(1, author, maintochatid, message, timestamp, cardorimage)
+        val messagechat = Messagechat(1, author, maintochatid, message, timestamp, cardorimage,12)
         viewModelScope.launch {
             DataHelper.insertmessagechat(messagechat)
         }
