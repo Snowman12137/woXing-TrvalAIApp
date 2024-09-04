@@ -11,26 +11,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.R
 import com.example.kamteamapp.data.Temp_Main_Items
-import com.example.kamteamapp.data.tempMainItem2
-import com.example.kamteamapp.data.tempMainItem3
-import com.example.kamteamapp.data.tempMainItem4
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
-//class ConversationUiState(
-//    val channelName: String,
-//    initialMessages: List<Message>
-//) {
-//    private val _messages: MutableList<Message> = initialMessages.toMutableStateList()
-//    val messages: List<Message> = _messages
-//
-//    fun addMessage(msg: Message) {
-//        _messages.add(0, msg)
-//    }
-//}
-
 
 class ConversationUiState(
     val channelName: String,
@@ -81,9 +65,7 @@ class ConversationViewModel : ViewModel() {
                 "蓝心大模型",
                 "已为您生成出行方案",
                 "8:06 PM",
-                CardorImage.CardItem(
-                    tempMainItem3
-                )
+
             ))
             delay(30000)
             conversation.addMessage(Message(
@@ -105,9 +87,7 @@ class ConversationViewModel : ViewModel() {
                 "蓝心大模型",
                 "已为您重新规划方案",
                 "8:06 PM",
-                CardorImage.CardItem(
-                    tempMainItem4
-                )
+
             ))
 
 

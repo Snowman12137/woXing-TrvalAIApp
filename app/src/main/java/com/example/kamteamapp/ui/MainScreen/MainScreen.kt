@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kamteamapp.R
+import com.example.kamteamapp.base.databasefinal.Mainitems
 import com.example.kamteamapp.data.Tempss
 import com.example.kamteamapp.ui.HistoryProgram.HistoryProgramScreen
 import com.example.kamteamapp.ui.MainScreen.MyScreen.MyScreen
@@ -59,14 +60,15 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
+    ListData:List<Mainitems>,
     navigateUp :()->Unit,
-    onNavigateToHistory :(String)->Unit,
+    onNavigateToHistory :(Int)->Unit,
     onNavigateToAIChat :()->Unit,
     onNavigateToUser :()->Unit,
     onNavigateToLogin :()->Unit,
     onNavigateToMain:()->Unit = {},
 
-){
+    ){
     var navIndex by rememberSaveable { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
     val homeListState = rememberLazyListState()
@@ -109,6 +111,7 @@ fun MainScreen(
                 }
                 1 -> saveableStateHolder.SaveableStateProvider(navItems[1].label){
                     HistoryProgramScreen(
+                        ListData,
                         navigateUp = navigateUp,
                         onNavigateToMain = onNavigateToMain,
                         navigateToItemUpdate = onNavigateToHistory,

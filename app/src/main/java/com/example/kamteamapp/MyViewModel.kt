@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.Utils.TransPartToDisplay
@@ -14,6 +16,7 @@ import com.example.kamteamapp.base.databasefinal.TravelDatabase
 import com.example.kamteamapp.base.databasefinal.Travelitems
 import com.example.kamteamapp.base.prase.TravelData
 import com.example.kamteamapp.data.Data_my
+import com.example.kamteamapp.ui.chat.ConversationUiState
 import com.example.kamteamapp.ui.item.DisplayItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,20 +27,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 
 
-class Conversationuistate(
+class Conversation(
     val channelName: String,
     initialMessages: List<Messagechat>
 ) {
-    private val _messages: MutableStateFlow<List<Messagechat>> = MutableStateFlow(initialMessages)
-    val messages: StateFlow<List<Messagechat>> = _messages.asStateFlow()
+    private val _messages: MutableLiveData<List<Messagechat>> = MutableLiveData(initialMessages)
+    val messages: LiveData<List<Messagechat>> = _messages
 
     fun addMessage(msg: Messagechat) {
-        _messages.update {
-            val newMessages = it.toMutableList()
-            newMessages.add(0, msg)
-            newMessages
-        }
+        val newMessages = _messages.value?.toMutableList() ?: mutableListOf()
+        newMessages.add(0, msg)
+        _messages.value = newMessages
     }
+
+    fun findMessageById(id: Int): Messagechat? {
+        return _messages.value?.find { it.id == id }
+    }
+
 }
 
 
@@ -58,25 +64,23 @@ data class MyUiState(
 class MyViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(MyUiState())
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
-
+    val conversation = Conversation("General", listOf())
     init {
 //插入测试
         viewModelScope.launch {
-
             //解析数据
             val temp = TransPartToDisplay()
             val data = temp.getString(Data_my)
-
             //定义插入的数据
             val mainitem = convertdata(data)
-
             //插入主要信息
             insertmainitem(mainitem)
-
-
             //插入对话消息
             insertmessagechat("me", mainitem.message_id, "这是测试消息", "2021-10-10", "card")
-
+            //conversation更新对话
+            conversation.addMessage(Messagechat(1, "me", mainitem.message_id, "这是测试消息", "2021-10-10", "card"))
+            val a = conversation.findMessageById(1)
+            Log.d("test", "init: ${a.toString()}")
             //插入旅游信息
             inserttravelitems(mainitem.travel_id, Data_my)
         }
@@ -176,10 +180,6 @@ class MyViewModel: ViewModel() {
         return Mainitems(id, time_start, travelday, travelname, other1, messageid, travelid)
 
     }
-
-
-
-
 }
 
 //    fun gettravelbyid(mainitems: Mainitems){
@@ -218,7 +218,7 @@ class MyViewModel: ViewModel() {
 //    }
 //}
 
-    //async { WanHelper.insertmessage(22, Data_my) }
+//async { WanHelper.insertmessage(22, Data_my) }
 //            val test_data = async{WanHelper.getmessage(1)}
 //            _uiState.update { state ->
 //                test_data.await().let {
