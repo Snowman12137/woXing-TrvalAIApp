@@ -49,6 +49,31 @@ object DataHelper {
         return travelDatabase.databaseDao().getalltravelitems(maintotravel)
     }
 
+    fun findmainitembynullname(): Flow<List<Int>> {
+        return travelDatabase.databaseDao().getmainitembynullname()
+    }
+
+
+    suspend fun deleteallmainitems() {
+        travelDatabase.databaseDao().deleteallmainitems()
+    }
+
+
+    suspend fun deleteallmessagechat() {
+        travelDatabase.databaseDao().deleteallmessagechat()
+    }
+
+    suspend fun deletealltravelitems() {
+        travelDatabase.databaseDao().deletealltravelitems()
+    }
+
+    //更新主表的name
+    suspend fun updatemainitembyid(id: Int) {
+        travelDatabase.databaseDao().updatemainitembyid(id)
+    }
+
+
+
     fun closeDatabase() {
         // Room 自动管理数据库连接，通常不需要手动关闭
     }

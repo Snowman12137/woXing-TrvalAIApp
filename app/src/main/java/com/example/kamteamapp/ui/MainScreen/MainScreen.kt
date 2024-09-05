@@ -67,6 +67,9 @@ fun MainScreen(
     onNavigateToUser :()->Unit,
     onNavigateToLogin :()->Unit,
     onNavigateToMain:()->Unit = {},
+    navigationToChatHistory:(String) ->Unit,
+    initPart :()->Unit,
+    updataPart:()->Unit
 
     ){
     var navIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -87,7 +90,9 @@ fun MainScreen(
         },
         bottomBar = {
             BottomNavigation(
-                items = navItems
+                items = navItems,
+                initPart =  initPart,
+                updataPart = updataPart
             ) {
                 //首页双击返回顶部
                 if ((it == 0) && (navIndex == 0) && homeListState.canScrollBackward) {
@@ -115,6 +120,7 @@ fun MainScreen(
                         navigateUp = navigateUp,
                         onNavigateToMain = onNavigateToMain,
                         navigateToItemUpdate = onNavigateToHistory,
+                        navigationToChatHistory = navigationToChatHistory,
                     )
                 }
 
@@ -137,6 +143,8 @@ fun MainScreen(
 @Composable
 fun BottomNavigation(
     items: List<NavigationItem> = listOf(),
+    initPart:()->Unit ,
+    updataPart:()->Unit,
     onClick: (index: Int) -> Unit
 ) {
     var currItem by rememberSaveable { mutableIntStateOf(0) }
@@ -151,6 +159,10 @@ fun BottomNavigation(
                 onClick = {
                     currItem = index
                     onClick(index)
+                    if (index == 2){
+                        initPart()
+                        updataPart()
+                    }
                 },
                 icon = {
                     BadgedBox(
@@ -257,14 +269,14 @@ data class NavigationItem(
     val unselectedColor: Int = R.color.theme
 )
 
-@Preview(showBackground = true, backgroundColor = 0xFFF0F0F0)
-@Composable
-fun WanBottomNavigationPreview() {
-    val navItems = listOf(
-        NavigationItem("首页", R.drawable.ic_bottom_bar_home),
-        NavigationItem("导航", R.drawable.ic_bottom_bar_navigation),
-        NavigationItem("项目", R.drawable.ic_bottom_bar_project),
-        NavigationItem("我的", R.drawable.ic_bottom_bar_user),
-    )
-    KamTeamAppTheme { BottomNavigation(items = navItems, onClick = { _ -> }) }
-}
+//@Preview(showBackground = true, backgroundColor = 0xFFF0F0F0)
+//@Composable
+//fun WanBottomNavigationPreview() {
+//    val navItems = listOf(
+//        NavigationItem("首页", R.drawable.ic_bottom_bar_home),
+//        NavigationItem("导航", R.drawable.ic_bottom_bar_navigation),
+//        NavigationItem("项目", R.drawable.ic_bottom_bar_project),
+//        NavigationItem("我的", R.drawable.ic_bottom_bar_user),
+//    )
+//    KamTeamAppTheme { BottomNavigation(items = navItems, onClick = { _ -> }) }
+//}

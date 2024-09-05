@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.kamteamapp.Utils.ScreenSizeManager
 import com.example.kamteamapp.Utils.WideThing
+import com.example.kamteamapp.base.databasefinal.Mainitems
 import com.example.kamteamapp.ui.HistoryProgram.HistoryProgramScreen
 import com.example.kamteamapp.ui.chat.ConversationScreen
 import com.example.kamteamapp.ui.MainScreen.MainScreen
@@ -29,6 +30,7 @@ import com.example.kamteamapp.ui.item.State
 import com.example.kamteamapp.ui.item.combineItems
 import com.example.kamteamapp.ui.login.LoginPage
 import com.example.kamteamapp.ui.login.register.RegisterPage
+import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -61,11 +63,14 @@ fun MyNavHost(
                 ListData = uiState.allmain_data,
                 navigateUp = {MyNavActions.navigateUp()},
                 onNavigateToHistory = {MyNavActions.navigateToDetailItem(it)},
-                onNavigateToAIChat = { MyNavActions.navigateToChat() },
+                onNavigateToAIChat = { MyNavActions.navigateToNew_Chat() },
                 onNavigateToUser = {},
                 onNavigateToLogin = {MyNavActions.navigateLoginDesatinations()},
                 onNavigateToMain = {MyNavActions.navigateToMainScreen()},
-            )
+                navigationToChatHistory = {MyNavActions.navigateToChat(it)},
+                initPart = {viewModel.getmainitembyid(uiState.mainid_namenull[0])},
+                updataPart = {viewModel.updateMainItemName(uiState.mainid_namenull[0])}
+                )
         }
 
         // 登录界面
@@ -87,18 +92,19 @@ fun MyNavHost(
         composable(MyDestinations.INTREST){
             IntrestScreen(
                 //navigateToAIUpdate = { MyNavActions.navigateToMainScreen() }
-                navigateToAIUpdate = { MyNavActions.navigateToChat() }
+                navigateToAIUpdate = { MyNavActions.navigateToMainScreen()}
             )
         }
 
-        composable(MyDestinations.HISTORY_PROGRAM){
-            HistoryProgramScreen(
-                ListData = uiState.allmain_data,
-                navigateUp = {MyNavActions.navigateUp()},
-                onNavigateToMain = {MyNavActions.navigateToMainScreen()},
-                navigateToItemUpdate = {MyNavActions.navigateToDetailItem(it)}
-            )
-        }
+//        composable(MyDestinations.HISTORY_PROGRAM){
+//            HistoryProgramScreen(
+//                ListData = uiState.allmain_data,
+//                navigateUp = {MyNavActions.navigateUp()},
+//                onNavigateToMain = {MyNavActions.navigateToMainScreen()},
+//                navigateToItemUpdate = {MyNavActions.navigateToDetailItem(it)},
+//                navigationToChatHistory = {MyNavActions.navigateToChat(it)}
+//            )
+//        }
 
 
         // Dtail 界面，选择细节
@@ -128,18 +134,41 @@ fun MyNavHost(
              onNavigateToMain = { MyNavActions.navigateToMainScreen() }
          )
      }
-        // 主界面 对话界面
-        composable(MyDestinations.CHAT_PART){
-            viewModel.getallmessagechat(uiState.allmain_data[0].message_id)
+        composable(MyDestinations.New_Chat){
+//            viewModel.getmainidbynamenull()
+            //viewModel.getmainitembyid(uiState.mainid_namenull[0])
+            //viewModel.getallmessagechat(uiState.mainitembyid.message_id)
+//            if (!init.value){
+//                viewModel.getmainitembyid(uiState.mainid_namenull[0])
+//            }
+
             ConversationScreen(
+                uiState.mainitembyid.message_id,
                 uiState.messagechat,
-                navigateUp = {MyNavActions.navigateToMainScreen()}
+                navigateUp = {MyNavActions.navigateToMainScreen()} ,
+                viewModel,
                 //navigateToItemUpdate = { MyNavActions.navigateToHistoryProgram() }
             )
+        }
 
+        // 主界面 对话界面
+        composable("${MyDestinations.CHAT_PART}/{numberchat}"){getentry->
+            val numberchat = getentry.arguments?.getString("numberchat")
+                if (numberchat!=null){
+                    //viewModel.getallmessagechat(numberchat.toInt())
+                    ConversationScreen(
+                        numberchat.toInt(),
+                        uiState.messagechat,
+                        navigateUp = {MyNavActions.navigateToMainScreen()} ,
+                        viewModel,
+                        //navigateToItemUpdate = { MyNavActions.navigateToHistoryProgram() }
+                    )
+
+            }
         }
     }
 }
+
 
 class MyNavActions(
     private val navController: NavHostController
@@ -150,9 +179,14 @@ class MyNavActions(
     val navigateToInterest:() ->Unit = {
         navigate(MyDestinations.INTREST)
     }
-    val navigateToChat:()->Unit = {
-        navigate(MyDestinations.CHAT_PART)
+    val navigateToChat:(numberid:String)->Unit = {
+        navigate(MyDestinations.CHAT_PART+ "/$it")
     }
+
+    val navigateToNew_Chat:()->Unit = {
+        navigate(MyDestinations.New_Chat)
+    }
+
     val navigateToHistoryProgram:()->Unit = {
         navigate(MyDestinations.HISTORY_PROGRAM)
     }
@@ -208,5 +242,6 @@ object MyDestinations{
     const val MAIN_SCREEN = "main_screen"
     const val ITEM_DETAILS = "item_details"
     const val REGISTER = "register"
+    const val New_Chat = "newchat"
 }
 

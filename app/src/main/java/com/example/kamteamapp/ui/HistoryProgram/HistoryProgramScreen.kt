@@ -60,6 +60,7 @@ fun HistoryProgramScreen(
     navigateUp :()->Unit,
     onNavigateToMain:()->Unit,
     navigateToItemUpdate: (Int) -> Unit,
+    navigationToChatHistory:(String) ->Unit,
     modifier: Modifier = Modifier,
     //viewModel: HistoryProgramScreenViewModel = viewModel()
 ){
@@ -68,6 +69,7 @@ fun HistoryProgramScreen(
         HistoryProgramBody(
             itemList = ListData,
             onItemClick = navigateToItemUpdate,
+            historyClick = navigationToChatHistory,
             modifier = modifier
                 .fillMaxSize()
         )
@@ -79,6 +81,7 @@ private fun HistoryProgramBody(
     itemList: List<Mainitems>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onItemClick: (Int) -> Unit,
+    historyClick:(String) -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -97,6 +100,7 @@ private fun HistoryProgramBody(
                 itemList = itemList,
                 onItemClick = { onItemClick(it) },
                 contentPadding = contentPadding,
+                historyClick = historyClick,
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
         }
@@ -111,6 +115,7 @@ fun MyList(
     itemList: List<Mainitems>,
     onItemClick: (Int) -> Unit,
     contentPadding: PaddingValues,
+    historyClick:(String) -> Unit,
     modifier: Modifier = Modifier
 ){
     LazyColumn(
@@ -118,12 +123,15 @@ fun MyList(
         contentPadding = contentPadding
     ) {
         items(items = itemList,key = {it.id}){item->
-            MyItem(
-                item = item,
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_small))
-                    .clickable { onItemClick(item.travel_id) }
-            )
+            if (item.name != ""){
+                MyItem(
+                    item = item,
+                    historyClick=historyClick,
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .clickable { onItemClick(item.travel_id) }
+                )
+            }
         }
     }
 }
@@ -132,7 +140,9 @@ fun MyList(
 // 每个卡片的展示界面
 @Composable
 fun MyItem(
-    item:Mainitems,modifier: Modifier = Modifier
+    item:Mainitems,
+    historyClick:(String) -> Unit,
+    modifier: Modifier = Modifier
 ){
     Card(
         colors = CardDefaults.cardColors(
@@ -156,7 +166,7 @@ fun MyItem(
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = stringResource(id = R.string.in_stock,item.trval_day.toInt()),
+                    text = stringResource(id = R.string.in_stock,item.trval_day),
                     style = MaterialTheme.typography.Card5Content3
                 )
             }
@@ -197,9 +207,8 @@ fun MyItem(
                     ),
                     shape = RoundedCornerShape(4.dp),
                     modifier = modifier
-                        .padding(5.dp),
-
-
+                        .padding(5.dp)
+                        .clickable { historyClick(item.message_id.toString()) }
                 ) {
                     Text(
                         text = "历史会话",

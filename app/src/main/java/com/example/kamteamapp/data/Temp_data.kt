@@ -5,11 +5,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.room.PrimaryKey
 import com.example.kamteamapp.R
-import com.example.kamteamapp.ui.chat.CardorImage
-import com.example.kamteamapp.ui.chat.ConversationUiState
-import com.example.kamteamapp.ui.chat.EMOJIS.EMOJI_PINK_HEART
-import com.example.kamteamapp.ui.chat.Message
-//import com.example.inventory.R
 import java.time.DayOfWeek
 import java.time.LocalDate
 

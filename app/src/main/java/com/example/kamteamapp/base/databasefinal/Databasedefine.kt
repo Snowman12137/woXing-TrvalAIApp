@@ -1,17 +1,14 @@
 package com.example.kamteamapp.base.databasefinal
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.kamteamapp.R
-import com.example.kamteamapp.ui.chat.CardorImage
-import java.time.LocalDate
 
 
 @Entity
 data class Mainitems(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,  // 主键
+    val id: Int =0,  // 主键
     val time_start: String,  // 起始时间
     val trval_day: String,   // 旅游天数
     val name : String,   // 事件名称
@@ -25,19 +22,24 @@ data class Mainitems(
 @Entity
 data class Messagechat(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,  // 主键
-    val author : String,  // 作者
+    val id: Int?,  // 主键
+    val author: String,  // 作者
     val maintochat: Int,  // 主要信息主键
     val message: String,  // 消息
-    val timestamp : String,  // 时间戳
-    val cardorimage: String? = null,
-    val authorImage: Int
+    val timestamp: String,  // 时间戳
+//    val cardorimage: CardorImage? = null,
+    val authorImage: Int  = if (author == "me") R.drawable.mypicture else R.drawable.vivo
 )
+
+sealed class CardorImage{
+    data class CardItem(val carditem: Mainitems) :CardorImage()
+    data class ImageItem( val image: Int ):CardorImage()
+}
 
 @Entity
 data class Travelitems(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,  // 主键
+    val id: Int?,  // 主键
     val maintotravel: Int,  // 主要信息主键
     val tr: String,  // 消息
 )

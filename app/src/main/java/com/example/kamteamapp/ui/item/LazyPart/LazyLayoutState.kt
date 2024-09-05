@@ -38,7 +38,7 @@ class LazyLayoutState {
     @SuppressLint("RestrictedApi")
     fun getBoundaries(
         constraints: Constraints,
-        threshold: Int = 500
+        threshold: Int = 50000
     ): ViewBoundaries {
         //------------------------------------------
         val fromX = offsetState.value.x - threshold

@@ -31,7 +31,7 @@ interface DatabaseDao  {
     fun getallmainitems(): Flow<List<Mainitems>>
 
     //根据maintochat查询
-    @Query("SELECT * FROM messagechat WHERE maintochat = :maintochat")
+    @Query("SELECT * FROM messagechat WHERE maintochat = :maintochat ORDER BY id DESC")
     fun getallmessagechat(maintochat: Int): Flow<List<Messagechat>>
 
     //根据maintotravel查询
@@ -39,8 +39,27 @@ interface DatabaseDao  {
     fun getalltravelitems(maintotravel: Int): Flow<Travelitems>
 
 
-    //删除
-    @Delete
-    suspend fun deletemainitem(mainitems: Mainitems)
+    //根据主表的事件名称为空返回主表的id
+    @Query("SELECT id FROM mainitems WHERE name = '无'")
+    fun getmainitembynullname(): Flow<List<Int>>
+
+    //将主表的name修改为有
+    @Query("UPDATE mainitems SET name = '有' WHERE id = :id")
+    suspend fun updatemainitembyid(id: Int)
+
+    //删除全部数据
+    @Query("DELETE FROM mainitems")
+    suspend fun deleteallmainitems()
+
+    //删除全部数据
+    @Query("DELETE FROM messagechat")
+    suspend fun deleteallmessagechat()
+
+    //删除全部数据
+    @Query("DELETE FROM travelitems")
+    suspend fun deletealltravelitems()
+
+
+
 
 }

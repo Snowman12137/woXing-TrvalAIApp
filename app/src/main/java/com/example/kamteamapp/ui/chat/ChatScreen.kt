@@ -2,6 +2,8 @@ package com.example.kamteamapp.ui.chat
 
 import android.annotation.SuppressLint
 import android.content.ClipDescription
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,6 +50,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -73,7 +76,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kamteamapp.MyViewModel
 import com.example.kamteamapp.R
+import com.example.kamteamapp.base.databasefinal.CardorImage
 import com.example.kamteamapp.base.databasefinal.Messagechat
 import com.example.kamteamapp.componets.MyAppBar
 import com.example.kamteamapp.ui.HistoryProgram.MyItem
@@ -88,15 +93,21 @@ data class TopMassage(
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ConversationScreen(
-    message:List<Messagechat>,
+    index_id:Int,
+    messages:List<Messagechat>,
     navigateUp:() -> Unit,
-    viewModels: ConversationViewModel = viewModel(),
+    viewModel:MyViewModel,
+    //viewModels: ConversationViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ){
+    LaunchedEffect(messages.size) { viewModel.getallmessagechat(index_id) }
+
+
     var topmassage = TopMassage()
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
@@ -110,7 +121,7 @@ fun ConversationScreen(
     var borderStroke by remember {
         mutableStateOf(Color.Transparent)
     }
-    val messages by viewModels.getMessages().observeAsState(listOf())
+    //val messages by viewModels.getMessages().observeAsState(listOf())
 
 
     val dragAndDropCallback = remember {
@@ -190,8 +201,8 @@ fun ConversationScreen(
             )
             UserInput(
                 onMessageSent = { content ->
-                    viewModels.conversation.addMessage(
-                        Message(topmassage.authorMe, content, topmassage.timeNow)
+                    viewModel.insertmessagechat(
+                        topmassage.authorMe, index_id,content, topmassage.timeNow,
                     )
                 },
                 resetScroll = {
@@ -249,7 +260,7 @@ fun ChannelNameBar(
                 imageVector = Icons.Rounded.Apps,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
-                    .clickable(onClick = {} )
+                    .clickable(onClick = {})
                     .padding(horizontal = 12.dp, vertical = 16.dp)
                     .height(24.dp),
                 contentDescription = stringResource(id = R.string.info)
@@ -264,7 +275,7 @@ fun ChannelNameBar(
 @Composable
 fun Messages(
     data: TopMassage,
-    messages: List<Message>,
+    messages: List<Messagechat>,
     navigateToItemUpdate: () -> Unit,
     scrollState: LazyListState,
     modifier: Modifier = Modifier
@@ -316,7 +327,7 @@ fun Messages(
 @Composable
 fun Message(
     navigateToItemUpdate: () -> Unit,
-    msg: Message,
+    msg: Messagechat,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean
@@ -364,7 +375,7 @@ fun Message(
 @Composable
 fun AuthorAndTextMessage(
     navigateToItemUpdate: () -> Unit,
-    msg: Message,
+    msg: Messagechat,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
@@ -387,7 +398,7 @@ private val ChatBubbleShape = RoundedCornerShape(4.dp, 20.dp, 20.dp, 20.dp)
 
 @Composable
 fun ChatItemBubble(
-    message: Message,
+    message: Messagechat,
     isUserMe: Boolean,
     onItemOptionClick: () -> Unit
 ) {
@@ -409,45 +420,45 @@ fun ChatItemBubble(
                 //authorClicked = authorClicked
             )
         }
-        message.cardorimage?.let {
-            when(message.cardorimage){
-                is CardorImage.CardItem->{
-                    MyItem(
-                        message.cardorimage.carditem,
-                        modifier = Modifier
-                            .clickable (onClick = onItemOptionClick)
-                    )
-
-                }
-                is CardorImage.ImageItem->{
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Surface(
-                        color = backgroundBubbleColor,
-                        shape = ChatBubbleShape
-                    ) {
-                        Image(
-                            painter = painterResource(message.cardorimage.image),
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(160.dp),
-                            contentDescription = stringResource(id = R.string.attached_image)
-                        )
-                    }
-                }
-            }
-        }
+//        message.cardorimage?.let {
+//            when(message.cardorimage){
+//                is CardorImage.CardItem->{
+//                    MyItem(
+//                        message.cardorimage.carditem,
+//                        modifier = Modifier
+//                            .clickable (onClick = onItemOptionClick)
+//                    )
+//
+//                }
+//                is CardorImage.ImageItem->{
+//                    Spacer(modifier = Modifier.height(4.dp))
+//                    Surface(
+//                        color = backgroundBubbleColor,
+//                        shape = ChatBubbleShape
+//                    ) {
+//                        Image(
+//                            painter = painterResource(message.cardorimage.image),
+//                            contentScale = ContentScale.Fit,
+//                            modifier = Modifier.size(160.dp),
+//                            contentDescription = stringResource(id = R.string.attached_image)
+//                        )
+//                    }
+//                }
+//            }
+//        }
     }
 }
 
 @Composable
 fun ClickableMessage(
-    message: Message,
+    message: Messagechat,
     isUserMe: Boolean,
     //authorClicked: (String) -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
 
     val styledMessage = messageFormatter(
-        text = message.content,
+        text = message.message,
         primary = isUserMe
     )
 
@@ -472,7 +483,7 @@ fun ClickableMessage(
 
 
 @Composable
-private fun AuthorNameTimestamp(msg: Message) {
+private fun AuthorNameTimestamp(msg: Messagechat) {
     Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Text(
             text = msg.author,

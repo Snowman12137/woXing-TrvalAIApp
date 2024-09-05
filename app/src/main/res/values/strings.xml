@@ -3,7 +3,7 @@
     <string name="back_button">返回</string>
     <string name="item_entry_title">添加选项</string>
     <string name="no_item_description">!!!\n没数据\n点击加号+添加</string>
-    <string name="in_stock">一共旅游 %d 天</string>
+    <string name="in_stock">一共旅游 %s 天</string>
     <string name="birthday">请输入你的生日</string>>
 
 
