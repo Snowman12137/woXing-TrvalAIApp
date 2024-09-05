@@ -326,7 +326,7 @@ class MyViewModel: ViewModel() {
 
                             // 检查 code 是否为 1002
                             if (post.code == 1002) {
-                                // 发送第二个请求
+                                // 发送第二个请求 //
                                 val secondRequest = Request.Builder()
                                     .url("http://39.100.70.79:443/AI_travel_get?message=${post.data}")
                                     .build()
