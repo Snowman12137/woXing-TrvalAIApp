@@ -328,7 +328,7 @@ class MyViewModel: ViewModel() {
                             if (post.code == 1002) {
                                 // 发送第二个请求
                                 val secondRequest = Request.Builder()
-                                    .url("http://39.100.70.79:443/return_json?code=1001&status=200&time=4&data=${post.data}")
+                                    .url("http://39.100.70.79:443/AI_travel_get?message=${post.data}")
                                     .build()
 
                                 val secondResponse = client.newCall(secondRequest).execute()
