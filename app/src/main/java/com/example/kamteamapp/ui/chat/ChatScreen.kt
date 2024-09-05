@@ -98,7 +98,7 @@ data class TopMassage(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ConversationScreen(
-    index_id:Int,
+    index_id:Int = 0,
     messages:List<Messagechat>,
     navigateUp:() -> Unit,
     viewModel:MyViewModel,
@@ -201,9 +201,6 @@ fun ConversationScreen(
             )
             UserInput(
                 onMessageSent = { content ->
-//                    viewModel.insertmessagechat(
-//                        topmassage.authorMe, index_id,content, topmassage.timeNow,
-//                    )
                     viewModel.fetchPost(content,index_id)
                 },
                 resetScroll = {

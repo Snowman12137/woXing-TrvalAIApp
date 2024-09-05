@@ -27,7 +27,9 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
+import okhttp3.logging.HttpLoggingInterceptor
 
 
 //class Conversation(
@@ -62,11 +64,11 @@ data class MyUiState(
 
 
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 class MyViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(MyUiState())
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
+
     private var isInitialized = false
     //val conversation = Conversation("General", listOf())
 
@@ -74,7 +76,9 @@ class MyViewModel: ViewModel() {
 
     // http 部分
     private var lastTime: Int? = null // 保存上一次的时间值
-    private lateinit var client: OkHttpClient
+
+    private var client: OkHttpClient
+
     private val _post = MutableStateFlow<Post?>(null)
     val post: StateFlow<Post?> = _post
 
@@ -88,8 +92,10 @@ class MyViewModel: ViewModel() {
     val conversationHistory: StateFlow<List<Messagechat>> = _conversationHistory
 
 
-
     init {
+
+
+
 //插入测试
         viewModelScope.launch {
             deleteallmainitem()
@@ -114,11 +120,6 @@ class MyViewModel: ViewModel() {
             createNewData()
 
 
-            // http
-
-            client = OkHttpClient.Builder()
-                .build()
-
 
         }
 
@@ -138,6 +139,17 @@ class MyViewModel: ViewModel() {
 //            //获取所有的travelitems by id
 //            gettravelitem(1)
         }
+
+        // http
+        val logging = HttpLoggingInterceptor()
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+        client = OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .connectTimeout(300, TimeUnit.SECONDS)  // 设置连接超时为30秒
+            .readTimeout(300, TimeUnit.SECONDS)     // 设置读取超时为30秒
+            .writeTimeout(300, TimeUnit.SECONDS)    // 设置写入超时为300
+            .build()
+
     }
 
 
@@ -288,7 +300,7 @@ class MyViewModel: ViewModel() {
     }
 
 
-    fun fetchPost(userMessage: String,id: Int) {
+    fun fetchPost(userMessage: String,id: Int ) {
         _isLoading.value = true
         _errorMessage.value = null
 
@@ -353,10 +365,87 @@ class MyViewModel: ViewModel() {
                     _isLoading.value = false
                 }
             }
+
+
         }
+
     }
 
+
+//    fun fetchPost(userMessage: String, id: Int = 0) {
+//        _isLoading.value = true
+//        _errorMessage.value = null
+//
+//        Log.d("First","first")
+//        // 添加用户消息到 conversationHistory
+//        val userMessageObj = Messagechat(null, "me", id, userMessage, "现在")
+//        insertmessagechat(author = "me", id, userMessage, "现在")
+//        _conversationHistory.value = _conversationHistory.value + userMessageObj
+//
+//        Log.d("Secong","second")
+//        viewModelScope.launch {
+//            Log.d("Third","third")
+//            withContext(Dispatchers.IO) {
+//                val dataToSend = _conversationHistory.value.joinToString("\n") { it.message }
+//                val requestBuilder = Request.Builder()
+//                    .url("http://39.100.70.79:443/AI_chat?code=1001&status=200&time=${lastTime ?: "1"}&data=$dataToSend")
+//
+//                val request = requestBuilder.build()
+//                Log.d("Fouth","fouth")
+//                try {
+//                    val response = client.newCall(request).execute()
+//                    if (response.isSuccessful) {
+//                        response.body?.string()?.let { responseBody ->
+//                            val post = Gson().fromJson(responseBody, Post::class.java)
+//                            _post.value = post
+//
+//                            // 检查 code 是否为 1002
+//                            if (post.code == 1002) {
+//                                // 发送第二个请求
+//                                val secondRequest = Request.Builder()
+//                                    .url("http://39.100.70.79:443/return_json?code=1001&status=200&time=4&data=${post.data}")
+//                                    .build()
+//
+//                                val secondResponse = client.newCall(secondRequest).execute()
+//                                if (secondResponse.isSuccessful) {
+//                                    secondResponse.body?.string()?.let { secondResponseBody ->
+//                                        // 将返回的 JSON 作为服务端消息添加到聊天记录
+//                                        val serverMessageObj = Messagechat(null, "服务端", id, secondResponseBody, "现在")
+//                                        insertmessagechat(author = "服务端", id, secondResponseBody, "现在")
+//                                        _conversationHistory.value = _conversationHistory.value + serverMessageObj
+//                                    }
+//                                } else {
+//                                    _errorMessage.value = "第二次请求失败，错误码：${secondResponse.code}"
+//                                }
+//                            } else {
+//                                post.data?.let { message ->
+//                                    // 更新 conversationHistory
+//                                    val serverMessageObj = Messagechat(null, "服务端", id, message, "现在")
+//                                    insertmessagechat(author = "服务端", id, message, "现在")
+//                                    _conversationHistory.value = _conversationHistory.value + serverMessageObj
+//                                }
+//                            }
+//
+//                            // 更新 lastTime
+//                            lastTime = post.time
+//                        } ?: run {
+//                            _errorMessage.value = "响应体为空"
+//                        }
+//                    } else {
+//                        _errorMessage.value = "请求失败，错误码：${response.code}"
+//                    }
+//                } catch (e: IOException) {
+//                    _errorMessage.value = "网络请求失败：${e.message}"
+//                } finally {
+//                    _isLoading.value = false
+//                }
+//            }
+//        }
+//    }
+
 }
+
+
 
 //    fun gettravelbyid(mainitems: Mainitems){
 //        viewModelScope.launch {
