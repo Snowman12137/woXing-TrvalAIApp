@@ -102,6 +102,15 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha03")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    // Gson 库，用于解析 JSON（可选，但推荐）
+    implementation ("com.google.code.gson:gson:2.8.8")
+
+    // OkHttp 核心库
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
+    // OkHttp 日志拦截器
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14")
+
     //implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     //implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
 

@@ -23,7 +23,7 @@ import com.example.kamteamapp.R
 fun MyAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    navigateUp: () -> Unit,
+    onNavIconPressed: () -> Unit = { },
     title: @Composable () -> Unit,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
@@ -33,19 +33,12 @@ fun MyAppBar(
         title = title,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-//            JetchatIcon(
-//                contentDescription = stringResource(id = R.string.navigation_drawer_open),
-//                modifier = Modifier
-//                    .size(64.dp)
-//                    .clickable(onClick = navigateUp)
-//                    .padding(16.dp)
-//            )
-            Icon(
-                imageVector = Icons.Filled.ArrowBackIosNew,
-                contentDescription = null,
+            JetchatIcon(
+                contentDescription = stringResource(id = R.string.navigation_drawer_open),
                 modifier = Modifier
-                    .padding(10.dp, 5.dp, 0.dp, 5.dp)
-                    .clickable { navigateUp() }
+                    .size(64.dp)
+                    .clickable(onClick = onNavIconPressed)
+                    .padding(16.dp)
             )
         }
     )
