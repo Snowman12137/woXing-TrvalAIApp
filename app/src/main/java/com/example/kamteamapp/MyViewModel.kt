@@ -304,7 +304,7 @@ class MyViewModel: ViewModel() {
         _isLoading.value = true
         _errorMessage.value = null
 
-        // 添加用户消息到 conversationHistory
+        // 添加用户消息到 conversationHistory//
         val userMessageObj = Messagechat(null,"me",id, userMessage, "现在")
         insertmessagechat(author = "me",id,userMessage,"现在")
         _conversationHistory.value = _conversationHistory.value + userMessageObj
