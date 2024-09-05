@@ -13,12 +13,20 @@ import com.example.kamteamapp.base.databasefinal.Messagechat
 import com.example.kamteamapp.base.databasefinal.Travelitems
 import com.example.kamteamapp.base.prase.TravelData
 import com.example.kamteamapp.data.Data_my
+import com.example.kamteamapp.data.Post
+import com.example.kamteamapp.ui.chat.Message
 import com.example.kamteamapp.ui.item.DisplayItem
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 import kotlin.random.Random
 
 
@@ -61,6 +69,26 @@ class MyViewModel: ViewModel() {
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
     private var isInitialized = false
     //val conversation = Conversation("General", listOf())
+
+
+
+    // http 部分
+    private var lastTime: Int? = null // 保存上一次的时间值
+    private lateinit var client: OkHttpClient
+    private val _post = MutableStateFlow<Post?>(null)
+    val post: StateFlow<Post?> = _post
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
+    private val _conversationHistory = MutableStateFlow<List<Messagechat>>(emptyList())
+    val conversationHistory: StateFlow<List<Messagechat>> = _conversationHistory
+
+
+
     init {
 //插入测试
         viewModelScope.launch {
@@ -84,6 +112,14 @@ class MyViewModel: ViewModel() {
             createNewData()
             createNewData()
             createNewData()
+
+
+            // http
+
+            client = OkHttpClient.Builder()
+                .build()
+
+
         }
 
         viewModelScope.launch {
@@ -250,6 +286,76 @@ class MyViewModel: ViewModel() {
             ""
         )
     }
+
+
+    fun fetchPost(userMessage: String,id: Int) {
+        _isLoading.value = true
+        _errorMessage.value = null
+
+        // 添加用户消息到 conversationHistory
+        val userMessageObj = Messagechat(null,"me",id, userMessage, "现在")
+        insertmessagechat(author = "me",id,userMessage,"现在")
+        _conversationHistory.value = _conversationHistory.value + userMessageObj
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val dataToSend = _conversationHistory.value.joinToString("\n") { it.message }
+                val requestBuilder = Request.Builder()
+                    .url("http://39.100.70.79:443/AI_chat?code=1001&status=200&time=${lastTime ?: "1"}&data=$dataToSend")
+
+                val request = requestBuilder.build()
+
+                try {
+                    val response = client.newCall(request).execute()
+                    if (response.isSuccessful) {
+                        response.body?.string()?.let { responseBody ->
+                            val post = Gson().fromJson(responseBody, Post::class.java)
+                            _post.value = post
+
+                            // 检查 code 是否为 1002
+                            if (post.code == 1002) {
+                                // 发送第二个请求
+                                val secondRequest = Request.Builder()
+                                    .url("http://39.100.70.79:443/return_json?code=1001&status=200&time=4&data=${post.data}")
+                                    .build()
+
+                                val secondResponse = client.newCall(secondRequest).execute()
+                                if (secondResponse.isSuccessful) {
+                                    secondResponse.body?.string()?.let { secondResponseBody ->
+                                        // 将返回的 JSON 作为服务端消息添加到聊天记录
+                                        val serverMessageObj = Messagechat(null,"服务端",id, secondResponseBody, "现在")
+                                        insertmessagechat(author = "服务端",id,secondResponseBody,"现在")
+                                        _conversationHistory.value = _conversationHistory.value + serverMessageObj
+                                    }
+                                } else {
+                                    _errorMessage.value = "第二次请求失败，错误码：${secondResponse.code}"
+                                }
+                            } else {
+                                post.data?.let { message ->
+                                    // 更新 conversationHistory
+                                    val serverMessageObj = Messagechat(null,"服务端", id,message, "现在")
+                                    insertmessagechat(author = "服务端",id,message,"现在")
+                                    _conversationHistory.value = _conversationHistory.value + serverMessageObj
+                                }
+                            }
+
+                            // 更新 lastTime
+                            lastTime = post.time
+                        } ?: run {
+                            _errorMessage.value = "响应体为空"
+                        }
+                    } else {
+                        _errorMessage.value = "请求失败，错误码：${response.code}"
+                    }
+                } catch (e: IOException) {
+                    _errorMessage.value = "网络请求失败：${e.message}"
+                } finally {
+                    _isLoading.value = false
+                }
+            }
+        }
+    }
+
 }
 
 //    fun gettravelbyid(mainitems: Mainitems){

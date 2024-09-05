@@ -201,9 +201,10 @@ fun ConversationScreen(
             )
             UserInput(
                 onMessageSent = { content ->
-                    viewModel.insertmessagechat(
-                        topmassage.authorMe, index_id,content, topmassage.timeNow,
-                    )
+//                    viewModel.insertmessagechat(
+//                        topmassage.authorMe, index_id,content, topmassage.timeNow,
+//                    )
+                    viewModel.fetchPost(content,index_id)
                 },
                 resetScroll = {
                     scope.launch {

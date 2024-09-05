@@ -25,6 +25,7 @@ fun MyAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     onNavIconPressed: () -> Unit = { },
     title: @Composable () -> Unit,
+    navigateUp: () -> Unit,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
