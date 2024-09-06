@@ -98,14 +98,16 @@ data class TopMassage(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ConversationScreen(
-    index_id:Int,
+    index_message_id:Int,
+    index_trval_id:Int,
+    index_main_id:Int,
     messages:List<Messagechat>,
     navigateUp:() -> Unit,
     viewModel:MyViewModel,
     //viewModels: ConversationViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ){
-    LaunchedEffect(messages.size) { viewModel.getallmessagechat(index_id) }
+    LaunchedEffect(messages.size) { viewModel.getallmessagechat(index_message_id) }
 
 
     var topmassage = TopMassage()
@@ -204,7 +206,7 @@ fun ConversationScreen(
 //                    viewModel.insertmessagechat(
 //                        topmassage.authorMe, index_id,content, topmassage.timeNow,
 //                    )
-                    viewModel.fetchPost(content,index_id)
+                    viewModel.fetchPost(content,index_message_id,index_trval_id,index_main_id)
                 },
                 resetScroll = {
                     scope.launch {

@@ -288,7 +288,7 @@ class MyViewModel: ViewModel() {
     }
 
 
-    fun fetchPost(userMessage: String,id: Int) {
+    fun fetchPost(userMessage: String,id: Int,trvalId:Int,index_main_id:Int,) {
         _isLoading.value = true
         _errorMessage.value = null
 
@@ -324,7 +324,9 @@ class MyViewModel: ViewModel() {
                                     secondResponse.body?.string()?.let { secondResponseBody ->
                                         // 将返回的 JSON 作为服务端消息添加到聊天记录
                                         val serverMessageObj = Messagechat(null,"服务端",id, secondResponseBody, "现在")
-                                        insertmessagechat(author = "服务端",id,secondResponseBody,"现在")
+                                        //insertmessagechat(author = "服务端",id,secondResponseBody,"现在")
+                                        // insertresult
+                                        insertresult(secondResponseBody)
                                         _conversationHistory.value = _conversationHistory.value + serverMessageObj
                                     }
                                 } else {
@@ -354,6 +356,13 @@ class MyViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+    private fun insertresult(result:String){
+        val temp = TransPartToDisplay()
+        val res = temp.getMain(result)
+
+
     }
 
 }

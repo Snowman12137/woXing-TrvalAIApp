@@ -144,6 +144,8 @@ fun MyNavHost(
 
             ConversationScreen(
                 uiState.mainitembyid.message_id,
+                uiState.mainitembyid.travel_id,
+                uiState.mainitembyid.id,
                 uiState.messagechat,
                 navigateUp = {MyNavActions.navigateToMainScreen()} ,
                 viewModel,
@@ -158,6 +160,8 @@ fun MyNavHost(
                     //viewModel.getallmessagechat(numberchat.toInt())
                     ConversationScreen(
                         numberchat.toInt(),
+                        0,
+                        0,
                         uiState.messagechat,
                         navigateUp = {MyNavActions.navigateToMainScreen()} ,
                         viewModel,

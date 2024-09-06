@@ -2,6 +2,9 @@ package com.example.kamteamapp.Utils
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.kamteamapp.base.databasefinal.Mainitems
+import com.example.kamteamapp.base.prase.Main
+import com.example.kamteamapp.base.prase.Travel
 import com.example.kamteamapp.base.prase.TravelData
 import com.example.kamteamapp.data.Between
 import com.example.kamteamapp.data.Detail_Trval_Data
@@ -20,6 +23,10 @@ class TransPartToDisplay(){
     fun getString(jsonString: String): TravelData {
         val gson = Gson()
         return gson.fromJson(jsonString, TravelData::class.java)
+    }
+
+    fun getMain(Mainss:String): Main {
+        return getString(Mainss).main
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
