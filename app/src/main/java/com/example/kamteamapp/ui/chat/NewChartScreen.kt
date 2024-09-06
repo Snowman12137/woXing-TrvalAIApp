@@ -23,22 +23,30 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.kamteamapp.ui.theme.KamTeamAppTheme
+import com.example.kamteamapp.ui.theme.login_body1
 
 
-@Preview
-@Composable
-fun show(){
-    KamTeamAppTheme {
-        InitDialog()
-    }
-}
+//@Preview
+//@Composable
+//fun show(){
+//    KamTeamAppTheme {
+//        InitDialog()
+//    }
+//}
 
 @Composable
 fun InitDialog(
-
-){
+    updataInit: () -> Unit,
+    gotoPOST: (String) -> Unit,
+) {
     val showingDialog = remember { mutableStateOf(true) }
-    val save_part = remember { mutableStateOf(Formate()) }
+    //val savePart = remember { mutableStateOf(Formate()) } // 这里管理状态
+    val num = remember { mutableStateOf("") }
+    val start_part = remember { mutableStateOf("") }
+    val end_part = remember { mutableStateOf("") }
+    val start_time = remember { mutableStateOf("") }
+    val datas = remember { mutableStateOf("") }
+
     if (showingDialog.value) {
         AlertDialog(
             onDismissRequest = {
@@ -49,18 +57,16 @@ fun InitDialog(
                 Text(text = "基本信息表")
             },
             text = {
-                Column(
-
-                ) {
-                    TextAndField("出行人数",save_part.value.num)
-                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
-                    TextAndField("起始地点",save_part.value.start_part)
-                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
-                    TextAndField("出行终点",save_part.value.end_part)
-                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
-                    TextAndField("出发时间",save_part.value.start_time)
-                    Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
-                    TextAndField("出行天数",save_part.value.datas)
+                Column {
+                    TextAndField("出行人数", num)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextAndField("起始地点", start_part)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextAndField("出行终点", end_part)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextAndField("出发时间", start_time)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextAndField("出行天数", datas)
                 }
             },
 
@@ -68,9 +74,22 @@ fun InitDialog(
                 TextButton(
                     onClick = {
                         showingDialog.value = false
+                        updataInit()
+                        gotoPOST(
+                            """
+                            {
+                                "start_location":"${start_part.value}",
+                                "destination":"${end_part.value}",
+                                "start_data":"${start_time.value}",
+                                "duration":"${datas.value}",
+                                "people_count":"${num.value}",
+                                "budget_per_person": 2000,
+                                "preferences":"年轻化一些的景点"
+                            }
+                            """.trimIndent()
+                        )
                     },
-                    modifier = Modifier
-                        .padding(5.dp)
+                    modifier = Modifier.padding(5.dp)
                 ) {
                     Text("确定输入信息")
                 }
@@ -89,7 +108,7 @@ fun TextAndField(
         modifier = Modifier
             .padding(2.dp)
     ){
-        Text(text = text)
+        //Text(text = text)
         Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
         OutlinedTextField(
             value = contents.value,
@@ -99,9 +118,16 @@ fun TextAndField(
             },
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)
-                .height(30.dp)
+                .height(60.dp)
                 .fillMaxWidth(0.5f)
-                .border(1.dp, MaterialTheme.colorScheme.primary)
+                .border(1.dp, MaterialTheme.colorScheme.primary),
+            placeholder = {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.login_body1,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         )
     }
 
@@ -110,9 +136,9 @@ fun TextAndField(
 
 
 data class Formate(
-    var num: MutableState<String> =mutableStateOf(""),
-    var start_part:MutableState<String> =mutableStateOf(""),
-    var end_part:MutableState<String> =mutableStateOf(""),
-    var start_time:MutableState<String> =mutableStateOf(""),
-    var datas:MutableState<String> =mutableStateOf("")
+    val num: String = "",
+    val start_part: String = "",
+    val end_part: String = "",
+    val start_time: String = "",
+    val datas: String = ""
 )

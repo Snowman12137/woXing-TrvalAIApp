@@ -27,7 +27,7 @@ data class Messagechat(
     val maintochat: Int,  // 主要信息主键
     val message: String,  // 消息
     val timestamp: String,  // 时间戳
-//    val cardorimage: CardorImage? = null,
+    val cardid:Int? = 0,
     val authorImage: Int  = if (author == "me") R.drawable.mypicture else R.drawable.vivo
 )
 

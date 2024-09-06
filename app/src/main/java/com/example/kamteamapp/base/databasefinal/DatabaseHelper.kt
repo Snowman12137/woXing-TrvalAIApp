@@ -22,6 +22,8 @@ object DataHelper {
         travelDatabase.databaseDao().inserttravelitems(travelitems)
     }
 
+
+
     fun getmainitembyid(id: Int): Flow<Mainitems> {
         return travelDatabase.databaseDao().getmainitembyid(id)
     }
@@ -70,6 +72,17 @@ object DataHelper {
     //更新主表的name
     suspend fun updatemainitembyid(id: Int) {
         travelDatabase.databaseDao().updatemainitembyid(id)
+    }
+
+
+    suspend fun updatemain_string(id: Int, timestart:String, travelday:String, name:String){
+        travelDatabase.databaseDao().updatemain_string(id,timestart,travelday,name)
+
+    }
+
+    //根据travel的id跟新travel的tr
+    suspend fun updatetravel_string(id: Int, tr: String) {
+        travelDatabase.databaseDao().updatetravel_string(id, tr)
     }
 
 

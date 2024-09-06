@@ -69,7 +69,8 @@ fun MainScreen(
     onNavigateToMain:()->Unit = {},
     navigationToChatHistory:(String) ->Unit,
     initPart :()->Unit,
-    updataPart:()->Unit
+    updataPart:()->Unit,
+    updataInit:()->Unit
 
     ){
     var navIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -125,6 +126,7 @@ fun MainScreen(
                 }
 
                 2 -> saveableStateHolder.SaveableStateProvider(navItems[2].label){
+                    updataInit()
                     onNavigateToAIChat()
                     //ConversationScreen()
                 }

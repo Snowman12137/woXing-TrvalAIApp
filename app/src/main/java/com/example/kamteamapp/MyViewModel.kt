@@ -3,6 +3,9 @@ package com.example.kamteamapp
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kamteamapp.Utils.TransPartToDisplay
@@ -14,6 +17,7 @@ import com.example.kamteamapp.base.databasefinal.Travelitems
 import com.example.kamteamapp.base.prase.TravelData
 import com.example.kamteamapp.data.Data_my
 import com.example.kamteamapp.data.Post
+import com.example.kamteamapp.data.default
 import com.example.kamteamapp.ui.chat.Message
 import com.example.kamteamapp.ui.item.DisplayItem
 import com.google.gson.Gson
@@ -27,6 +31,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
@@ -50,6 +55,12 @@ import kotlin.random.Random
 
 
 
+sealed interface MarsUiState {
+    data class Success(val test: Int) : MarsUiState
+    object Error : MarsUiState
+    object Loading : MarsUiState
+}
+
 data class MyUiState(
     var mainid_namenull:List<Int> = ArrayList(),
     var travelitem: Travelitems = Travelitems(0, 0, ""),
@@ -67,10 +78,8 @@ data class MyUiState(
 class MyViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(MyUiState())
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
-    private var isInitialized = false
-    //val conversation = Conversation("General", listOf())
 
-
+    var marsUiState: MarsUiState by mutableStateOf(MarsUiState.Loading)
 
     // http 部分
     private var lastTime: Int? = null // 保存上一次的时间值
@@ -99,16 +108,17 @@ class MyViewModel: ViewModel() {
             val temp = TransPartToDisplay()
             val data = temp.getString(Data_my)
 //            //定义插入的数据
-            val mainitem = convertdata(data)
-            //插入主要信息
-            insertmainitem(mainitem)
+            if (data!=null){
+                val mainitem = convertdata(data)
+                //插入主要信息
+                insertmainitem(mainitem)
 
-            //插入对话消息
-            insertmessagechat("me", mainitem.message_id, "这是测试消息", "2021-10-10")
+                //插入对话消息
+                insertmessagechat("me", mainitem.message_id, "这是测试消息", "2021-10-10")
 //
 ////            插入旅游信息
-            inserttravelitems(mainitem.travel_id, Data_my)
-
+                inserttravelitems(mainitem.travel_id, Data_my)
+            }
             createNewData()
             createNewData()
             createNewData()
@@ -117,6 +127,8 @@ class MyViewModel: ViewModel() {
             // http
 
             client = OkHttpClient.Builder()
+                .connectTimeout(500,TimeUnit.SECONDS)
+                .readTimeout(500,TimeUnit.SECONDS)
                 .build()
 
 
@@ -140,6 +152,18 @@ class MyViewModel: ViewModel() {
         }
     }
 
+
+    fun updatetravelitem(id: Int, tr: String) {
+        viewModelScope.launch {
+            DataHelper.updatetravel_string(id, tr)
+        }
+    }
+
+    fun updateMainitem_String(id: Int,time_start:String,travelday:String,name:String){
+        viewModelScope.launch {
+            DataHelper.updatemain_string(id,time_start,travelday,name)
+        }
+    }
 
     fun updateMainItemName(id: Int) {
         viewModelScope.launch {
@@ -178,8 +202,10 @@ class MyViewModel: ViewModel() {
                 _uiState.update { state ->
                     state.travelitem = travelitems
                     val temp = TransPartToDisplay()
-                    state.test_data = temp.getDisPlay(temp.getString(travelitems.tr))
-
+                    val res = temp.getString(travelitems.tr)
+                    if (res!=null){
+                        state.test_data = temp.getDisPlay(res)
+                    }
 //                    Log.d("test2", "gettravelitem: ${travelitems.toString()}")
                     state.copy(updateTime = System.nanoTime())
                 }
@@ -234,9 +260,10 @@ class MyViewModel: ViewModel() {
         }
     }
 
-    fun insertmessagechat(author:String,maintochatid: Int, message: String,timestamp:String,cardorimage:CardorImage?=null) {
+    fun insertmessagechat(author:String,maintochatid: Int, message: String,timestamp:String,cardid:Int?=0) {
 
-        val messagechat = Messagechat(null,author, maintochatid, message, timestamp)
+//        val messagechat = Messagechat(null,author, maintochatid, message, timestamp)
+        val messagechat = Messagechat(null, author=author, maintochat = maintochatid, message = message, timestamp=timestamp, cardid =cardid)
         viewModelScope.launch {
             DataHelper.insertmessagechat(messagechat)
         }
@@ -283,12 +310,12 @@ class MyViewModel: ViewModel() {
         )
         inserttravelitems(
             travel_id,
-            ""
+            default
         )
     }
 
 
-    fun fetchPost(userMessage: String,id: Int,trvalId:Int,index_main_id:Int,) {
+    fun fetchPost(userMessage: String,id: Int,trvalId:Int,index_main_id:Int) {
         _isLoading.value = true
         _errorMessage.value = null
 
@@ -316,7 +343,7 @@ class MyViewModel: ViewModel() {
                             if (post.code == 1002) {
                                 // 发送第二个请求
                                 val secondRequest = Request.Builder()
-                                    .url("http://39.100.70.79:443/return_json?code=1001&status=200&time=4&data=${post.data}")
+                                    .url("http://39.100.70.79:443/AI_travel_get?code=1001&status=200&time=4&data=${post.data}")
                                     .build()
 
                                 val secondResponse = client.newCall(secondRequest).execute()
@@ -326,7 +353,11 @@ class MyViewModel: ViewModel() {
                                         val serverMessageObj = Messagechat(null,"服务端",id, secondResponseBody, "现在")
                                         //insertmessagechat(author = "服务端",id,secondResponseBody,"现在")
                                         // insertresult
-                                        insertresult(secondResponseBody)
+                                        marsUiState = MarsUiState.Success(1)
+
+                                        Log.d("TEST",secondResponseBody)
+                                        insertmessagechat(author = "服务端",id,"以下是生成的方案:","现在",index_main_id)
+                                        insertresult(secondResponseBody,index_main_id,trvalId)
                                         _conversationHistory.value = _conversationHistory.value + serverMessageObj
                                     }
                                 } else {
@@ -358,11 +389,21 @@ class MyViewModel: ViewModel() {
         }
     }
 
-    private fun insertresult(result:String){
+    private fun insertresult(result:String,id: Int,trvalId:Int){
         val temp = TransPartToDisplay()
         val res = temp.getMain(result)
+        if (res!=null){
 
+            updateMainitem_String(id,res.time_start,res.trval_day,res.name)
+            updatetravelitem(trvalId,result)
+        }else{
+            //updateMainitem_String(id,res.time_start,res.trval_day,res.name)
+            updatetravelitem(trvalId, default)
+        }
+    }
 
+    fun getmainItem(id:Int): Mainitems{
+        return uiState.value.mainitembyid
     }
 
 }

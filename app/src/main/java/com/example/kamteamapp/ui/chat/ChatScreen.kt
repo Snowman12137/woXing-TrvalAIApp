@@ -1,6 +1,7 @@
 package com.example.kamteamapp.ui.chat
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.ClipDescription
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -10,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
@@ -37,6 +40,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.Apps
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -76,6 +80,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kamteamapp.MarsUiState
 import com.example.kamteamapp.MyViewModel
 import com.example.kamteamapp.R
 import com.example.kamteamapp.base.databasefinal.CardorImage
@@ -98,13 +103,17 @@ data class TopMassage(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ConversationScreen(
+    updata:Boolean,
+    updataInit:() -> Unit,
     index_message_id:Int,
     index_trval_id:Int,
     index_main_id:Int,
     messages:List<Messagechat>,
     navigateUp:() -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     viewModel:MyViewModel,
     //viewModels: ConversationViewModel = viewModel(),
+    marsUiState: MarsUiState,
     modifier: Modifier = Modifier,
 ){
     LaunchedEffect(messages.size) { viewModel.getallmessagechat(index_message_id) }
@@ -194,12 +203,20 @@ fun ConversationScreen(
                         )
                 }, target = dragAndDropCallback)
         ) {
+            if (!updata){
+                InitDialog(
+                    updataInit,
+                    gotoPOST = { viewModel.fetchPost(it,index_message_id,index_trval_id,index_main_id) }
+                )
+            }
             Messages(
                 data = topmassage,
                 messages = messages,
-                navigateToItemUpdate = {},
+                navigateToItemUpdate = navigateToItemUpdate ,
                 modifier = Modifier.weight(1f),
-                scrollState = scrollState
+                scrollState = scrollState,
+                viewModel = viewModel,
+                marsUiState = marsUiState,
             )
             UserInput(
                 onMessageSent = { content ->
@@ -233,7 +250,6 @@ fun ChannelNameBar(
     if (functionalityNotAvailablePopupShown) {
         FunctionalityNotAvailablePopup { functionalityNotAvailablePopupShown = false }
     }
-    InitDialog()
     MyAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
@@ -275,13 +291,16 @@ fun ChannelNameBar(
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Messages(
     data: TopMassage,
     messages: List<Messagechat>,
-    navigateToItemUpdate: () -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     scrollState: LazyListState,
-    modifier: Modifier = Modifier
+    viewModel:MyViewModel,
+    modifier: Modifier = Modifier,
+    marsUiState: MarsUiState,
 ){
     val scope = rememberCoroutineScope()
     Box (modifier = modifier){
@@ -316,7 +335,9 @@ fun Messages(
                         msg = content,
                         isUserMe = content.author == data.authorMe,
                         isFirstMessageByAuthor = isFirstMessageByAuthor,
-                        isLastMessageByAuthor = isLastMessageByAuthor
+                        isLastMessageByAuthor = isLastMessageByAuthor,
+                        viewModel = viewModel,
+                        marsUiState = marsUiState,
                     )
                 }
 
@@ -327,13 +348,16 @@ fun Messages(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Message(
-    navigateToItemUpdate: () -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     msg: Messagechat,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
-    isLastMessageByAuthor: Boolean
+    isLastMessageByAuthor: Boolean,
+    viewModel:MyViewModel,
+    marsUiState: MarsUiState,
 ){
     val borderColor = if (isUserMe) {
         MaterialTheme.colorScheme.primary
@@ -369,26 +393,31 @@ fun Message(
             isLastMessageByAuthor = isLastMessageByAuthor,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .weight(1f)
+                .weight(1f),
+            viewModel,
+            marsUiState = marsUiState
         )
     }
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AuthorAndTextMessage(
-    navigateToItemUpdate: () -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     msg: Messagechat,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel:MyViewModel,
+    marsUiState: MarsUiState,
 ) {
     Column(modifier = modifier) {
         if (isLastMessageByAuthor) {
             AuthorNameTimestamp(msg)
         }
-        ChatItemBubble(msg, isUserMe,navigateToItemUpdate )
+        ChatItemBubble(msg, isUserMe,navigateToItemUpdate,viewModel,marsUiState)
         if (isFirstMessageByAuthor) {
             Spacer(modifier = Modifier.height(8.dp))
         } else {
@@ -399,11 +428,14 @@ fun AuthorAndTextMessage(
 
 private val ChatBubbleShape = RoundedCornerShape(4.dp, 20.dp, 20.dp, 20.dp)
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatItemBubble(
     message: Messagechat,
     isUserMe: Boolean,
-    onItemOptionClick: () -> Unit
+    navigateToItemUpdate: (Int) -> Unit,
+    viewModel:MyViewModel,
+    marsUiState: MarsUiState,
 ) {
 
     val backgroundBubbleColor = if (isUserMe) {
@@ -423,32 +455,51 @@ fun ChatItemBubble(
                 //authorClicked = authorClicked
             )
         }
-//        message.cardorimage?.let {
-//            when(message.cardorimage){
-//                is CardorImage.CardItem->{
-//                    MyItem(
-//                        message.cardorimage.carditem,
-//                        modifier = Modifier
-//                            .clickable (onClick = onItemOptionClick)
-//                    )
-//
-//                }
-//                is CardorImage.ImageItem->{
-//                    Spacer(modifier = Modifier.height(4.dp))
-//                    Surface(
-//                        color = backgroundBubbleColor,
-//                        shape = ChatBubbleShape
-//                    ) {
-//                        Image(
-//                            painter = painterResource(message.cardorimage.image),
-//                            contentScale = ContentScale.Fit,
-//                            modifier = Modifier.size(160.dp),
-//                            contentDescription = stringResource(id = R.string.attached_image)
-//                        )
-//                    }
-//                }
-//            }
-//        }
+        //if (message.cardid!=null && message.cardid!=0){
+
+            when (marsUiState) {
+                is MarsUiState.Loading -> LoadingScreen()
+
+                is MarsUiState.Success ->{
+                    if (message.cardid!=null && message.cardid!=0){
+                        val res = viewModel.getmainItem(message.cardid)
+                        MyItem(
+                            res,
+                            historyClick = {},
+                            modifier = Modifier
+                                .clickable {navigateToItemUpdate(res.travel_id)}
+                        )
+                    }
+                }
+
+                is MarsUiState.Error -> ErrorScreen()
+
+
+            }
+        //}
+
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+//    Image(
+//        modifier = modifier.size(200.dp),
+//        painter = painterResource(R.drawable.loading_img),
+//        contentDescription = null
+//    )
+}
+
+@Composable
+fun ErrorScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
+        )
     }
 }
 

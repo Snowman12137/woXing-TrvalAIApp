@@ -39,12 +39,17 @@ interface DatabaseDao  {
     fun getalltravelitems(maintotravel: Int): Flow<Travelitems>
 
 
+    //更新travelitems的tr
+    //根据travel的id跟新travel的tr
+    @Query("UPDATE travelitems SET tr = :tr WHERE maintotravel = :id")
+    suspend fun updatetravel_string(id: Int,tr:String)
+
 
     //根绝主表的id更新主表的time_start、travel_day、name
 //    @Query("UPDATE mainitems SET time_start = :timestart AND trval_day = :day AND name =:name WHERE id = :id")
 //    suspend fun updatemain_string(id:Int,timestart:String,day:String,name:String)
 
-    @Query("UPDATE mainitems SET time_start =:timestart AND time_start =:timestart AND name =:name WHERE id = :id")
+    @Query("UPDATE mainitems SET time_start =:timestart,trval_day=:day,name =:name WHERE id = :id")
     suspend fun updatemain_string(id: Int, timestart: String, day: String, name: String)
 
     //根据主表的事件名称为空返回主表的id

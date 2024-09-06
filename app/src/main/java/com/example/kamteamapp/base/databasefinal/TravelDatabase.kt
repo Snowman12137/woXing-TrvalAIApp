@@ -18,7 +18,7 @@ abstract class TravelDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): TravelDatabase {
-            return Room.databaseBuilder(context,TravelDatabase::class.java, "databaselastfinal1").build()
+            return Room.databaseBuilder(context,TravelDatabase::class.java, "databaselastfinal3").build()
         }
     }
 }

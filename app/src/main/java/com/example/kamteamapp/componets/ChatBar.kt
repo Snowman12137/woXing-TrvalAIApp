@@ -34,13 +34,19 @@ fun MyAppBar(
         title = title,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            JetchatIcon(
-                contentDescription = stringResource(id = R.string.navigation_drawer_open),
+            Icon(
+                imageVector = Icons.Filled.ArrowBackIosNew,
+                contentDescription = null,
                 modifier = Modifier
-                    .size(64.dp)
-                    .clickable(onClick = onNavIconPressed)
-                    .padding(16.dp)
+                    .padding(10.dp, 5.dp, 0.dp, 5.dp)
+                    .clickable { navigateUp() }
             )
+//            JetchatIcon(
+//                contentDescription = stringResource(id = R.string.navigation_drawer_open),
+//                modifier = Modifier
+//                    .size(64.dp)
+//                    .clickable(onClick = onNavIconPressed)
+//                    .padding(16.dp)
         }
     )
 }

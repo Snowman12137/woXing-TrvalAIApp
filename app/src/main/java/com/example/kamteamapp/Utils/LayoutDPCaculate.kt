@@ -27,6 +27,7 @@ class ScreenSizeManager(private val context: Context) {
         _res.BasePadding = screenWidth / 100
         _res.screenWidth= screenWidth
         _res.screenHeight= screenHeight
+        _res.BarHight = screenHeight/10
 
 
         _res.TimeLangDP = _res.TimeLang / destiyss
@@ -54,6 +55,7 @@ data class WideThing(
     var screenWidth: Int =0,
     var screenHeight: Int =0 ,
     var start_part:Int = 26,//(dp大小)
+    var BarHight:Int = 200,
 
 
     var TimeLangDP :Float = 0f,

@@ -157,3 +157,45 @@ val Data_my = "{\n" +
         "         }\n" +
         "     ]\n" +
         "}"
+
+val default =  "{\n" +
+        "    \"main\":{\n" +
+        "        \"time_start\":\"未定义\",\n" +
+        "        \"trval_day\":\"3\",\n" +
+        "        \"name\":\"未命名旅游\"\n" +
+        "    },\n" +
+        "    \"weather\":[\n" +
+        "        {\n" +
+        "            \"number_day\":\"1\",\n" +
+        "            \"where\":\"未定义\",\n" +
+        "            \"data\":\"2024-9-1\",\n" +
+        "            \"week\":3,\n" +
+        "            \"day_weather\":\"晴天\",\n" +
+        "            \"day_temp\":\"0\",\n" +
+        "            \"night_weather\":\"晴\",\n" +
+        "            \"night_temp\":\"0\",\n" +
+        "            \"attention\":\"请与AI对话获取信息\"\n" +
+        "        },{\n" +
+        "            \"number_day\":\"2\",\n" +
+        "            \"where\":\"未定义\",\n" +
+        "            \"data\":\"2024-9-1\",\n" +
+        "            \"week\":3,\n" +
+        "            \"day_weather\":\"晴天\",\n" +
+        "            \"day_temp\":\"0\",\n" +
+        "            \"night_weather\":\"晴\",\n" +
+        "            \"night_temp\":\"0\",\n" +
+        "            \"attention\":\"请与AI对话获取信息\"\n" +
+        "        },{\n" +
+        "            \"number_day\":\"3\",\n" +
+        "            \"where\":\"未定义\",\n" +
+        "            \"data\":\"2024-9-1\",\n" +
+        "            \"week\":3,\n" +
+        "            \"day_weather\":\"晴天\",\n" +
+        "            \"day_temp\":\"0\",\n" +
+        "            \"night_weather\":\"晴\",\n" +
+        "            \"night_temp\":\"0\",\n" +
+        "            \"attention\":\"请与AI对话获取信息\"\n" +
+        "        },\n" +
+        "    ],\n" +
+        "    \"trval\":[]\n" +
+        "}"

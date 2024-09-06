@@ -20,13 +20,20 @@ import java.time.LocalDate
 
 class TransPartToDisplay(){
 
-    fun getString(jsonString: String): TravelData {
+    fun getString(jsonString: String): TravelData? {
+        if (jsonString.isEmpty()) {
+            // 如果是空字符串，则返回 null 或者抛出异常
+            return null
+            // 或者你也可以选择抛出一个异常
+            // throw IllegalArgumentException("jsonString 不能为空")
+        }
+
         val gson = Gson()
         return gson.fromJson(jsonString, TravelData::class.java)
     }
 
-    fun getMain(Mainss:String): Main {
-        return getString(Mainss).main
+    fun getMain(Mainss:String): Main? {
+        return getString(Mainss)?.main
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

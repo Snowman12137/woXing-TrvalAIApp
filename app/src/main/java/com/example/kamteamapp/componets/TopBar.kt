@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -48,46 +49,50 @@ fun MyTopAppBar(
     onNavigateToMain: () -> Unit ,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = Modifier
-            .background(colorResource(R.color.theme))
-            .fillMaxWidth()
-            .height(45.dp)
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Spacer(Modifier.width(15.dp))
-        Icon(
-            imageVector = Icons.Filled.ArrowBackIosNew,
-            tint = colorResource(R.color.white),
-            contentDescription = null,
+    Column {
+        Spacer(Modifier.height(25.dp))
+        Row(
             modifier = Modifier
-                .padding(10.dp, 5.dp, 0.dp, 5.dp)
-                .clickable { navigateUp() }
-            )
-        Box (
-            modifier = Modifier
-                .clip(RoundedCornerShape(50))
-                .clipToBounds()
-                //.background(colorResource(R.color.three_nine_gray))
-                .weight(1f)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.CenterStart
+                .background(colorResource(R.color.theme))
+                .fillMaxWidth()
+                .height(45.dp)
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ){
-
-        }
-        IconButton(
-            modifier = Modifier.height(45.dp),
-            onClick = {onNavigateToMain()}
-        ) {
+            Spacer(Modifier.width(15.dp))
             Icon(
-                Icons.Filled.Home,
+                imageVector = Icons.Filled.ArrowBackIosNew,
+                tint = colorResource(R.color.white),
                 contentDescription = null,
-                tint = colorResource(R.color.white)
+                modifier = Modifier
+                    .padding(10.dp, 5.dp, 0.dp, 5.dp)
+                    .clickable { navigateUp() }
             )
+            Box (
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .clipToBounds()
+                    //.background(colorResource(R.color.three_nine_gray))
+                    .weight(1f)
+                    .fillMaxHeight(),
+                contentAlignment = Alignment.CenterStart
+            ){
+
+            }
+            IconButton(
+                modifier = Modifier.height(45.dp),
+                onClick = {onNavigateToMain()}
+            ) {
+                Icon(
+                    Icons.Filled.Home,
+                    contentDescription = null,
+                    tint = colorResource(R.color.white)
+                )
+            }
+
+
         }
-
-
     }
+
 }
 
