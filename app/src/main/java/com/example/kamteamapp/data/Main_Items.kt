@@ -166,7 +166,7 @@ val default =  "{\n" +
         "    },\n" +
         "    \"weather\":[\n" +
         "        {\n" +
-        "            \"number_day\":\"1\",\n" +
+        "            \"number_day\":1,\n" +
         "            \"where\":\"未定义\",\n" +
         "            \"data\":\"2024-9-1\",\n" +
         "            \"week\":3,\n" +
@@ -176,7 +176,7 @@ val default =  "{\n" +
         "            \"night_temp\":\"0\",\n" +
         "            \"attention\":\"请与AI对话获取信息\"\n" +
         "        },{\n" +
-        "            \"number_day\":\"2\",\n" +
+        "            \"number_day\":2,\n" +
         "            \"where\":\"未定义\",\n" +
         "            \"data\":\"2024-9-1\",\n" +
         "            \"week\":3,\n" +
@@ -186,7 +186,7 @@ val default =  "{\n" +
         "            \"night_temp\":\"0\",\n" +
         "            \"attention\":\"请与AI对话获取信息\"\n" +
         "        },{\n" +
-        "            \"number_day\":\"3\",\n" +
+        "            \"number_day\":3,\n" +
         "            \"where\":\"未定义\",\n" +
         "            \"data\":\"2024-9-1\",\n" +
         "            \"week\":3,\n" +

@@ -96,6 +96,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.kamteamapp.MarsUiState
 import com.example.kamteamapp.R
 import com.example.kamteamapp.data.TimeLinerColor
 import kotlin.math.absoluteValue
@@ -119,11 +120,11 @@ enum class EmojiStickerSelector {
     STICKER
 }
 
-@Preview
-@Composable
-fun UserInputPreview() {
-    UserInput(onMessageSent = {})
-}
+//@Preview
+//@Composable
+//fun UserInputPreview() {
+//    UserInput(onMessageSent = {})
+//}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -131,6 +132,7 @@ fun UserInput(
     onMessageSent: (String) -> Unit,
     modifier: Modifier = Modifier,
     resetScroll: () -> Unit = {},
+    marsUiState: MarsUiState,
 ) {
     var currentInputSelector by rememberSaveable { mutableStateOf(InputSelector.NONE) }
     val dismissKeyboard = { currentInputSelector = InputSelector.NONE }

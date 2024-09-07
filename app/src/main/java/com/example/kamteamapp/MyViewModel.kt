@@ -306,7 +306,7 @@ class MyViewModel: ViewModel() {
         )
 
         insertmessagechat(
-            "else",message_id,"请输入你的问题","7:30PM"
+            "蓝心小V",message_id,"请输入你的问题","7:30PM"
         )
         inserttravelitems(
             travel_id,
@@ -318,7 +318,7 @@ class MyViewModel: ViewModel() {
     fun fetchPost(userMessage: String,id: Int,trvalId:Int,index_main_id:Int) {
         _isLoading.value = true
         _errorMessage.value = null
-
+        marsUiState = MarsUiState.Loading
         // 添加用户消息到 conversationHistory
         val userMessageObj = Messagechat(null,"me",id, userMessage, "现在")
         insertmessagechat(author = "me",id,userMessage,"现在")
@@ -358,7 +358,7 @@ class MyViewModel: ViewModel() {
                                         Log.d("TEST",secondResponseBody)
                                         insertmessagechat(author = "服务端",id,"以下是生成的方案:","现在",index_main_id)
                                         insertresult(secondResponseBody,index_main_id,trvalId)
-                                        _conversationHistory.value = _conversationHistory.value + serverMessageObj
+                                        _conversationHistory.value = emptyList()
                                     }
                                 } else {
                                     _errorMessage.value = "第二次请求失败，错误码：${secondResponse.code}"
@@ -367,6 +367,7 @@ class MyViewModel: ViewModel() {
                                 post.data?.let { message ->
                                     // 更新 conversationHistory
                                     val serverMessageObj = Messagechat(null,"服务端", id,message, "现在")
+                                    marsUiState = MarsUiState.Success(1)
                                     insertmessagechat(author = "服务端",id,message,"现在")
                                     _conversationHistory.value = _conversationHistory.value + serverMessageObj
                                 }

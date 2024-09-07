@@ -121,7 +121,7 @@ fun MyNavHost(
          }
 
          if (uiState.travelitem.tr== "" ){
-             Toast.makeText(context,"还没有数据，请先与AI沟通需求", Toast.LENGTH_SHORT).show()
+             //Toast.makeText(context,"还没有数据，请先与AI沟通需求", Toast.LENGTH_SHORT).show()
 
          }else{
              actions.setTrvalItem(uiState.test_data)

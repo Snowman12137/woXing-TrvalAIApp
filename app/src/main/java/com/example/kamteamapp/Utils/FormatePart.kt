@@ -38,19 +38,21 @@ class TransPartToDisplay(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDisPlay(tars:TravelData): List<DisplayItem>{
-        val itemsWeathers = tars.weather.map { item->
-            Temp_Weather_Items(
-                item.number_day,
-                item.number_day,
-                item.where,
-                formatData(item.data),
-                formatData(item.data).dayOfWeek,
-                Weather.OVER_CAST,
-                item.day_temp.toInt(),
-                Weather.OVER_CAST,
-                item.night_temp.toInt(),
-                attention = item.attention
-            )
+        val itemsWeathers = tars.weather?.mapNotNull { item->
+            item?.let {
+                Temp_Weather_Items(
+                    item.number_day,
+                    item.number_day,
+                    item.where,
+                    formatData(item.data),
+                    formatData(item.data).dayOfWeek,
+                    Weather.OVER_CAST,
+                    item.day_temp.toInt(),
+                    Weather.OVER_CAST,
+                    item.night_temp.toInt(),
+                    attention = item.attention
+                )
+            }
         }
         val itemsTrvals = tars.trval.mapNotNull { item ->
             when {

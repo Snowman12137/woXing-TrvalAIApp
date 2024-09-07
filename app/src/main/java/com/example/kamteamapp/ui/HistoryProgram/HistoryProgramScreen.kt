@@ -123,7 +123,7 @@ fun MyList(
         contentPadding = contentPadding
     ) {
         items(items = itemList,key = {it.id}){item->
-            if (item.name != ""){
+            if (item.name != "无"){
                 MyItem(
                     item = item,
                     historyClick=historyClick,

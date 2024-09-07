@@ -218,6 +218,17 @@ fun ConversationScreen(
                 viewModel = viewModel,
                 marsUiState = marsUiState,
             )
+            when (marsUiState) {
+                is MarsUiState.Loading -> LoadingScreen()
+
+                is MarsUiState.Success ->{
+
+                }
+
+                is MarsUiState.Error -> ErrorScreen()
+
+
+            }
             UserInput(
                 onMessageSent = { content ->
 //                    viewModel.insertmessagechat(
@@ -230,6 +241,7 @@ fun ConversationScreen(
                         scrollState.scrollToItem(0)
                     }
                 },
+                marsUiState = marsUiState,
                 modifier = Modifier.imePadding()
             )
         }
@@ -456,26 +468,26 @@ fun ChatItemBubble(
             )
         }
         //if (message.cardid!=null && message.cardid!=0){
-
-            when (marsUiState) {
-                is MarsUiState.Loading -> LoadingScreen()
-
-                is MarsUiState.Success ->{
-                    if (message.cardid!=null && message.cardid!=0){
-                        val res = viewModel.getmainItem(message.cardid)
-                        MyItem(
-                            res,
-                            historyClick = {},
-                            modifier = Modifier
-                                .clickable {navigateToItemUpdate(res.travel_id)}
-                        )
-                    }
-                }
-
-                is MarsUiState.Error -> ErrorScreen()
-
+        when(marsUiState){
+            is MarsUiState.Loading->{
 
             }
+            is MarsUiState.Success->{
+                if (message.cardid!=null && message.cardid!=0){
+                    val res = viewModel.getmainItem(message.cardid)
+                    MyItem(
+                        res,
+                        historyClick = {},
+                        modifier = Modifier
+                            .clickable {navigateToItemUpdate(res.travel_id)}
+                    )
+                }
+            }
+            is MarsUiState.Error->{
+
+            }
+        }
+
         //}
 
     }
@@ -483,11 +495,11 @@ fun ChatItemBubble(
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-//    Image(
-//        modifier = modifier.size(200.dp),
-//        painter = painterResource(R.drawable.loading_img),
-//        contentDescription = null
-//    )
+    Image(
+        modifier = modifier.size(200.dp),
+        painter = painterResource(R.drawable.loading_img),
+        contentDescription = null
+    )
 }
 
 @Composable

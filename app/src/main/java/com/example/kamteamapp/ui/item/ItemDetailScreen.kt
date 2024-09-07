@@ -100,8 +100,13 @@ fun MainBody(
 
 
 
-fun combineItems(detailss:List<New_Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>): List<DisplayItem> {
-    return detailss.map { DisplayItem.New_Temp_Trval(it) } +
-            weatherItems.map { DisplayItem.WeatherItem(it) }
+fun combineItems(detailss:List<New_Temp_Trval_Items>, weatherItems: List<Temp_Weather_Items>?): List<DisplayItem> {
+    if (weatherItems!=null){
+        return detailss.map { DisplayItem.New_Temp_Trval(it) } +
+                weatherItems.map { DisplayItem.WeatherItem(it) }
+    }else{
+        return detailss.map { DisplayItem.New_Temp_Trval(it) }
+    }
+
 }
 
