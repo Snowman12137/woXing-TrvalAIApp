@@ -358,7 +358,7 @@ class MyViewModel: ViewModel() {
                                         Log.d("TEST",secondResponseBody)
                                         insertmessagechat(author = "服务端",id,"以下是生成的方案:","现在",index_main_id)
                                         insertresult(secondResponseBody,index_main_id,trvalId)
-                                        _conversationHistory.value = emptyList()
+                                        //_conversationHistory.value = emptyList()
                                     }
                                 } else {
                                     _errorMessage.value = "第二次请求失败，错误码：${secondResponse.code}"
